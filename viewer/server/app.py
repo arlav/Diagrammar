@@ -214,4 +214,5 @@ if DIST.exists():
 
     @app.get("/")
     def index():
-        return FileResponse(DIST / "index.html")
+        # the page must never be served from a browser cache: its script names change with every build
+        return FileResponse(DIST / "index.html", headers={"Cache-Control": "no-store"})
