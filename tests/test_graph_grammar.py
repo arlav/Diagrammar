@@ -1,40 +1,46 @@
 """
-The graph grammar against the prototype's recorded results.
+The graph grammar as local productions, against the prototype's recorded results.
 
-Golden figures come from `graph_grammar_report.json` and the two recorded graphs, not from the READMEs.
+Golden figures come from `graph_grammar_report.json` and the recorded as-built graph.
 """
 import json
+import re
 from pathlib import Path
 
 import pytest
 
-from topogrammar.graph.grammar import ALL, Derivation, RulePack
-from topogrammar.graph.metrics import (access_subgraph, compare, cut_vertices, metrics, reachability,
-                                       unresolved)
+from topogrammar.graph.derivation import ALL, Derivation
+from topogrammar.graph.metrics import access_subgraph, compare, cut_vertices, metrics, reachability, unresolved
+from topogrammar.graph.pack import Pack
+from topogrammar.graph.patterns import Expr, Pattern, Snapshot, expand, matches
 
-ROOT = Path(__file__).resolve().parents[1] / "examples" / "narkomfin"
-REPORT = json.loads((ROOT / "golden" / "graph_grammar_report.json").read_text())
-VARIANTS = {v["name"]: v for v in REPORT["variants"]}
+ROOT = Path(__file__).resolve().parents[1] / "examples"
 
 
 @pytest.fixture(scope="module")
 def pack():
-    return RulePack(ROOT / "graph")
+    return Pack(ROOT / "narkomfin" / "graph")
+
+
+@pytest.fixture(scope="module")
+def unite():
+    return Pack(ROOT / "unite" / "graph")
 
 
 def derive(pack, preset):
-    d = Derivation(pack, preset=preset)
-    return d, d.run()
+    d = Derivation(pack, params=pack.params(preset), preset=preset)
+    d.run(pack.strategies[pack.presets[preset]["strategy"]])
+    return d
 
 
-def recorded_steps(name):
-    v = VARIANTS[name]
-    return [(s["rule"], s["nodes"], s["edges"]) for s in v["steps_A"] + v["steps_B"]]
+def norm(nid):
+    """The prototype named a cell by tag and bay, and had one penthouse."""
+    return re.sub(r"_L\d+$", "", nid.replace("PH_02", "PENTHOUSE"))
 
 
 # ---------------------------------------------------------------- the acceptance figures (brief, section 3)
 def test_as_built_access_subgraph(pack):
-    d, _ = derive(pack, "V1_as_built")
+    d = derive(pack, "V1_as_built")
     acc = access_subgraph(d.state, pack.occupiable)
     m = metrics(acc)
     assert (m["nodes"], m["edges"]) == (115, 121)
@@ -46,184 +52,212 @@ def test_as_built_access_subgraph(pack):
     assert len(cut_vertices(acc)) == 49
 
 
-def test_as_built_is_the_recorded_graph(pack):
-    """Same ids, same edges, same relations as the prototype's composed graph."""
-    d, _ = derive(pack, "V1_as_built")
-    gold = pack.golden("V1_as_built")
-    assert set(d.state.ids()) == {n["id"] for n in gold["nodes"]}
-    pair = lambda e: (min(e["a"], e["b"]), max(e["a"], e["b"]), e["rel"], bool(e.get("mirror")))
-    assert {pair(e) for e in d.state.edges()} == {pair(e) for e in gold["edges"]}
-    for n in gold["nodes"]:
-        mine = d.state.node(n["id"])
-        assert mine["type"] == n["type"]
-        if n["block"] == "A" and n["id"] != "PENTHOUSE":      # the condenser is placed as built, see pack.json
-            assert mine["pos"] == pytest.approx(tuple(n["pos"]), abs=1e-3)
-
-
-def test_as_built_access_graph_is_isomorphic_to_the_recorded_one(pack):
-    d, _ = derive(pack, "V1_as_built")
+def test_as_built_access_graph_is_the_recorded_one(pack):
+    """Same nodes, same access edges, same relations as the prototype's composed graph."""
+    d = derive(pack, "V1_as_built")
     gold = pack.golden("V1_as_built")
     acc = access_subgraph(d.state, pack.occupiable)
     keep = {n["id"] for n in gold["nodes"] if n["type"] in pack.occupiable}
-    nodes = [n for n in gold["nodes"] if n["id"] in keep]
-    edges = [e for e in gold["edges"] if pack.relations[e["rel"]] != "none" and e["a"] in keep and e["b"] in keep]
-    verdict = compare(list(acc.nodes().values()), acc.edges(), nodes, edges)
-    assert verdict["degree_sequences_equal"]
-    assert verdict["isomorphic"]
+    assert {norm(n) for n in acc.ids()} == keep
+    pair = lambda e: (min(norm(e["a"]), norm(e["b"])), max(norm(e["a"]), norm(e["b"])), e["rel"])
+    gold_edges = {pair(e) for e in gold["edges"] if pack.relations[e["rel"]] != "none"
+                  and e["a"] in keep and e["b"] in keep}
+    assert {pair(e) for e in acc.edges()} == gold_edges
+    verdict = compare(list(acc.nodes().values()), acc.edges(), [n for n in gold["nodes"] if n["id"] in keep],
+                      [e for e in gold["edges"] if pack.relations[e["rel"]] != "none" and e["a"] in keep and e["b"] in keep])
     assert verdict["isomorphic_typed"]
 
 
-@pytest.mark.parametrize("preset", ["V1_as_built", "V5_short_block"])
-def test_every_production_matches_the_recorded_step(pack, preset):
-    _, steps = derive(pack, preset)
-    assert [(s.rule, s.metrics["nodes"], s.metrics["edges"]) for s in steps] == recorded_steps(preset)
+def test_the_full_graph_has_the_recorded_node_count(pack):
+    d = derive(pack, "V1_as_built")
+    assert metrics(d.state)["nodes"] == 137
 
 
-@pytest.mark.parametrize("preset", sorted(VARIANTS))
-def test_every_dwelling_is_reachable_from_the_ground(pack, preset):
-    d, _ = derive(pack, preset)
+@pytest.mark.parametrize("preset,dwellings", [("V1_as_built", 53), ("V2_all_U", 81), ("V3_gamma", 57),
+                                              ("V4_skip_stop", 61)])
+def test_every_dwelling_is_reachable_from_the_ground(pack, preset, dwellings):
+    d = derive(pack, preset)
     r = reachability(d.state, pack.source, "dwelling")
     assert r["valid"], r["unreachable"]
-    assert r["total"] == pack.presets[preset]["expect"]["dwellings"]
-    if preset in ("V1_as_built", "V5_short_block"):
-        assert r["total"] == VARIANTS[preset]["dwellings"]
-
-
-# ---------------------------------------------------------------- where the port departs from the prototype
-def as_prototype(state, P):
-    """Undo the two corrections the port makes, to show they are the whole difference.
-
-    1. The prototype names a dwelling by tag and bay only, so stacked cells that share a tag (V2, V3,
-       V4) are one node, carrying the level of the last cell. Here they are separate dwellings.
-    2. The prototype gives the dwelling beside a core its lobby door only if it is tagged K or F."""
-    s = state.copy()
-    groups = {}
-    for n in s.match(type="dwelling"):
-        if s.get(n, "bay") is not None and s.get(n, "tag") != "E":
-            groups.setdefault((s.get(n, "tag"), s.get(n, "bay")), []).append(n)
-    top = {key: max(s.get(n, "level") for n in nodes) for key, nodes in groups.items()}
-    for e in s.edges():
-        if e["rel"] != "core_door":
-            continue
-        for n in (e["a"], e["b"]):
-            key = (s.get(n, "tag"), s.get(n, "bay"))
-            if key in groups and (key[0] not in ("K", "F") or s.get(n, "level") != top[key]):
-                s.unlink(e["a"], e["b"])
-    for (tag, bay), nodes in groups.items():
-        if len(nodes) > 1:
-            s.contract(sorted(nodes), f"{tag}{bay:02d}", type="dwelling", tag=tag, bay=bay)
-    return s
-
-
-@pytest.mark.parametrize("preset", ["V2_all_U_3levels", "V3_gamma_access_over", "V4_skipstop_Z4"])
-def test_stacked_cells_account_for_the_whole_difference(pack, preset):
-    d, _ = derive(pack, preset)
-    recorded = VARIANTS[preset]
-    s = as_prototype(d.state, d.P)
-    m = metrics(s)
-    assert (m["nodes"], m["edges"]) == (recorded["metrics"]["nodes"], recorded["metrics"]["edges"])
-    assert m["edges_by_access"] == recorded["metrics"]["edges_by_access"]
-    assert len(s.match(type="dwelling")) == recorded["dwellings"]
-
-
-def test_v4_reduced_to_the_prototype_is_the_recorded_graph(pack):
-    d, _ = derive(pack, "V4_skipstop_Z4")
-    gold = json.loads((ROOT / "golden" / "graph_V4_skipstop_Z4_dicts.json").read_text())
-    s = as_prototype(d.state, d.P)
-    verdict = compare(list(s.nodes().values()), s.edges(), gold["nodes"], gold["edges"])
-    assert verdict["isomorphic"]
-
-
-@pytest.mark.parametrize("preset,dwellings", [("V2_all_U_3levels", 81), ("V3_gamma_access_over", 53),
-                                              ("V4_skipstop_Z4", 61)])
-def test_stacked_cells_are_separate_dwellings(pack, preset, dwellings):
-    d, _ = derive(pack, preset)
-    assert len(d.state.match(type="dwelling")) == dwellings
-    assert not d.state.conflicts
+    assert r["total"] == dwellings == pack.presets[preset]["expect"]["dwellings"]
+    assert metrics(access_subgraph(d.state, pack.occupiable))["components"] == 1
 
 
 # ---------------------------------------------------------------- terminal discipline
 def test_no_bay_survives_the_as_built_derivation(pack):
-    d, _ = derive(pack, "V1_as_built")
+    d = derive(pack, "V1_as_built")
     left = unresolved(d.state, pack.nonterminals)
-    assert "bay" not in left and "mass" not in left
-    assert left == dict(storey=["CB0", "CB3"])          # the condenser storeys GB never rewrites
+    assert left == dict(storey=["CB0", "CB3"])          # the condenser storeys no rule rewrites
 
 
-@pytest.mark.parametrize("preset,bays", [("V3_gamma_access_over", 16), ("V5_short_block", 5)])
-def test_leftover_bays_are_reported_not_relabelled(pack, preset, bays):
-    """The prototype's roof rule turned every surviving bay into roof, which hid these."""
-    d, _ = derive(pack, preset)
+def test_gamma_leaves_its_third_level_to_the_architect(pack):
+    d = derive(pack, "V3_gamma")
     left = unresolved(d.state, pack.nonterminals)["bay"]
-    assert len(left) == bays
-    assert all(d.state.get(n, "level") < d.P["levels"] for n in left)
+    assert len(left) == 12 and all(d.state.get(n, "level") == 3 for n in left)
+    assert any(o["site"].rule == "street" and d.state.get(o["site"].nodes[0], "level") == 3 for o in d.offers())
 
 
-# ---------------------------------------------------------------- site-level derivation
-def test_order_inside_a_stage_is_free(pack):
-    """Derive by hand, one site at a time, in reverse order: the result is the same graph."""
-    a, _ = derive(pack, "V1_as_built")
+# ---------------------------------------------------------------- rules as data
+def test_expressions_are_restricted():
+    assert Expr("abs(a - b) + 1")({"a": 1, "b": 3}) == 3
+    with pytest.raises(ValueError):
+        Expr("__import__('os')")
+    with pytest.raises(ValueError):
+        Expr("a._secret")
+
+
+def test_families_expand_for_parameters():
+    spec = {"nodes": {"b[j]": {"type": "bay", "for": "j in range(k)"}},
+            "edges": [["b[j]", "b[j+1]", "above", {"for": "j in range(k - 1)"}]]}
+    out = expand(spec, {"k": 3})
+    assert list(out["nodes"]) == ["b0", "b1", "b2"]
+    assert out["edges"] == [["b0", "b1", "above"], ["b1", "b2", "above"]]
+
+
+def test_a_pattern_matches_what_it_describes(pack):
+    d = Derivation(pack, preset="V1_as_built")
+    d.run({"steps": pack.strategies["as_built"]["steps"][:4]})
+    snap = Snapshot(d.state)
+    p = Pattern.build({"nodes": {"a": {"type": "bay"}, "b": {"type": "bay", "bay": "=a.bay", "level": "=a.level + 1"}},
+                       "edges": [["a", "b", "above"]]}, {})
+    found = list(matches(p, snap, {}))
+    assert len(found) == 22 * 5
+    assert all(d.state.get(m["b"], "level") == d.state.get(m["a"], "level") + 1 for m in found)
+
+
+def test_rules_have_cards(pack):
+    card = pack.rules["cell"].card(pack.env(pack.params()), params=(("k", 3), ("ci", 1)))
+    assert list(card["lhs"]["nodes"]) == ["b0", "b1", "b2", "c"]
+    assert ["c", "b1", "door"] in card["lhs"]["edges"]
+    assert len(card["nac"]) == 2                          # no second door on b0 or b2
+    assert card["rhs"]["contract"]["into"] == "d"
+
+
+# ---------------------------------------------------------------- free choice
+def test_every_match_is_offered_and_consequences_are_not(pack):
+    d = Derivation(pack, preset="V1_as_built")
+    d.run({"steps": pack.strategies["as_built"]["steps"][:4]})
+    offers = d.offers()
+    rules = {o["site"].rule for o in offers}
+    assert {"street", "core", "roof", "axiom_condenser"} <= rules
+    assert not any(pack.rules[r].auto for r in rules)
+    assert sum(1 for o in offers if o["site"].rule == "street") == 132
+    assert sum(1 for o in offers if o["site"].rule == "core") == 132
+
+
+def test_consequences_follow_every_choice(pack):
+    d = Derivation(pack, preset="V1_as_built")
+    d.run({"steps": pack.strategies["as_built"]["steps"][:3]})
+    step = d.apply("bay", ALL)
+    assert [r for r, _ in step.consequences] == ["stack_adjacent"] * 110
+    assert step.event["edges_added"] and all(e["rel"] in ("party", "above") for e in step.event["edges_added"])
+
+
+def test_the_order_of_independent_choices_does_not_matter(pack):
+    a = Derivation(pack, preset="V1_as_built")
+    a.run({"steps": pack.strategies["as_built"]["steps"][:4]})
     b = Derivation(pack, preset="V1_as_built")
-    while True:
-        entry = next((e for e in b.applicable() if e["enabled"]), None)
-        if entry is None:
-            break
-        b.apply(entry["rule"].id, entry["sites"][-1].key)
-    pair = lambda e: (min(e["a"], e["b"]), max(e["a"], e["b"]), e["rel"], bool(e.get("mirror")))
+    b.run({"steps": pack.strategies["as_built"]["steps"][:4]})
+    a.apply("street", {"where": "b.level == 1"}), a.apply("street", {"where": "b.level == 4"})
+    b.apply("street", {"where": "b.level == 4"}), b.apply("street", {"where": "b.level == 1"})
+    pair = lambda e: (min(e["a"], e["b"]), max(e["a"], e["b"]), e["rel"])
     assert set(a.state.ids()) == set(b.state.ids())
     assert {pair(e) for e in a.state.edges()} == {pair(e) for e in b.state.edges()}
-    assert len(b.steps) > 70                              # every site was its own step
 
 
-def test_stages_hold_rules_back(pack):
+def test_the_order_of_conflicting_choices_is_a_design(pack):
+    """Street before core: the street runs through the core. Core before street: it stops there."""
+    a = Derivation(pack, preset="V1_as_built")
+    a.run({"steps": pack.strategies["as_built"]["steps"][:4]})
+    a.apply("street", {"where": "b.level == 1"}), a.apply("core", {"where": "b.bay == 2"})
+    b = Derivation(pack, preset="V1_as_built")
+    b.run({"steps": pack.strategies["as_built"]["steps"][:4]})
+    b.apply("core", {"where": "b.bay == 2"}), b.apply("street", {"where": "b.level == 1"})
+    assert "c1_02" in a.state and "c1_02" not in b.state
+    assert a.state.edge("S1_02", "c1_02")["rel"] == "door"
+    assert a.state.edge("c1_01", "c1_02")["rel"] == "corridor"
+
+
+def test_conflicts_are_marked(pack):
     d = Derivation(pack, preset="V1_as_built")
-    enabled = lambda: {e["rule"].id for e in d.applicable() if e["enabled"]}
-    assert enabled() == {"GA0", "GB0"}
-    d.apply("GA0"), d.apply("GA1"), d.apply("GA2")
-    d.apply("GA3", "L1")
-    assert "GA4" not in enabled()                         # five storeys are still undivided
-    with pytest.raises(ValueError, match="waits for GA3"):
-        d.apply("GA4", ALL)
-    d.apply("GA3", ALL)
-    assert "GA4" in enabled()
+    d.run({"steps": pack.strategies["as_built"]["steps"][:6]})
+    cell = next(o for o in d.offers() if o["site"].rule == "cell" and dict(o["site"].params) == {"k": 2, "ci": 0}
+                and "b1_03" in o["site"].nodes)
+    assert cell["decisive"]
+    assert {"cell", "street", "core"} <= set(cell["conflicts_with"])
+    facade = next(o for o in d.offers() if o["site"].rule == "facade")
+    assert not facade["decisive"]
 
 
-def test_the_bridge_needs_the_street(pack):
-    """Grammar GB is derived on its own; only R_BRIDGE waits for grammar GA."""
+def test_a_preview_takes_no_step_and_a_branch_keeps_both(pack):
     d = Derivation(pack, preset="V1_as_built")
-    for rule in ("GB0", "GB1", "GB2", "GB3", "GB4", "GB5"):
-        d.apply(rule)
-    assert not next(e for e in d.applicable() if e["rule"].id == "GB6")["enabled"]
-    assert metrics(d.state)["components"] == 2           # the condenser, and the interface node
-    for rule in ("GA0", "GA1", "GA2"):
-        d.apply(rule)
-    d.apply("GA3", ALL), d.apply("GA4", ALL)
-    d.apply("GB6")
-    assert d.state.edge("IFACE", "c1_00")["rel"] == "door"
-
-
-def test_facade_is_an_identity_production(pack):
-    d = Derivation(pack, preset="V1_as_built")
-    d.run(until="GA6")
-    before = metrics(d.state)
-    step = d.apply("GA7")
-    assert step.metrics == before
-    assert step.event["identity"]
-    assert not step.event["nodes_added"] and not step.event["edges_added"]
-    assert not next(e for e in d.applicable() if e["rule"].id == "GA7")["sites"]
-
-
-def test_going_back_and_choosing_again_starts_a_branch(pack):
-    d = Derivation(pack, preset="V1_as_built")
-    d.run(until="GA2")
+    d.run({"steps": pack.strategies["as_built"]["steps"][:3]})
+    before = len(d.steps)
+    p = d.preview("bay", ALL)
+    assert p.metrics["nodes"] == 133 and len(d.steps) == before
     fork = d.head
-    d.apply("GA3", "L1")
+    d.apply("bay", {"where": "s.level == 1"})
     d.goto(fork)
-    d.apply("GA3", "L6")
+    d.apply("bay", {"where": "s.level == 6"})
     assert len(d.steps[fork].children) == 2
     assert "b6_00" in d.state and "b1_00" not in d.state
 
 
+# ---------------------------------------------------------------- pathways
+def test_a_pathway_replays_and_hashes_the_same(pack):
+    d = derive(pack, "V1_as_built")
+    p = d.pathway()
+    assert p["pack"] == pack.hash() and len(p["steps"]) == len(d.path()) - 1 == 19
+    e = Derivation(pack, preset="V1_as_built")
+    e.replay(p)
+    assert e.pathway()["hash"] == p["hash"]
+    assert metrics(e.state) == metrics(d.state)
+
+
+def test_a_different_choice_gives_a_different_hash(pack):
+    a = Derivation(pack, preset="V1_as_built")
+    a.run({"steps": pack.strategies["as_built"]["steps"][:4]})
+    b = Derivation(pack, preset="V1_as_built")
+    b.run({"steps": pack.strategies["as_built"]["steps"][:4]})
+    a.apply("core", {"where": "b.bay == 2"})
+    b.apply("core", {"where": "b.bay == 3"})
+    assert a.pathway()["hash"] != b.pathway()["hash"]
+    assert a.pathway()["steps"][:4] == b.pathway()["steps"][:4]
+
+
+# ---------------------------------------------------------------- transformation: Narkomfin -> Unité
+def test_the_unite_is_a_transformation_of_narkomfin(unite, pack):
+    diff = unite.diff()
+    assert diff["base_hash"] == pack.hash()
+    assert diff["changed"] == ["street"]
+    assert diff["added"] == ["cell_down", "cell_up"]
+    assert "cell" in diff["removed"] and "bridge" in diff["removed"]
+    assert diff["dimensions"]["depth"] == (9.9, 24.0)
+    assert [l["title"] for l in unite.lineage()] == ["Dom Narkomfin", "Unité d'Habitation"]
+    assert unite.hash() != pack.hash()
+
+
+def test_the_unite_derives_with_interlocked_cells(unite):
+    d = derive(unite, "unite")
+    r = reachability(d.state, unite.source, "dwelling")
+    assert r["valid"] and r["total"] == 81
+    acc = access_subgraph(d.state, unite.occupiable)
+    assert metrics(acc)["components"] == 1
+    assert not unresolved(d.state, unite.nonterminals)
+    up = d.state.node("U03_L2")
+    down = d.state.node("D03_L1")
+    assert up["kind"] == "up" and down["kind"] == "down"
+    assert d.state.edge("U03_L2", "c2_03")["rel"] == "door" and d.state.edge("D03_L1", "c2_03")["rel"] == "door"
+    assert d.state.edge("U03_L2", "D03_L1")["rel"] == "above"          # the down cell's lower level is under the up cell's street half
+
+
+def test_unite_cells_are_interpreted_as_sections(unite):
+    d = derive(unite, "unite")
+    cells = {c["id"]: c for c in unite.modules["interpret"].cells(d.state, dict(d.P, dim=unite.dimensions))}
+    assert len(cells["U03_L2"]["profile"]) == 6 and cells["U03_L2"]["axis"] == "x"
+    assert cells["c2_03"]["profile"][0][1] == pytest.approx(24.0 / 2 - 2.6 / 2)
+
+
 def test_a_rewrite_step_is_within_budget(pack):
-    _, steps = derive(pack, "V1_as_built")
-    assert max(s.elapsed_ms / s.applications for s in steps) < 50
+    d = derive(pack, "V1_as_built")
+    assert max(s.elapsed_ms / max(1, s.applications) for s in d.steps.values() if s.id) < 50

@@ -1,0 +1,78 @@
+# The rules the Unité changes or adds. Everything else is inherited from Dom Narkomfin.
+
+- id: street
+  title: R_RUE_INTERIEURE
+  verb: "bay → band + corridor + band, two doors"
+  grammar: GA
+  symbols: [SP.CORRIDOR, DV.WALL.CORR, OP.DOOR]
+  description: The internal street runs through the MIDDLE of the section. A bay on a street level splits into a south band, the corridor and a north band, with a door from the corridor into each band. Narkomfin's street ran along the south face and left one band.
+  shape: {operation: SPLIT-Y twice + door walls}
+  group: "street on L{b.level}"
+  label: "bay {b.bay}, L{b.level}"
+  lhs:
+    nodes:
+      b: {type: bay, block: A}
+  nac:
+    - nodes:
+        c: {type: corridor, level: "=b.level", bay: "=b.bay"}
+  rhs:
+    create:
+      c: {id: "c{b.level}_{b.bay:02d}", type: corridor, level: "=b.level", bay: "=b.bay", block: A, symbol: SP.CORRIDOR, label: "RUE L{b.level}"}
+      n: {id: "n{b.level}_{b.bay:02d}", type: bay, level: "=b.level", bay: "=b.bay", block: A, half: N, label: "BAY {b.bay} N"}
+    relabel:
+      b: {half: S, label: "BAY {b.bay} S"}
+    link:
+      - [c, b, door]
+      - [c, n, door]
+
+- id: cell_up
+  title: R_CELL_UP
+  verb: "south band + bay above → dwelling"
+  grammar: GA
+  symbols: [SP.CELL.K]
+  description: The cell entered from the street on its lower level. It takes the south half of the street level and the whole bay above, so that from the street one goes UP into the living space.
+  shape: {operation: merge - corridor}
+  group: "up cells from L{s.level}"
+  label: "bay {s.bay}, L{s.level}-L{t.level}"
+  lhs:
+    nodes:
+      s: {type: bay, block: A, half: S}
+      t: {type: bay, block: A, bay: "=s.bay", level: "=s.level + 1", half: null}
+      c: {type: corridor}
+    edges:
+      - [s, t, above]
+      - [c, s, door]
+  nac:
+    - nodes:
+        d: {type: corridor}
+      edges: [[d, t, door]]
+  rhs:
+    contract: {into: d, nodes: [s, t]}
+    create:
+      d: {id: "U{s.bay:02d}_L{s.level}", type: dwelling, tag: U, kind: up, levels: 2, corridor_index: 0, bay: "=s.bay", level: "=s.level", block: A, symbol: SP.CELL.U, label: "UP b{s.bay}"}
+
+- id: cell_down
+  title: R_CELL_DOWN
+  verb: "north band + bay below → dwelling"
+  grammar: GA
+  symbols: [SP.CELL.F]
+  description: The cell entered from the street on its upper level. It takes the north half of the street level and the whole bay below, so that from the street one goes DOWN. Up and down cells interlock, which is why one street serves three floors.
+  shape: {operation: merge - corridor}
+  group: "down cells from L{n.level}"
+  label: "bay {n.bay}, L{t.level}-L{n.level}"
+  lhs:
+    nodes:
+      n: {type: bay, block: A, half: N}
+      t: {type: bay, block: A, bay: "=n.bay", level: "=n.level - 1", half: null}
+      c: {type: corridor}
+    edges:
+      - [t, n, above]
+      - [c, n, door]
+  nac:
+    - nodes:
+        d: {type: corridor}
+      edges: [[d, t, door]]
+  rhs:
+    contract: {into: d, nodes: [n, t]}
+    create:
+      d: {id: "D{n.bay:02d}_L{t.level}", type: dwelling, tag: D, kind: down, levels: 2, corridor_index: 1, bay: "=n.bay", level: "=t.level", block: A, symbol: SP.CELL.D, label: "DOWN b{n.bay}"}

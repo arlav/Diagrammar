@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import type { Check, Scene } from "../api";
-import { useShown, useStore, type Tab } from "../store";
+import { useEffect, useRef, useState } from "react";
+import type { Check, Pathway, Scene } from "../api";
+import { pack as packOf, useShown, useStore, type Tab } from "../store";
 import { ACCESS_COLOR, ACCESS_LABEL, typeColor } from "../theme";
 import { AccessDot, EdgeTally, NodeChip, NodeChips } from "./Chips";
 
@@ -97,7 +97,7 @@ function Inspector({ scene }: { scene: Scene }) {
 const MARK: Record<Check["status"], string> = { ok: "✓", pending: "…", fail: "✕" };
 
 function Checks({ scene }: { scene: Scene }) {
-  const pack = useStore((s) => s.pack);
+  const pack = useStore(packOf);
   const inv = scene.invariants;
   const preset = scene.preset ? pack?.presets[scene.preset] : null;
   const left = Object.entries(inv.unresolved);
@@ -105,9 +105,8 @@ function Checks({ scene }: { scene: Scene }) {
     <div className="pad">
       <p className="muted">
         {preset ? <>Figures the preset <b>{preset.title}</b> must reach. </> : "These parameters are not a preset, so only the general checks apply. "}
-        {!scene.complete && "Until the derivation is complete, a figure not yet reached is pending."}
+        {!scene.complete && "While choices are still open, a figure not yet reached is pending."}
       </p>
-      {scene.warnings.map((w) => <div key={w} className="notice warn">{w}</div>)}
       <table className="checks">
         <thead><tr><th /><th>check</th><th>expected</th><th>now</th></tr></thead>
         <tbody>
@@ -131,14 +130,8 @@ function Checks({ scene }: { scene: Scene }) {
         </div>
       ) : (
         <p className="muted">{preset && "access" in (preset.expect as object)
-          ? "Compared with the prototype's recorded access graph once the derivation is complete."
-          : "No recorded graph to compare with for these parameters. From P4 this compares the driven graph with the one rebuilt from shape provenance."}</p>
-      )}
-      {preset?.prototype && (
-        <div className="notice">
-          <b>The prototype recorded {preset.prototype.dwellings} dwellings here.</b>
-          <span>{preset.prototype.note} Here they are separate dwellings.</span>
-        </div>
+          ? "Compared with the prototype's recorded access graph once nothing is left to apply."
+          : "No recorded graph to compare with here. From P4 this compares the driven graph with the one rebuilt from shape provenance."}</p>
       )}
 
       <h4>Reachability</h4>
@@ -163,20 +156,79 @@ function Checks({ scene }: { scene: Scene }) {
   );
 }
 
+function PathwayView({ scene }: { scene: Scene }) {
+  const goto = useStore((s) => s.goto);
+  const replay = useStore((s) => s.replay);
+  const busy = useStore((s) => s.busy);
+  const p = scene.pathway;
+  const [pasted, setPasted] = useState("");
+  const [bad, setBad] = useState("");
+  const text = JSON.stringify(p, null, 1);
+  const decisions = p.steps.reduce((n, s) => n + s.decisions, 0);
+  const load = () => {
+    try {
+      const obj = JSON.parse(pasted) as Pathway;
+      if (!Array.isArray(obj.steps)) throw new Error("no steps");
+      setBad("");
+      replay(obj);
+    } catch {
+      setBad("That is not a pathway: paste the JSON exported from this panel.");
+    }
+  };
+  return (
+    <div className="pad">
+      <p className="muted">The choices that led here, in order. The hash chains them to the pack, so the same choices on the same rules give the same hash, and a different choice anywhere gives a different one.</p>
+      <table className="kv">
+        <tbody>
+          <tr><th>pack</th><td>{p.lineage.map((l) => `${l.title} ${l.hash}`).join(" → ")}</td></tr>
+          <tr><th>pathway</th><td>{p.hash}</td></tr>
+          <tr><th>choices</th><td>{p.steps.length}, of which {decisions} decided against another offer</td></tr>
+        </tbody>
+      </table>
+      <h4>Steps</h4>
+      <ol className="pathway">
+        {p.steps.map((s, i) => (
+          <li key={s.hash} className={s.decisions > 0 ? "decision" : ""}>
+            <button className="plain" onClick={() => goto(s.step)} title={`Go to step ${s.step}`}>
+              <b>{s.rule}</b>{Object.keys(s.params).length > 0 && <code>{Object.entries(s.params).map(([k, v]) => `${k}=${v}`).join(" ")}</code>}
+              <span>{s.sites.length > 1 ? `${s.sites.length} sites` : s.label}</span>
+              {s.decisions > 0 && <em title="This choice decided against other offers for the same nodes">decision</em>}
+              {s.consequences > 0 && <span className="muted">+{s.consequences}</span>}
+            </button>
+            <span className="hash">{s.hash.slice(0, 8)}{i === p.steps.length - 1 ? "" : ""}</span>
+          </li>
+        ))}
+      </ol>
+      <h4>Export</h4>
+      <textarea className="export" readOnly value={text} rows={5} onFocus={(e) => e.currentTarget.select()} />
+      <h4>Replay a pathway here</h4>
+      <p className="muted">Paste a pathway's JSON. It replaces this derivation and replays the choices on this pack's rules.</p>
+      <textarea className="export" value={pasted} rows={3} onChange={(e) => setPasted(e.target.value)} placeholder='{"steps": [...]}' />
+      {bad && <div className="notice bad">{bad}</div>}
+      <button className="primary small" disabled={busy || !pasted.trim()} onClick={load}>Replay</button>
+    </div>
+  );
+}
+
 function EventView({ scene }: { scene: Scene }) {
   const e = scene.event;
-  const rule = useStore((s) => s.pack?.rules.find((r) => r.id === e.rule));
+  const pack = useStore(packOf);
+  const rule = pack?.rules.find((r) => r.id === e.rule);
   if (!e.rule || !rule) return <p className="muted pad">No production has been applied yet.</p>;
+  const by = new Map<string, number>();
+  for (const c of e.consequences ?? []) by.set(c.rule, (by.get(c.rule) ?? 0) + 1);
   return (
     <div className="pad">
       <div className="node-head">
-        <div><b>{rule.id} {rule.name}</b><span>{scene.preview ? "preview, not applied" : `step ${scene.step.id}, ${scene.step.elapsed_ms} ms`}</span></div>
+        <div><b>{rule.id} {rule.title}</b><span>{scene.preview ? "preview, not applied" : `step ${scene.step.id}, ${scene.step.elapsed_ms} ms`}</span></div>
       </div>
       <table className="kv">
         <tbody>
-          <tr><th>graph</th><td>{e.operation}</td></tr>
+          <tr><th>graph</th><td>{rule.verb}</td></tr>
           <tr><th>shape</th><td>{e.shape_operation}</td></tr>
-          <tr><th>sites</th><td>{(e.sites ?? []).length > 6 ? `${e.sites!.length} sites` : (e.sites ?? []).join(", ")}</td></tr>
+          {Object.keys(e.params ?? {}).length > 0 && <tr><th>parameters</th><td>{Object.entries(e.params!).map(([k, v]) => `${k} = ${v}`).join(", ")}</td></tr>}
+          <tr><th>sites</th><td>{(e.sites ?? []).length > 4 ? `${e.sites!.length} sites` : (e.sites ?? []).join(", ")}</td></tr>
+          {scene.step.decisions > 0 && <tr><th>decisions</th><td>{scene.step.decisions} of the sites had other offers competing for their nodes</td></tr>}
         </tbody>
       </table>
       {e.identity && <div className="notice">An identity production: the shape changes, the graph does not.</div>}
@@ -189,7 +241,58 @@ function EventView({ scene }: { scene: Scene }) {
       <h4>Nodes relabelled ({e.nodes_changed.length})</h4><NodeChips ids={e.nodes_changed} />
       <h4>Edges added ({e.edges_added.length})</h4><EdgeTally edges={e.edges_added} />
       <h4>Edges removed ({e.edges_removed.length})</h4><EdgeTally edges={e.edges_removed} />
+      <h4>Consequences ({(e.consequences ?? []).length})</h4>
+      {by.size === 0 ? <span className="muted">none</span>
+        : <span className="chips">{[...by.entries()].map(([r, n]) => <span key={r} className="chip flat">{r} ×{n}</span>)}</span>}
       <p className="muted foot">This is the graph's own record of the production. From P3 the ledger of shape provenance is shown beside it.</p>
+    </div>
+  );
+}
+
+function PackView() {
+  const pack = useStore(packOf);
+  const packs = useStore((s) => s.packs);
+  if (!pack) return null;
+  const d = pack.diff;
+  const base = d ? packs.find((p) => p.title === d.base) : null;
+  const byGrammar = new Map<string, number>();
+  for (const r of pack.rules) byGrammar.set(r.grammar, (byGrammar.get(r.grammar) ?? 0) + 1);
+  return (
+    <div className="pad">
+      <div className="node-head"><div><b>{pack.title}</b><span>{pack.model}</span></div></div>
+      <table className="kv">
+        <tbody>
+          <tr><th>version</th><td>{pack.version}</td></tr>
+          <tr><th>hash</th><td>{pack.hash}</td></tr>
+          <tr><th>rules</th><td>{pack.rules.length}: {[...byGrammar.entries()].map(([g, n]) => `${n} in ${g}`).join(", ")}; {pack.rules.filter((r) => r.auto).length} consequences</td></tr>
+          <tr><th>lineage</th><td>{pack.lineage.map((l) => `${l.title} (${l.hash})`).join(" → ")}</td></tr>
+        </tbody>
+      </table>
+      {d && (
+        <>
+          <h4>Transformation of {d.base}</h4>
+          <p className="muted">Knight (1983): a new language from an existing grammar by changing, adding and removing rules. The base pack's hash is {d.base_hash}{base && base.hash !== d.base_hash ? ", which no longer matches its current version" : ""}.</p>
+          <table className="kv">
+            <tbody>
+              <tr><th>changed</th><td>{d.changed.join(", ") || "none"}</td></tr>
+              <tr><th>added</th><td>{d.added.join(", ") || "none"}</td></tr>
+              <tr><th>removed</th><td>{d.removed.join(", ") || "none"}</td></tr>
+              {Object.entries(d.dimensions).map(([k, [a, b]]) => <tr key={k}><th>{k}</th><td>{show(a)} → {show(b)}</td></tr>)}
+              {Object.entries(d.parameters).map(([k, [a, b]]) => <tr key={k}><th>{k}</th><td>{show(a)} → {show(b)}</td></tr>)}
+            </tbody>
+          </table>
+        </>
+      )}
+      <h4>Dimensions</h4>
+      <table className="kv"><tbody>{Object.entries(pack.dimensions).map(([k, v]) => <tr key={k}><th>{k}</th><td>{show(v)}</td></tr>)}</tbody></table>
+      <h4>Rules</h4>
+      <table className="kv rules-list">
+        <tbody>
+          {pack.rules.map((r) => (
+            <tr key={r.id} className={r.auto ? "auto" : ""}><th>{r.id}</th><td>{r.title}<em>{r.verb}</em>{r.auto && <span className="tag">consequence</span>}</td></tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -228,7 +331,7 @@ function Elements() {
   );
 }
 
-const TABS: [Tab, string][] = [["inspect", "Inspect"], ["checks", "Checks"], ["event", "Event"], ["elements", "Elements"]];
+const TABS: [Tab, string][] = [["inspect", "Inspect"], ["checks", "Checks"], ["pathway", "Pathway"], ["event", "Event"], ["pack", "Pack"], ["elements", "Elements"]];
 
 export default function RightPanel() {
   const scene = useShown();
@@ -246,7 +349,8 @@ export default function RightPanel() {
       </div>
       <div className="tab-body">
         {!scene ? null : tab === "inspect" ? <Inspector scene={scene} /> : tab === "checks" ? <Checks scene={scene} />
-          : tab === "event" ? <EventView scene={scene} /> : <Elements />}
+          : tab === "pathway" ? <PathwayView scene={scene} /> : tab === "event" ? <EventView scene={scene} />
+          : tab === "pack" ? <PackView /> : <Elements />}
       </div>
     </aside>
   );

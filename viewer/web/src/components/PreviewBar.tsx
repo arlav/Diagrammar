@@ -1,21 +1,23 @@
-import { useStore } from "../store";
+import { useStore, pack as packOf } from "../store";
 import { EdgeTally } from "./Chips";
 
 export default function PreviewBar() {
   const preview = useStore((s) => s.preview);
   const of = useStore((s) => s.previewOf);
-  const rule = useStore((s) => s.scene?.rules.find((r) => r.id === s.previewOf?.rule));
+  const pack = useStore(packOf);
   const apply = useStore((s) => s.apply);
   const cancel = useStore((s) => s.cancelPreview);
   const busy = useStore((s) => s.busy);
-  if (!preview || !of || !rule) return null;
+  if (!preview || !of) return null;
+  const rule = pack?.rules.find((r) => r.id === of.rule);
   const e = preview.event;
   const n = preview.step.applications;
+  const auto = preview.step.consequences.length;
   return (
     <div className="preview-bar" role="dialog" aria-label="Preview of a production">
       <div className="what">
-        <b>{rule.id} {rule.name}</b>
-        <span>{n > 1 ? `at ${n} sites` : `at ${preview.step.label}`}</span>
+        <b>{rule?.id ?? of.rule} {rule?.title ?? ""}</b>
+        <span>{n > 1 ? `at ${n} sites` : `at ${preview.step.label}`}{auto > 0 ? `, ${auto} consequence${auto > 1 ? "s" : ""}` : ""}</span>
       </div>
       <div className="effect">
         {e.identity
@@ -31,7 +33,7 @@ export default function PreviewBar() {
       </div>
       <div className="actions">
         <button onClick={cancel}>Cancel</button>
-        <button className="primary" disabled={busy} onClick={() => apply(of.rule, of.site)}>Apply</button>
+        <button className="primary" disabled={busy} onClick={() => apply(of.rule, of.select)}>Apply</button>
       </div>
     </div>
   );

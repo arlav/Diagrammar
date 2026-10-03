@@ -258,7 +258,33 @@ exposed in a viewer that can enumerate.
    parity must hold for the derivation that follows the as-built order; every other derivation is a
    variant and is judged by the gates (reachability, terminal discipline, lockstep).
 
-## 9. Plan for this branch
+## 9. Plan for this branch, and its status (2026-10-03)
+
+| Step | Work | Status |
+|---|---|---|
+| 1 | Pattern matcher: typed subgraph with attribute predicates and NACs on `GraphState` | **done**: `topogrammar/graph/patterns.py`; a 4-node pattern matches the as-built graph in about 1 ms |
+| 2 | Rule schema (YAML) and the effect-oriented apply: delete, contract, create, relabel, link, unlink | **done**: `topogrammar/graph/rules.py`, `pack.py`, `derivation.py` |
+| 3 | The Narkomfin pack rewritten as 28 local rules (19 choices, 9 consequences), with the as-built as a recorded pathway | **done**: `examples/narkomfin/graph/`; the as-built pathway reproduces the recorded access graph edge for edge, 115 / 121 / 1 / 7 / 49, in 1.3 s; `ends`, `core_lines`, `cells`, `corridor_levels` are gone from the parameters |
+| 4 | Independence of offers: which choices decide against others | **done** as parallel independence (a site conflicts with another when it changes a node the other reads); exposed per site and per group. A static critical-pair analysis over the rule set, independent of the state, is not done |
+| 5 | Pathways: recorded, replayed, hashed (axis E2) and the pack hashed with its lineage (axis E3) | **done**; enumeration with canonical de-duplication (V6) is not |
+| 6 | Viewer: every match offered, drawn LHS → RHS cards, decisions marked, pathway panel, pack transformation panel, the Unité derivable | **done** except authoring: cards are drawn from the data, not yet drawn *into* it |
+
+The Unité pack (`examples/unite/graph/`) extends Narkomfin by changing one rule (`street`), adding two
+(`cell_up`, `cell_down`) and removing twelve (the Narkomfin cell and end unit, and the whole condenser
+grammar); its recorded pathway gives 81 dwellings, all reachable, with every bay resolved.
+
+Two things the port taught:
+
+- **A pair holds one relation.** When a bay becomes a stairwell its plain `above` adjacency becomes a
+  `stair`, and the blind `party` wall beside a lobby becomes a `core_door`. `link` therefore relabels an
+  existing edge rather than refusing. This is what the brief's MERGED and MODIFIED relations will look
+  like on the graph side.
+- **Consequences are not choices.** Nine of the 28 rules (adjacency, street links, stair chains, lobby
+  doors, the mirror mark) fire wherever they match and are kept out of the palette. They are exactly the
+  rules that provenance supplies for free on the shape side (a shared face is an edge), so from P4 they
+  can be replaced by the ledger without touching the choices.
+
+### Plan as first written
 
 | Step | Work | Done when |
 |---|---|---|
@@ -273,7 +299,18 @@ Steps 1–4 are the same work that P2–P4 need (the shape face of each rule and
 graph plug into the same rule objects), so this is not a detour from the plan; it replaces the
 P1 procedures with the form P2 would have needed anyway.
 
-## 10. Questions for Theo
+## 10. Decisions (Theo, 2026-10-03)
+
+1. **Free choice, every match offered** (C4). Stages become an optional strategy.
+2. **Rules are authored as drawn LHS → RHS cards**; the text form is generated from them.
+3. **First transformation: Narkomfin → Unité d'Habitation.**
+4. **Controls and variations are structured as pathways the architect governs**: a pathway is the
+   recorded sequence of choices; the engine shows where a choice changes the design and where it does
+   not; pathways are named, replayed, compared and hashed.
+5. **Rule changes are versioned and hashed.** The link with the history of transformations Wassim is
+   building inside Topologic is to be discussed with him.
+
+## 11. Questions that led to the decisions
 
 1. Is C4 (every match offered, order free, decisions marked) the way you want to drive it, with stages
    kept as an optional strategy? Or should the viewer keep stages as the default and open order only

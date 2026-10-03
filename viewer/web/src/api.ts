@@ -40,24 +40,63 @@ export interface Site {
   key: string;
   label: string;
   nodes: string[];
+  touched: string[];
+  params: Record<string, unknown>;
+  decisive: boolean;
+  conflicts_with: string[];
+  conflicts: number;
+}
+
+export interface SiteGroup {
+  label: string;
+  params: Record<string, unknown>;
+  sites: Site[];
+  competes_with: string[];
 }
 
 export interface RuleInfo {
   id: string;
-  name: string;
+  title: string;
+  verb: string;
   grammar: string;
-  stage: number;
-  operation: string;
-  shape_operation: string;
   description: string;
-  identity: boolean;
   symbols: string[];
+  shape: { operation?: string };
+  auto: boolean;
+  identity: boolean;
+  params: Record<string, unknown>;
+  hash: string;
 }
 
 export interface Rule extends RuleInfo {
   enabled: boolean;
-  reason: string;
-  sites: Site[];
+  site_count: number;
+  groups: SiteGroup[];
+}
+
+export interface PatternView {
+  nodes: Record<string, Record<string, unknown>>;
+  edges: [string, string, string | null][];
+  where: string[];
+  flags: string[];
+}
+
+export interface Card {
+  id: string;
+  params: Record<string, unknown>;
+  lhs: PatternView;
+  nac: PatternView[];
+  rhs: {
+    delete?: string[];
+    contract?: { into: string; nodes: string[] };
+    create?: Record<string, Record<string, unknown>>;
+    relabel?: Record<string, Record<string, unknown>>;
+    unlink?: [string, string][];
+    link?: [string, string, string][];
+    set_edge?: [string, string, Record<string, unknown>][];
+    flag?: string[];
+  };
+  touched: string[];
 }
 
 export interface TimelineStep {
@@ -69,6 +108,8 @@ export interface TimelineStep {
   nodes: number;
   edges: number;
   applications: number;
+  consequences: number;
+  decisions: number;
   elapsed_ms: number;
   children: number[];
   on_path: boolean;
@@ -108,7 +149,9 @@ export interface GraphEvent {
   shape_operation?: string;
   identity?: boolean;
   sites?: string[];
+  params?: Record<string, unknown>;
   matched?: string[];
+  consequences?: { rule: string; label: string }[];
   nodes_removed: string[];
   nodes_added: string[];
   nodes_changed: string[];
@@ -117,14 +160,48 @@ export interface GraphEvent {
   edges_changed: GraphEdge[];
 }
 
+export interface PathwayStep {
+  step: number;
+  rule: string;
+  params: Record<string, unknown>;
+  sites: string[][];
+  consequences: number;
+  nodes: number;
+  edges: number;
+  hash: string;
+  label: string;
+  decisions: number;
+}
+
+export interface Pathway {
+  pack: string;
+  lineage: { title: string; version: string; hash: string }[];
+  preset: string | null;
+  parameters: Record<string, unknown>;
+  steps: PathwayStep[];
+  hash: string;
+}
+
+export interface Strategy {
+  id: string;
+  title: string;
+  steps: number;
+  cursor: number;
+  skipped: { index: number; rule: string }[];
+  next: { rule: string; params?: Record<string, unknown>; select?: unknown; repeat?: boolean } | null;
+}
+
 export interface Scene {
   session: string;
-  warnings: string[];
+  pack: string;
+  pack_name: string;
+  pack_hash: string;
   preview: boolean;
   preset: string | null;
   parameters: Record<string, unknown>;
   dimensions: Record<string, unknown>;
-  step: { id: number; parent: number | null; rule: string | null; site: string | null; label: string; note: string; applications: number; elapsed_ms: number };
+  step: { id: number; parent: number | null; rule: string | null; label: string; applications: number; decisions: number;
+          consequences: { rule: string; label: string }[]; elapsed_ms: number; params: Record<string, unknown> };
   head: number;
   complete: boolean;
   event: GraphEvent;
@@ -141,27 +218,45 @@ export interface Scene {
   };
   rules: Rule[];
   timeline: TimelineStep[];
+  pathway: Pathway;
+  strategy: Strategy | null;
 }
 
 export interface Preset {
   title: string;
   note: string;
   parameters: Record<string, unknown>;
+  strategy: string | null;
   expect: Record<string, unknown>;
-  prototype: { dwellings: number; note: string } | null;
+}
+
+export interface PackDiff {
+  base: string;
+  base_hash: string;
+  added: string[];
+  removed: string[];
+  changed: string[];
+  dimensions: Record<string, [unknown, unknown]>;
+  parameters: Record<string, [unknown, unknown]>;
 }
 
 export interface Pack {
+  name: string;
   title: string;
   version: string;
   model: string;
+  hash: string;
+  lineage: { title: string; version: string; hash: string }[];
+  diff: PackDiff | null;
   source: string;
   relations: Record<string, Access>;
   occupiable: string[];
   nonterminals: string[];
-  parameters: Record<string, unknown>;
+  dimensions: Record<string, unknown>;
+  parameters: Record<string, number>;
   parameter_notes: Record<string, string>;
   presets: Record<string, Preset>;
+  strategies: Record<string, { id: string; title: string; note: string; steps: number }>;
   rules: RuleInfo[];
 }
 
@@ -176,6 +271,8 @@ export interface ElementType {
   where: string;
   grammar_role: string;
 }
+
+export type Selection = string | string[] | { where?: string; params?: Record<string, unknown>; group?: string };
 
 export class ApiError extends Error {
   problems: string[];
@@ -210,13 +307,17 @@ async function call<T>(path: string, body?: unknown): Promise<T> {
 }
 
 export const api = {
-  pack: () => call<Pack>("/api/pack"),
+  packs: () => call<Pack[]>("/api/packs"),
+  card: (pack: string, rule: string, params?: Record<string, unknown>) =>
+    call<Card>(`/api/pack/${pack}/card/${rule}` + (params ? `?params=${encodeURIComponent(JSON.stringify(params))}` : "")),
   elements: () => call<{ elements: ElementType[] }>("/api/elements"),
-  start: (preset: string | null, parameters?: Record<string, unknown>) =>
-    call<Scene>("/api/session", { preset, parameters: parameters ?? null }),
-  preview: (sid: string, rule: string, site: string) => call<Scene>(`/api/session/${sid}/preview`, { rule, site }),
-  apply: (sid: string, rule: string, site: string) => call<Scene>(`/api/session/${sid}/apply`, { rule, site }),
+  start: (pack: string, preset: string | null, parameters?: Record<string, unknown>) =>
+    call<Scene>("/api/session", { pack, preset, parameters: parameters ?? null }),
+  preview: (sid: string, rule: string, select: Selection | null) => call<Scene>(`/api/session/${sid}/preview`, { rule, select }),
+  apply: (sid: string, rule: string, select: Selection | null) => call<Scene>(`/api/session/${sid}/apply`, { rule, select }),
   goto: (sid: string, step: number) => call<Scene>(`/api/session/${sid}/goto`, { step }),
   undo: (sid: string) => call<Scene>(`/api/session/${sid}/undo`, {}),
-  run: (sid: string, until: string | null) => call<Scene>(`/api/session/${sid}/run`, { until }),
+  run: (sid: string, mode: "next" | "continue" | "all") => call<Scene>(`/api/session/${sid}/run`, { mode }),
+  pathway: (sid: string) => call<Pathway>(`/api/session/${sid}/pathway`),
+  replay: (sid: string, pathway: Pathway) => call<Scene>(`/api/session/${sid}/replay`, { pathway }),
 };

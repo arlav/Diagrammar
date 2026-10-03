@@ -99,12 +99,16 @@ class GraphState:
         return nid
 
     def link(self, a, b, rel, **props):
-        """Add an edge. Returns False when an end is missing: a rule may offer a link to a neighbour
-        that a variant does not have."""
+        """There is now a relation `rel` between a and b. A pair holds one relation, so an existing
+        edge is relabelled: a stair replaces the plain adjacency of two stacked bays, a lobby door
+        replaces the blind party wall. Returns False when an end is missing."""
         if a not in self._ix or b not in self._ix or a == b:
             return False
-        if self.edge(a, b) is not None:
-            return False
+        e = TGraph.Edge(self.graph, vertexA=self._ix[a], vertexB=self._ix[b], silent=True)
+        if e is not None:
+            for k, v in dict(rel=rel, access=self.access.get(rel, "none"), **props).items():
+                self.graph.SetEdgeValue(e["index"], k, v, silent=True)
+            return True
         self.graph.AddEdge(self._ix[a], self._ix[b],
                            dictionary=dict(rel=rel, access=self.access.get(rel, "none"), **props), silent=True)
         return True
@@ -131,6 +135,14 @@ class GraphState:
                     self.graph.SetVertexValue(self._ix[nid], kk, round(float(vv), 3), silent=True)
             else:
                 self.graph.SetVertexValue(self._ix[nid], k, v, silent=True)
+
+    def rename(self, old, new):
+        """Give a node a new semantic id. Edges follow, since they are held by index."""
+        if new in self._ix:
+            raise ValueError(f"node '{new}' already exists")
+        i = self._ix.pop(old)
+        self._ix[new] = i
+        self.graph.SetVertexValue(i, "id", new, silent=True)
 
     def update_edge(self, a, b, **props):
         e = TGraph.Edge(self.graph, vertexA=self._ix[a], vertexB=self._ix[b], silent=True)

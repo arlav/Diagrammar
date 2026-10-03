@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { useStore } from "../store";
 
-const text = (v: unknown) => (typeof v === "object" ? JSON.stringify(v).replace(/,/g, ", ") : String(v));
-
 export default function AxiomDrawer() {
-  const pack = useStore((s) => s.pack);
+  const packs = useStore((s) => s.packs);
   const scene = useStore((s) => s.scene);
   const open = useStore((s) => s.axiomOpen);
   const setOpen = useStore((s) => s.openAxiom);
@@ -13,56 +11,82 @@ export default function AxiomDrawer() {
   const refused = useStore((s) => s.problems);
   const error = useStore((s) => s.error);
 
+  const [packName, setPackName] = useState("");
   const [preset, setPreset] = useState<string>("");
   const [fields, setFields] = useState<Record<string, string>>({});
   const [bad, setBad] = useState<Record<string, string>>({});
-  const [checked, setChecked] = useState(false);      // the server has seen what is in the fields now
+  const [checked, setChecked] = useState(false);
 
-  const fill = (name: string) => {
-    if (!pack) return;
-    const p = { ...pack.parameters, ...(pack.presets[name]?.parameters ?? {}) };
-    setPreset(name);
-    setFields(Object.fromEntries(Object.entries(p).map(([k, v]) => [k, text(v)])));
+  const pack = packs.find((p) => p.name === packName) ?? null;
+
+  const fill = (name: string, presetName: string) => {
+    const p = packs.find((x) => x.name === name);
+    if (!p) return;
+    const params = { ...p.parameters, ...(p.presets[presetName]?.parameters ?? {}) };
+    setPackName(name);
+    setPreset(presetName);
+    setFields(Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)])));
     setBad({});
+    setChecked(false);
   };
 
   useEffect(() => {
-    if (!open || !pack || !scene) return;
-    if (scene.preset) fill(scene.preset);
-    else { setPreset(""); setFields(Object.fromEntries(Object.entries(scene.parameters).map(([k, v]) => [k, text(v)]))); setBad({}); }
+    if (!open || !scene) return;
+    if (scene.preset) fill(scene.pack_name, scene.preset);
+    else {
+      setPackName(scene.pack_name); setPreset("");
+      setFields(Object.fromEntries(Object.entries(scene.parameters).map(([k, v]) => [k, String(v)])));
+      setBad({}); setChecked(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   if (!open || !pack) return null;
 
-  const base: Record<string, unknown> = { ...pack.parameters, ...(preset ? pack.presets[preset].parameters : {}) };
-  const edited = Object.keys(fields).filter((k) => fields[k].replace(/\s/g, "") !== text(base[k]).replace(/\s/g, ""));
+  const base: Record<string, unknown> = { ...pack.parameters, ...(preset ? pack.presets[preset]?.parameters ?? {} : {}) };
+  const edited = Object.keys(fields).filter((k) => fields[k].trim() !== String(base[k]));
 
   const submit = async () => {
     const values: Record<string, unknown> = {};
     const wrong: Record<string, string> = {};
     for (const k of edited) {
-      try { values[k] = JSON.parse(fields[k]); }
-      catch { wrong[k] = typeof pack.parameters[k] === "number" ? "Enter a whole number." : 'Enter a list, such as [1, 4] or [[1, 2, 0, "K"]].'; }
+      const n = Number(fields[k]);
+      if (!Number.isInteger(n)) wrong[k] = "Enter a whole number.";
+      else values[k] = n;
     }
     setBad(wrong);
     setChecked(Object.keys(wrong).length === 0);
     if (Object.keys(wrong).length > 0) return;
-    const ok = await start(preset || null, edited.length > 0 ? values : undefined);
+    const ok = await start(packName, preset || null, edited.length > 0 ? values : undefined);
     if (ok) setOpen(false);
   };
 
   const steps = scene?.timeline.length ?? 0;
+  const d = pack.diff;
   return (
     <div className="scrim" onMouseDown={(e) => { if (e.target === e.currentTarget) setOpen(false); }}>
       <div className="drawer" role="dialog" aria-label="Axiom">
         <header><h2>Axiom</h2><button className="x" onClick={() => setOpen(false)} aria-label="Close">×</button></header>
         <div className="drawer-body">
+          <h4>Grammar</h4>
+          <div className="presets">
+            {packs.map((p) => (
+              <button key={p.name} className={"preset" + (packName === p.name ? " on" : "")} onClick={() => fill(p.name, Object.keys(p.presets)[0])}>
+                <b>{p.title}</b><span>{p.diff ? `a transformation of ${p.diff.base}: ${p.rules.length} rules` : `${p.rules.length} rules`}</span>
+              </button>
+            ))}
+          </div>
+          {d && (
+            <p className="muted small">
+              From {d.base}: changed {d.changed.join(", ") || "nothing"}; added {d.added.join(", ") || "nothing"}; removed {d.removed.length} rule{d.removed.length === 1 ? "" : "s"}.
+            </p>
+          )}
           <h4>Start from</h4>
           <div className="presets">
             {Object.entries(pack.presets).map(([k, p]) => (
-              <button key={k} className={"preset" + (preset === k ? " on" : "")} onClick={() => fill(k)}>
+              <button key={k} className={"preset" + (preset === k ? " on" : "")} onClick={() => fill(packName, k)}>
                 <b>{p.title}</b><span>{p.note}</span>
+                {p.strategy && <em>recorded pathway: {pack.strategies[p.strategy]?.steps ?? "?"} choices</em>}
               </button>
             ))}
           </div>

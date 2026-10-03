@@ -1,0 +1,546 @@
+# The Dom Narkomfin graph grammar as local productions.
+#
+# Each rule has a left-hand side (lhs: a pattern), negative application conditions (nac: patterns
+# that must not extend a match) and a right-hand side (rhs: effects on the matched nodes). Rules
+# marked `auto` are consequences and fire wherever they match; the others are the architect's choices.
+# Values: "A" literal, "=expr" expression, "L{b.level}" template. Families: b[j] with for: "j in range(k)".
+
+# ================================================================== grammar A: the block
+- id: axiom_block
+  title: AXIOM
+  verb: "∅ → mass"
+  grammar: GA
+  description: One node of type mass, the block as a single prism.
+  shape: {operation: axiom prism}
+  group: axiom
+  label: the block
+  nac:
+    - flags: [axiom_block]
+  rhs:
+    create:
+      m: {id: BLOCK, type: mass, block: A, label: BLOCK}
+    flag: [axiom_block]
+
+- id: lift
+  title: R_LIFT
+  verb: "mass → ground + mass"
+  grammar: GA
+  symbols: [CO.PIL]
+  description: The block is lifted on pilotis. The ground plane becomes a node in its own right, joined to the mass by 'supports' (access none), which is what makes the pilotis legible to the graph.
+  shape: {operation: SPLIT-Z}
+  group: lift
+  label: the block
+  lhs:
+    nodes:
+      m: {type: mass, block: A, id: BLOCK}
+  rhs:
+    delete: [m]
+    create:
+      g: {id: GROUND, type: ground, block: A, label: GROUND}
+      u: {id: MASS, type: mass, block: A, label: MASS}
+    link:
+      - [g, u, supports]
+
+- id: stack
+  title: R_STACK
+  verb: "mass → storey × n"
+  grammar: GA
+  symbols: [SL.BAY, SL.ROOF]
+  description: The mass becomes a chain of storey nodes on 'above' edges (access none).
+  shape: {operation: repeated SPLIT-Z}
+  params: {n: "=[P.levels]"}
+  group: stack
+  label: "=f'{n} storeys'"
+  lhs:
+    nodes:
+      m: {type: mass, block: A, id: MASS}
+      g: {type: ground}
+  rhs:
+    delete: [m]
+    create:
+      L[j]: {id: "L{j}", type: storey, level: "=j", block: A, label: "STOREY L{j}", for: "j in range(1, n + 1)"}
+    link:
+      - [g, "L[1]", above]
+      - ["L[j]", "L[j+1]", above, {for: "j in range(1, n)"}]
+
+- id: bay
+  title: R_BAY
+  verb: "storey → bay × n, party"
+  grammar: GA
+  symbols: [DV.WALL.PARTY, CO.RECT, SL.BAY]
+  description: A storey is divided on the bay rhythm. The bays are chained by 'party' edges whose access is NONE, so the subdivision creates adjacency without access; every later rule has to supply the access explicitly.
+  shape: {operation: SPLIT-X + wall/column pair}
+  params: {n: "=[P.bays]"}
+  group: "bay rhythm"
+  label: "storey L{s.level}"
+  lhs:
+    nodes:
+      s: {type: storey, block: A}
+  rhs:
+    delete: [s]
+    create:
+      b[i]: {id: "b{s.level}_{i:02d}", type: bay, level: "=s.level", bay: "=i", block: A, label: "BAY {i}", for: "i in range(n)"}
+    link:
+      - ["b[i]", "b[i+1]", party, {for: "i in range(n - 1)"}]
+
+- id: stack_adjacent
+  title: stacked bays
+  verb: "bay over bay → above"
+  grammar: GA
+  auto: true
+  description: A bay sits on the bay below it. On the shape side this is a shared face.
+  lhs:
+    nodes:
+      a: {type: bay, block: A}
+      b: {type: bay, block: A, level: "=a.level + 1", bay: "=a.bay"}
+  nac:
+    - edges: [[a, b]]
+  rhs:
+    link:
+      - [a, b, above]
+
+- id: street
+  title: R_CORRIDOR
+  verb: "bay → corridor + band, door"
+  grammar: GA
+  symbols: [SP.CORRIDOR, DV.WALL.CORR, OP.DOOR]
+  description: A bay is split into a corridor segment and the band behind it, with one door between them. Segments on one level chain into an internal street (access open); each band has exactly one door to it.
+  shape: {operation: SPLIT-Y + door wall}
+  group: "street on L{b.level}"
+  label: "bay {b.bay}, L{b.level}"
+  lhs:
+    nodes:
+      b: {type: bay, block: A}
+  nac:
+    - nodes:
+        c: {type: corridor, level: "=b.level", bay: "=b.bay"}
+  rhs:
+    create:
+      c: {id: "c{b.level}_{b.bay:02d}", type: corridor, level: "=b.level", bay: "=b.bay", block: A, symbol: SP.CORRIDOR, label: "CORRIDOR L{b.level}"}
+    link:
+      - [c, b, door]
+
+- id: street_link
+  title: street
+  verb: "corridor beside corridor → open"
+  grammar: GA
+  auto: true
+  description: Two corridor segments side by side are one street.
+  lhs:
+    nodes:
+      a: {type: corridor}
+      b: {type: corridor, level: "=a.level", bay: "=a.bay + 1"}
+  nac:
+    - edges: [[a, b, corridor]]
+  rhs:
+    link:
+      - [a, b, corridor]
+
+- id: cell
+  title: R_CELL
+  verb: "bands × k with one street door → dwelling"
+  grammar: GA
+  symbols: [SP.CELL.K, SP.CELL.F, CI.STAIR.K, CI.STAIR.F]
+  description: A run of k stacked bands in one bay, entered from the street on level ci of the run, becomes ONE dwelling. The door to the street survives, the internal 'above' edges dissolve. k and ci decide the section - L, U, Gamma or Z - and one street serves k floors.
+  shape: {operation: merge stack - corridor notch}
+  params: {k: [2, 3, 4], ci: "=range(k)"}
+  group: "=f'{kind(k, ci)} cell: {k} levels, entered on level {ci}'"
+  label: "=f'bay {b0.bay}, L{b0.level}-L{b0.level + k - 1}'"
+  lhs:
+    nodes:
+      b[j]: {type: bay, block: A, level: "=b[0].level + j", for: "j in range(k)"}
+      c: {type: corridor}
+    edges:
+      - ["b[j]", "b[j+1]", above, {for: "j in range(k - 1)"}]
+      - [c, "b[ci]", door]
+  nac:
+    - nodes:
+        d: {type: corridor}
+      edges: [[d, "b[j]", door]]
+      for: "j in [j for j in range(k) if j != ci]"
+  rhs:
+    contract: {into: d, nodes: "=[f'b{j}' for j in range(k)]"}
+    create:
+      d: {id: "=f'{tag(k, ci)}{b0.bay:02d}_L{b0.level}'", type: dwelling, tag: "=tag(k, ci)", kind: "=kind(k, ci)", levels: "=k", corridor_index: "=ci", bay: "=b0.bay", level: "=b0.level", block: A, symbol: "=f'SP.CELL.{tag(k, ci)}'", label: "=f'{tag(k, ci)} [{kind(k, ci)}] b{b0.bay}'"}
+
+- id: end_unit
+  title: R_END_UNIT
+  verb: "band beside a core → flat"
+  grammar: GA
+  symbols: [SP.CELL.E]
+  description: A band within two bays of a stair core, with something above it, becomes a one-level flat entered from the stair lobby. It is the degenerate case of the cell rule, k = 1, no street.
+  shape: {operation: relabel}
+  group: "end units on L{b.level}"
+  label: "bay {b.bay}, L{b.level}"
+  lhs:
+    nodes:
+      b: {type: bay, block: A}
+      s: {type: stairwell, block: A, level: "=b.level"}
+      t: {}
+    edges:
+      - [b, t, above]
+    where:
+      - "abs(b.bay - s.bay) <= 2"
+      - "t.level == b.level + 1"
+  rhs:
+    relabel:
+      b: {id: "E{b.level}_{b.bay:02d}", type: dwelling, tag: E, kind: flat, levels: 1, corridor_index: 0, symbol: SP.CELL.E, label: "END UNIT L{b.level} b{b.bay}"}
+
+- id: street_stop
+  title: street stops at the core
+  verb: "flat with a street door → door removed"
+  grammar: GA
+  auto: true
+  description: The street stops at the cores. An end unit is entered from the stair lobby, so the door it had to the corridor goes.
+  lhs:
+    nodes:
+      d: {type: dwelling, tag: E}
+      c: {type: corridor}
+    edges:
+      - [d, c, door]
+  rhs:
+    unlink:
+      - [d, c]
+
+- id: core
+  title: R_CORE
+  verb: "bay → stairwell"
+  grammar: GA
+  symbols: [SP.STAIRWELL, CI.FLIGHT, CI.LANDING, DV.WALL.CORE]
+  description: A bay becomes a stairwell. Stacked stairwells chain by 'stair' edges (access stair), the only vertical access in the graph, and the lobby opens onto the street and the dwellings beside it.
+  shape: {operation: relabel + flights}
+  group: "core on line {b.bay}"
+  label: "bay {b.bay}, L{b.level}"
+  lhs:
+    nodes:
+      b: {type: bay, block: A}
+  rhs:
+    relabel:
+      b: {id: "S{b.level}_{b.bay:02d}", type: stairwell, symbol: SP.STAIRWELL, label: "STAIRWELL b{b.bay}"}
+
+- id: stair_ground
+  title: stair to the ground
+  verb: "stairwell on L1 → stair to ground"
+  grammar: GA
+  auto: true
+  lhs:
+    nodes:
+      s: {type: stairwell, block: A, level: 1}
+      g: {type: ground}
+  nac:
+    - edges: [[s, g, stair]]
+  rhs:
+    link:
+      - [g, s, stair]
+
+- id: stair_chain
+  title: flights
+  verb: "stairwell over stairwell → stair"
+  grammar: GA
+  auto: true
+  lhs:
+    nodes:
+      a: {type: stairwell}
+      b: {type: stairwell, block: "=a.block", bay: "=a.bay", level: "=a.level + 1"}
+  nac:
+    - edges: [[a, b, stair]]
+  rhs:
+    link:
+      - [a, b, stair]
+
+- id: lobby_street
+  title: lobby to the street
+  verb: "stairwell beside corridor → core door"
+  grammar: GA
+  auto: true
+  description: The core interrupts the street, so it carries it. A door on each side.
+  lhs:
+    nodes:
+      s: {type: stairwell, block: A}
+      c: {type: corridor, level: "=s.level"}
+    where:
+      - "abs(c.bay - s.bay) == 1"
+  nac:
+    - edges: [[s, c, core_door]]
+  rhs:
+    link:
+      - [s, c, core_door]
+
+- id: lobby_dwelling
+  title: lobby to the dwellings
+  verb: "stairwell beside dwelling → core door"
+  grammar: GA
+  auto: true
+  description: The dwelling beside the core is entered from the lobby, once, on its lowest level. End units within two bays are too.
+  lhs:
+    nodes:
+      s: {type: stairwell, block: A}
+      d: {type: dwelling, level: "=s.level"}
+    where:
+      - "d.bay is not None and abs(d.bay - s.bay) <= (2 if d.tag == 'E' else 1)"
+  nac:
+    - edges: [[s, d, core_door]]
+  rhs:
+    link:
+      - [s, d, core_door]
+
+- id: pair_mark
+  title: mirrored pair
+  verb: "K beside K → mirror"
+  grammar: GA
+  auto: true
+  description: K dwellings are built in mirrored pairs about their shared party wall.
+  lhs:
+    nodes:
+      a: {type: dwelling, tag: K}
+      b: {type: dwelling, tag: K, bay: "=a.bay + 1"}
+    edges:
+      - [a, b, party]
+    where:
+      - "a.bay % 2 == 1"
+      - "a.mirror_marked is None"
+  rhs:
+    set_edge:
+      - [a, b, {mirror: true}]
+    relabel:
+      a: {mirror_marked: true}
+      b: {mirror_marked: true}
+
+- id: roof
+  title: R_ROOF
+  verb: "bay with nothing above → roof"
+  grammar: GA
+  symbols: [SL.ROOF, EN.PARAPET, EN.WALL.END]
+  description: A bay with nothing above it is roof zone. A bay left anywhere below stays a non-terminal, and is reported as such.
+  shape: {operation: parapet}
+  group: roof
+  label: "bay {b.bay}, L{b.level}"
+  lhs:
+    nodes:
+      b: {type: bay, block: A}
+  nac:
+    - nodes:
+        t: {}
+      edges: [[b, t, above]]
+      where: ["t.level == b.level + 1"]
+  rhs:
+    relabel:
+      b: {type: roof, symbol: SL.ROOF, label: "ROOF ZONE {b.label}"}
+
+- id: penthouse
+  title: R_PENTHOUSE
+  verb: "top of a core → penthouse"
+  grammar: GA
+  description: A terminal dwelling attached to the top of a core.
+  shape: {operation: attach}
+  group: penthouse
+  label: "core on line {s.bay}"
+  lhs:
+    nodes:
+      s: {type: stairwell, block: A}
+  nac:
+    - nodes:
+        t: {type: stairwell, bay: "=s.bay", level: "=s.level + 1"}
+    - nodes:
+        p: {type: dwelling, tag: PH}
+      edges: [[s, p]]
+  rhs:
+    create:
+      p: {id: "PH_{s.bay:02d}", type: dwelling, tag: PH, kind: flat, levels: 1, level: "=s.level + 1", block: A, label: PENTHOUSE}
+    link:
+      - [s, p, stair]
+
+- id: facade
+  title: R_FACADE
+  verb: "(identity)"
+  grammar: GA
+  identity: true
+  symbols: [EN.SPAND, EN.WIN.RIBBON]
+  description: IDENTITY on the graph. The facade split (spandrel + ribbon, or spandrel 0 for a curtain wall) changes no node and no edge. It stays in the rule list as the honest record that shape and graph grammars are not in bijection; envelope is style, and the graph cannot see it.
+  shape: {operation: SPLIT-Z (parametric h)}
+  group: facade
+  label: the envelope
+  lhs:
+    nodes:
+      g: {type: ground}
+  nac:
+    - flags: [facade]
+  rhs:
+    flag: [facade]
+
+# ================================================================== grammar B: the condenser
+- id: axiom_condenser
+  title: AXIOM
+  verb: "∅ → mass + interface"
+  grammar: GB
+  description: A second axiom, plus ONE interface node standing for the block's street. Grammar B sees nothing else of grammar A, which is what lets the two be varied independently.
+  shape: {operation: axiom prism}
+  group: axiom
+  label: the condenser
+  nac:
+    - flags: [axiom_condenser]
+  rhs:
+    create:
+      m: {id: COND, type: mass, block: B, label: CONDENSER}
+      f: {id: IFACE, type: interface, block: A/B, label: "[interface] BLOCK L1 corridor", pos: "=(0.0, D.corridor / 2, D.pilotis + 0.5 * D.storey)"}
+    flag: [axiom_condenser]
+
+- id: stack_condenser
+  title: R_STACK
+  verb: "mass → storey × n"
+  grammar: GB
+  description: The same stacking production as in grammar A.
+  shape: {operation: repeated SPLIT-Z}
+  params: {n: "=[P.cb_levels]"}
+  group: stack
+  label: "=f'{n} storeys'"
+  lhs:
+    nodes:
+      m: {type: mass, block: B}
+  rhs:
+    delete: [m]
+    create:
+      CB[j]: {id: "CB{j}", type: storey, level: "=j", block: B, label: "CB L{j}", for: "j in range(n)"}
+    link:
+      - ["CB[j]", "CB[j+1]", above, {for: "j in range(n - 1)"}]
+
+- id: merge
+  title: R_MERGE
+  verb: "storey over storey → hall"
+  grammar: GB
+  symbols: [SP.HALL]
+  description: Two stacked storeys become one double-height hall. The same contraction as the cell rule with the opposite programme, a collective room instead of a dwelling. The result is a node of high degree, which is the graph-theoretic definition of a social condenser.
+  shape: {operation: UNION of two storeys}
+  group: hall
+  label: "CB L{a.level}-L{b.level}"
+  lhs:
+    nodes:
+      a: {type: storey, block: B}
+      b: {type: storey, block: B, level: "=a.level + 1"}
+    edges:
+      - [a, b, above]
+  rhs:
+    contract: {into: h, nodes: [a, b]}
+    create:
+      h: {id: HALL, type: hall, level: "=a.level", levels: 2, block: B, symbol: SP.HALL, label: "SP.HALL (social condenser)"}
+
+- id: merge_more
+  title: R_MERGE (again)
+  verb: "hall + storey → taller hall"
+  grammar: GB
+  description: The hall absorbs the storey above or below it.
+  shape: {operation: UNION}
+  group: hall
+  label: "CB L{s.level}"
+  lhs:
+    nodes:
+      h: {type: hall}
+      s: {type: storey, block: B}
+    edges:
+      - [h, s, above]
+  rhs:
+    contract: {into: g, nodes: [h, s]}
+    create:
+      g: {id: HALL, type: hall, level: "=min(h.level, s.level)", levels: "=h.levels + 1", block: B, symbol: SP.HALL, label: "SP.HALL (social condenser)"}
+
+- id: gallery
+  title: R_GALLERY
+  verb: "hall → hall + gallery, open"
+  grammar: GB
+  symbols: [SL.GALL]
+  description: A gallery joined to the hall by an 'open' edge, no wall, no door. The open edge is what distinguishes a gallery from a room.
+  shape: {operation: SUBTRACT curved void}
+  group: gallery
+  label: the hall
+  lhs:
+    nodes:
+      h: {type: hall}
+  nac:
+    - nodes:
+        g: {type: gallery}
+      edges: [[h, g]]
+  rhs:
+    create:
+      g: {id: GALLERY, type: gallery, level: "=h.level + h.levels - 1", block: B, symbol: SL.GALL, label: GALLERY}
+    link:
+      - [h, g, open]
+
+- id: core_condenser
+  title: R_CORE
+  verb: "hall → core chain, core door"
+  grammar: GB
+  symbols: [SP.STAIRWELL, CI.FLIGHT]
+  description: A core strip attached to the hall's north face. It overshoots the roof by one level, which is what gives the condenser its roof terrace.
+  shape: {operation: ATTACH on a face port}
+  params: {n: "=[P.cb_core_levels]"}
+  group: core
+  label: "=f'{n} levels'"
+  lhs:
+    nodes:
+      h: {type: hall}
+  nac:
+    - nodes:
+        s: {type: stairwell, block: B}
+  rhs:
+    create:
+      CBS[j]: {id: "CBS{j}", type: stairwell, level: "=j", block: B, symbol: SP.STAIRWELL, label: "CB CORE L{j}", for: "j in range(n)"}
+    link:
+      - ["CBS[h.level]", h, core_door]
+
+- id: lobby_gallery
+  title: core to the gallery
+  verb: "stairwell at the gallery level → core door"
+  grammar: GB
+  auto: true
+  lhs:
+    nodes:
+      s: {type: stairwell, block: B}
+      g: {type: gallery, level: "=s.level"}
+  nac:
+    - edges: [[s, g, core_door]]
+  rhs:
+    link:
+      - [s, g, core_door]
+
+- id: facade_condenser
+  title: R_FACADE
+  verb: "(identity)"
+  grammar: GB
+  identity: true
+  symbols: [EN.WIN.CURT]
+  description: IDENTITY, as in grammar A. The curtain wall is the same facade rule with the split height at zero.
+  shape: {operation: SPLIT-Z with h = 0}
+  group: facade
+  label: the condenser envelope
+  lhs:
+    nodes:
+      h: {type: hall}
+  nac:
+    - flags: [facade_condenser]
+  rhs:
+    flag: [facade_condenser]
+
+- id: bridge
+  title: R_BRIDGE
+  verb: "core + street → bridge"
+  grammar: GB
+  symbols: [SP.BRIDGE]
+  description: The single production that joins the two grammars, through the interface node. In the composed graph the bridge is a cut vertex; remove it and the communal programme is stranded.
+  shape: {operation: ATTACH}
+  group: bridge
+  label: "to the street at bay {c.bay}, L{c.level}"
+  lhs:
+    nodes:
+      c: {type: corridor, block: A, bay: 0}
+      s: {type: stairwell, block: B, level: "=c.level"}
+      f: {type: interface}
+  nac:
+    - nodes:
+        b: {type: bridge}
+  rhs:
+    create:
+      b: {id: BRIDGE, type: bridge, level: 1, block: A/B, symbol: SP.BRIDGE, label: SP.BRIDGE}
+    link:
+      - [s, b, bridge]
+      - [b, f, bridge]
+      - [f, c, door]

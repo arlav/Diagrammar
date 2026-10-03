@@ -1,0 +1,23 @@
+id: skip_stop
+title: Skip-stop Z
+note: Eight levels, four-level Z cells entered on their second level, one street per four floors.
+parameters: {levels: 8}
+steps:
+  - {rule: axiom_block}
+  - {rule: lift}
+  - {rule: stack}
+  - {rule: bay, select: "*"}
+  - {rule: core, select: {where: "b.bay in (2, 19)"}}
+  - {rule: street, select: {where: "b.level in (2, 6)"}}
+  - {rule: cell, params: {k: 4, ci: 1}, select: {where: "b0.level in (1, 5) and 3 <= b0.bay <= 18"}}
+  - {rule: end_unit, select: "*", repeat: true}
+  - {rule: roof, select: "*"}
+  - {rule: penthouse, select: {where: "s.bay == 2"}}
+  - {rule: facade}
+  - {rule: axiom_condenser}
+  - {rule: stack_condenser}
+  - {rule: merge, select: {where: "a.level == 1"}}
+  - {rule: gallery}
+  - {rule: facade_condenser}
+  - {rule: core_condenser}
+  - {rule: bridge, select: {where: "c.level == 2"}}

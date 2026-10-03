@@ -89,3 +89,19 @@ def prism(profile, axis, a0, a1):
                 centroid=[round(c, 3) for c in place(cu, cv, (a0 + a1) / 2)],
                 bounds=[[round(c, 3) for c in lo], [round(c, 3) for c in hi]],
                 volume=round(area(poly) * (a1 - a0), 2))
+
+
+def centroid(profile, axis, a0, a1):
+    """The centroid of a prism, without building its triangles."""
+    poly = [tuple(map(float, p)) for p in profile]
+    poly = [p for i, p in enumerate(poly) if abs(p[0] - poly[i - 1][0]) + abs(p[1] - poly[i - 1][1]) > 1e-9]
+    a = area(poly)
+    if abs(a) < 1e-12:
+        u = sum(p[0] for p in poly) / len(poly)
+        v = sum(p[1] for p in poly) / len(poly)
+    else:
+        n = len(poly)
+        cross = [poly[i][0] * poly[(i + 1) % n][1] - poly[(i + 1) % n][0] * poly[i][1] for i in range(n)]
+        u = sum((poly[i][0] + poly[(i + 1) % n][0]) * cross[i] for i in range(n)) / (6 * a)
+        v = sum((poly[i][1] + poly[(i + 1) % n][1]) * cross[i] for i in range(n)) / (6 * a)
+    return [round(c, 3) for c in _PLACE[axis](u, v, (float(a0) + float(a1)) / 2)]

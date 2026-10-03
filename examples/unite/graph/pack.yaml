@@ -1,0 +1,41 @@
+title: Unité d'Habitation
+version: 0.1.0
+model: Unité d'Habitation, Marseille (Le Corbusier, 1947-52), as a transformation of Dom Narkomfin
+extends: ../../narkomfin/graph
+
+# Knight (1983): a new language by adding, removing and changing rules of an existing grammar.
+#   changed   street  - the street runs through the middle of the section, with a band on each side
+#   added     cell_up, cell_down - two-level cells interlocked around the street, one street serving three floors
+#   removed   the Narkomfin cell and end-unit rules, and the whole condenser grammar: the Unité's
+#             collective programme is inside the block (the shopping street, the roof), not beside it
+remove: [cell, end_unit, street_stop, axiom_condenser, stack_condenser, merge, merge_more, gallery, core_condenser, lobby_gallery, facade_condenser, bridge]
+
+modules:
+  interpret: interpret.py
+
+rules:
+  - rules.yaml
+
+strategies:
+  - strategies/unite.yaml
+
+dimensions:
+  depth: 24.0
+  storey: 2.26
+  pilotis: 7.0
+  corridor: 2.6
+  cb_origin: [-7.21, -22.96]
+
+parameters:
+  bays: 22
+  levels: 6
+
+presets:
+  unite:
+    title: Unité, six levels
+    note: Streets on L2 and L5 run through the middle of the section. Each bay holds two interlocked two-level cells per street, one going up, one going down.
+    strategy: unite
+    expect: {dwellings: 81}
+  free:
+    title: Free derivation
+    note: 22 bays, 6 levels. Nothing is decided.

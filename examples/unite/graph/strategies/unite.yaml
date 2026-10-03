@@ -1,0 +1,14 @@
+id: unite
+title: Unité, six levels
+note: Cores on lines 7 and 14, streets through the middle of L2 and L5, every bay an up cell and a down cell from each street.
+steps:
+  - {rule: axiom_block}
+  - {rule: lift}
+  - {rule: stack}
+  - {rule: bay, select: "*"}
+  - {rule: core, select: {where: "b.bay in (7, 14)"}}
+  - {rule: street, select: {where: "b.level in (2, 5)"}}
+  - {rule: cell_up, select: "*"}
+  - {rule: cell_down, select: "*"}
+  - {rule: penthouse, select: {where: "s.bay == 7"}}
+  - {rule: facade}

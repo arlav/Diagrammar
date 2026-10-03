@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import type { TimelineStep } from "../api";
 import { useStore } from "../store";
 
-const DX = 46, DY = 30, TOP = 30, LEFT = 28, CHART = 44;
+const DX = 74, DY = 30, TOP = 30, LEFT = 44, CHART = 44;
 
 // The derivation tree: depth runs to the right, each branch takes a lane of its own.
 function lay(steps: TimelineStep[]) {
@@ -47,8 +47,10 @@ export default function Timeline() {
   }, [scene?.head, steps.length]);
 
   if (!scene) return null;
-  const next = scene.rules.find((r) => r.enabled);
   const head = by.get(scene.head);
+  const st = scene.strategy;
+  const left = st ? st.steps - st.cursor : 0;
+  const offers = scene.rules.reduce((n, r) => n + r.site_count, 0);
 
   return (
     <div className="timeline">
@@ -58,14 +60,21 @@ export default function Timeline() {
           <span className="muted">step {at.get(scene.head)?.x ?? 0} of {depth}{lanes > 1 ? `, ${lanes} branches` : ""}</span>
         </div>
         <button onClick={undo} disabled={busy || previewing || scene.head === 0}>Step back</button>
-        <button onClick={() => next && run(next.id)} disabled={busy || previewing || !next}
-          title={next ? `Apply ${next.id} ${next.name} at all its sites` : ""}>
-          {next ? `Next stage: ${next.id}` : "Next stage"}
-        </button>
-        <button onClick={() => run(null)} disabled={busy || previewing || !next}>Derive to the end</button>
-        <button onClick={() => start(scene.preset, scene.preset ? undefined : scene.parameters)} disabled={busy || steps.length < 2}
+        {st && <>
+          <button onClick={() => run("next")} disabled={busy || previewing || left === 0}
+            title={st.next ? `The recorded pathway's next choice: ${st.next.rule}` : "The recorded pathway is complete"}>
+            {st.next ? `Recorded next: ${st.next.rule}` : "Recorded pathway done"}
+          </button>
+          <button onClick={() => run("continue")} disabled={busy || previewing || left === 0}
+            title={`Follow the recorded pathway "${st.title}" to its end (${left} choices left)`}>Follow the pathway</button>
+        </>}
+        <button onClick={() => start(scene.pack_name, scene.preset, scene.preset ? undefined : scene.parameters)} disabled={busy || steps.length < 2}
           title="Discard this derivation and begin again with the same parameters">Start again</button>
-        <span className={"state " + (scene.complete ? "done" : "")}>{scene.complete ? "Derivation complete" : head?.rule ? "" : "Choose an axiom to begin"}</span>
+        <span className={"state " + (scene.complete ? "done" : "")}>
+          {st && st.skipped.length > 0 && <span className="skipped" title={st.skipped.map((k) => `${k.index + 1}: ${k.rule}`).join(", ")}>
+            {st.skipped.length} recorded step{st.skipped.length > 1 ? "s" : ""} found nothing to apply here · </span>}
+          {scene.complete ? "Nothing left to apply" : head?.rule ? `${offers} choices open` : "Choose an axiom to begin"}
+        </span>
       </div>
       <div className="tl-scroll" ref={scroller}>
         <svg width={Math.max(W, 300)} height={H} role="img" aria-label="Derivation tree">
@@ -83,11 +92,12 @@ export default function Timeline() {
           {steps.map((s) => {
             const isHead = s.id === scene.head;
             return (
-              <g key={s.id} className={"tl-step" + (s.on_path ? " on" : "") + (isHead ? " head" : "") + (s.rule?.startsWith("GB") ? " gb" : "")}
+              <g key={s.id} className={"tl-step" + (s.on_path ? " on" : "") + (isHead ? " head" : "") + (s.rule?.includes("condenser") || s.rule === "merge" || s.rule === "gallery" || s.rule === "bridge" || s.rule === "merge_more" ? " gb" : "") + (s.decisions > 0 ? " decision" : "")}
                 transform={`translate(${px(s.id)},${py(s.id)})`} onClick={() => !previewing && !busy && goto(s.id)}
                 role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" && !previewing && !busy) goto(s.id); }}>
-                <title>{s.rule ? `${s.rule} at ${s.label}: ${s.nodes} nodes, ${s.edges} edges` : "The empty state"}</title>
+                <title>{s.rule ? `${s.rule} at ${s.label}: ${s.nodes} nodes, ${s.edges} edges${s.decisions ? `; ${s.decisions} decision${s.decisions > 1 ? "s" : ""} taken` : ""}${s.consequences ? `; ${s.consequences} consequences` : ""}` : "The empty state"}</title>
                 <rect className="hit" x={-DX / 2} y={-24} width={DX} height={DY + 18} />
+                {s.decisions > 0 && <circle className="ring" r={isHead ? 11 : 9} />}
                 <circle r={isHead ? 8 : 5.5} />
                 <text y={-13}>{s.rule ?? "start"}</text>
                 {s.applications > 1 && <text className="times" y={20}>×{s.applications}</text>}

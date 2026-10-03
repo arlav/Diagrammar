@@ -1,0 +1,100 @@
+title: Dom Narkomfin
+version: 0.2.0
+model: Dom Narkomfin (Ginzburg & Milinis, 1928-30)
+
+modules:
+  helpers: helpers.py
+  interpret: interpret.py
+
+rules:
+  - rules.yaml
+
+strategies:
+  - strategies/as_built.yaml
+  - strategies/all_u.yaml
+  - strategies/skip_stop.yaml
+  - strategies/gamma.yaml
+
+source: GROUND
+
+relations:
+  supports: none
+  above: none
+  party: none
+  door: door
+  core_door: door
+  bridge: door
+  corridor: open
+  open: open
+  stair: stair
+
+occupiable: [ground, dwelling, corridor, stairwell, hall, gallery, bridge, interface]
+nonterminals: [mass, storey, bay]
+
+dimensions:
+  bay: 3.66
+  depth: 9.90
+  storey: 2.80
+  pilotis: 2.50
+  slab: 0.30
+  corridor: 1.80
+  hall_band: 1.58
+  stairwell_depth: 5.0
+  cb_origin: [-7.21, -22.96]
+  cb_length: 10.65
+  cb_depth: 9.96
+  cb_core_length: 8.90
+  cb_core_depth: 3.40
+  bridge_width: 2.34
+
+parameters:
+  bays: 22
+  levels: 6
+  cb_levels: 4
+  cb_core_levels: 5
+
+parameter_notes:
+  bays: number of structural bays along the block
+  levels: storeys above the pilotis
+  cb_levels: storeys of the condenser
+  cb_core_levels: levels of the condenser core
+
+constants:
+  tags: {"2,0": K, "3,1": F, "2,1": G, "4,1": Z, "1,0": E}
+
+presets:
+  V1_as_built:
+    title: V1 as built
+    note: 22 bays, 6 levels, streets on L1 and L4. K cells are L-sections, F cells are U-sections.
+    strategy: as_built
+    golden: ../golden/graph_AS_BUILT_AB_dicts.json
+    expect:
+      access:
+        nodes: 115
+        edges: 121
+        components: 1
+        max_degree: 7
+        cut_vertices: 49
+        nodes_by_type: {bridge: 1, corridor: 40, dwelling: 53, gallery: 1, ground: 1, hall: 1, interface: 1, stairwell: 17}
+        edges_by_access: {door: 69, open: 35, stair: 17}
+      dwellings: 53
+  V2_all_U:
+    title: V2 all U
+    note: 9 levels, 3 streets, every cell a three-level U.
+    strategy: all_u
+    parameters: {levels: 9}
+    expect: {dwellings: 81}
+  V3_gamma:
+    title: V3 Gamma
+    note: Unbuilt. The street at the top of a two-level cell, access over the dwelling. L3 is left undecided, so twelve bays stay unresolved.
+    strategy: gamma
+    expect: {dwellings: 57}
+  V4_skip_stop:
+    title: V4 skip-stop Z
+    note: Unbuilt. 8 levels, four-level cells, one street per four floors.
+    strategy: skip_stop
+    parameters: {levels: 8}
+    expect: {dwellings: 61}
+  free:
+    title: Free derivation
+    note: 22 bays, 6 levels. Nothing is decided; every rule is offered where it matches.

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useStore } from "./store";
+import { pack as packOf, useStore } from "./store";
 import { ACCESS_COLOR, ACCESS_LABEL } from "./theme";
 import Viewport3D from "./components/Viewport3D";
 import Graph2D from "./components/Graph2D";
@@ -12,7 +12,7 @@ import ViewBar, { CameraBar, GraphBar } from "./components/ViewBar";
 
 export default function App() {
   const init = useStore((s) => s.init);
-  const pack = useStore((s) => s.pack);
+  const pack = useStore(packOf);
   const scene = useStore((s) => s.scene);
   const error = useStore((s) => s.error);
   const axiomOpen = useStore((s) => s.axiomOpen);
@@ -29,14 +29,15 @@ export default function App() {
 
   const preset = scene?.preset ? pack?.presets[scene.preset] : null;
   const p = scene?.parameters as Record<string, unknown> | undefined;
+  const strategy = scene?.strategy;
 
   return (
     <div className="app">
       <header className="top">
         <div className="brand"><b>topogrammar</b><span>{pack?.model ?? ""}</span></div>
         <button className="axiom" onClick={() => openAxiom(true)} disabled={!pack}>
-          <b>{preset ? preset.title : scene ? "Custom parameters" : "…"}</b>
-          {p && <span>{String(p.bays)} bays, {String(p.levels)} levels, streets on {(p.corridor_levels as number[]).map((l) => `L${l}`).join(" and ")}</span>}
+          <b>{pack?.title ?? "…"}{preset ? ` · ${preset.title}` : scene ? " · custom parameters" : ""}</b>
+          {p && <span>{String(p.bays)} bays, {String(p.levels)} levels{strategy ? `, pathway "${strategy.title}"` : ", free"}</span>}
           <em>Change</em>
         </button>
         <div className="legend">

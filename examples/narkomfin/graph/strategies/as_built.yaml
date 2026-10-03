@@ -1,0 +1,23 @@
+id: as_built
+title: As built
+note: The derivation of the building as built, as a recorded pathway. Cores first, so that the streets stop at them; K cells on L1-L2, F cells on L3-L5; end units beyond the cores; one penthouse on the west core.
+steps:
+  - {rule: axiom_block}
+  - {rule: lift}
+  - {rule: stack}
+  - {rule: bay, select: "*"}
+  - {rule: core, select: {where: "b.bay in (2, 19)"}}
+  - {rule: street, select: {where: "b.level in (1, 4)"}}
+  - {rule: cell, params: {k: 2, ci: 0}, select: {where: "b0.level == 1 and 3 <= b0.bay <= 18"}}
+  - {rule: cell, params: {k: 3, ci: 1}, select: {where: "b0.level == 3 and 3 <= b0.bay <= 18"}}
+  - {rule: end_unit, select: "*", repeat: true}
+  - {rule: roof, select: "*"}
+  - {rule: penthouse, select: {where: "s.bay == 2"}}
+  - {rule: facade}
+  - {rule: axiom_condenser}
+  - {rule: stack_condenser}
+  - {rule: merge, select: {where: "a.level == 1"}}
+  - {rule: gallery}
+  - {rule: facade_condenser}
+  - {rule: core_condenser}
+  - {rule: bridge, select: {where: "c.level == 1"}}

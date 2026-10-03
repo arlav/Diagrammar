@@ -1,0 +1,22 @@
+id: gamma
+title: Gamma
+note: Two-level cells entered on their upper level, access over the dwelling. L3 is left to the architect, so twelve bays stay unresolved.
+steps:
+  - {rule: axiom_block}
+  - {rule: lift}
+  - {rule: stack}
+  - {rule: bay, select: "*"}
+  - {rule: core, select: {where: "b.bay in (2, 19)"}}
+  - {rule: street, select: {where: "b.level in (2, 5)"}}
+  - {rule: cell, params: {k: 2, ci: 1}, select: {where: "b0.level in (1, 4) and 3 <= b0.bay <= 18"}}
+  - {rule: end_unit, select: "*", repeat: true}
+  - {rule: roof, select: "*"}
+  - {rule: penthouse, select: {where: "s.bay == 2"}}
+  - {rule: facade}
+  - {rule: axiom_condenser}
+  - {rule: stack_condenser}
+  - {rule: merge, select: {where: "a.level == 1"}}
+  - {rule: gallery}
+  - {rule: facade_condenser}
+  - {rule: core_condenser}
+  - {rule: bridge, select: {where: "c.level == 2"}}

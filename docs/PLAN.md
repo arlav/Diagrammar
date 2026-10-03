@@ -1,6 +1,6 @@
 # `topogrammar` — implementation plan (viewer first)
 
-Status: P0 and P1 complete. P2 (element data and shape rule packs) next. Date: 2026-09-27.
+Status: P0, P1 and the `variants` branch (rules as data, free choice, pathways, Narkomfin → Unité) complete; see `docs/variants.md`. P2 (element data and shape rule packs) next. Date: 2026-10-03.
 Source brief: `BRIEF_topogrammar_ClaudeCode (1).md`. Prototype: `domnarkomfin_grammar_files/`.
 
 ## 1. Decisions taken
