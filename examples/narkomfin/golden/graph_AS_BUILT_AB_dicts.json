@@ -1,0 +1,3304 @@
+{
+  "nodes": [
+    {
+      "id": "GROUND",
+      "pos": [
+        40.26,
+        4.95,
+        1.2
+      ],
+      "label": "GROUND",
+      "type": "ground",
+      "block": "A"
+    },
+    {
+      "id": "b6_00",
+      "pos": [
+        1.83,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 0",
+      "type": "roof",
+      "level": 6,
+      "bay": 0,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_01",
+      "pos": [
+        5.49,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 1",
+      "type": "roof",
+      "level": 6,
+      "bay": 1,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_03",
+      "pos": [
+        12.81,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 3",
+      "type": "roof",
+      "level": 6,
+      "bay": 3,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_04",
+      "pos": [
+        16.47,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 4",
+      "type": "roof",
+      "level": 6,
+      "bay": 4,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_05",
+      "pos": [
+        20.13,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 5",
+      "type": "roof",
+      "level": 6,
+      "bay": 5,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_06",
+      "pos": [
+        23.79,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 6",
+      "type": "roof",
+      "level": 6,
+      "bay": 6,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_07",
+      "pos": [
+        27.45,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 7",
+      "type": "roof",
+      "level": 6,
+      "bay": 7,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_08",
+      "pos": [
+        31.11,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 8",
+      "type": "roof",
+      "level": 6,
+      "bay": 8,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_09",
+      "pos": [
+        34.77,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 9",
+      "type": "roof",
+      "level": 6,
+      "bay": 9,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_10",
+      "pos": [
+        38.43,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 10",
+      "type": "roof",
+      "level": 6,
+      "bay": 10,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_11",
+      "pos": [
+        42.09,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 11",
+      "type": "roof",
+      "level": 6,
+      "bay": 11,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_12",
+      "pos": [
+        45.75,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 12",
+      "type": "roof",
+      "level": 6,
+      "bay": 12,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_13",
+      "pos": [
+        49.41,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 13",
+      "type": "roof",
+      "level": 6,
+      "bay": 13,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_14",
+      "pos": [
+        53.07,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 14",
+      "type": "roof",
+      "level": 6,
+      "bay": 14,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_15",
+      "pos": [
+        56.73,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 15",
+      "type": "roof",
+      "level": 6,
+      "bay": 15,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_16",
+      "pos": [
+        60.39,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 16",
+      "type": "roof",
+      "level": 6,
+      "bay": 16,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_17",
+      "pos": [
+        64.05,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 17",
+      "type": "roof",
+      "level": 6,
+      "bay": 17,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_18",
+      "pos": [
+        67.71,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 18",
+      "type": "roof",
+      "level": 6,
+      "bay": 18,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_20",
+      "pos": [
+        75.03,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 20",
+      "type": "roof",
+      "level": 6,
+      "bay": 20,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "b6_21",
+      "pos": [
+        78.69,
+        4.95,
+        17.9
+      ],
+      "label": "ROOF ZONE BAY 21",
+      "type": "roof",
+      "level": 6,
+      "bay": 21,
+      "block": "A",
+      "symbol": "SL.ROOF"
+    },
+    {
+      "id": "c1_00",
+      "pos": [
+        1.83,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 0,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_01",
+      "pos": [
+        5.49,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 1,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_03",
+      "pos": [
+        12.81,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 3,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_04",
+      "pos": [
+        16.47,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 4,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_05",
+      "pos": [
+        20.13,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 5,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_06",
+      "pos": [
+        23.79,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 6,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_07",
+      "pos": [
+        27.45,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 7,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_08",
+      "pos": [
+        31.11,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 8,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_09",
+      "pos": [
+        34.77,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 9,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_10",
+      "pos": [
+        38.43,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 10,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_11",
+      "pos": [
+        42.09,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 11,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_12",
+      "pos": [
+        45.75,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 12,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_13",
+      "pos": [
+        49.41,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 13,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_14",
+      "pos": [
+        53.07,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 14,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_15",
+      "pos": [
+        56.73,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 15,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_16",
+      "pos": [
+        60.39,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 16,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_17",
+      "pos": [
+        64.05,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 17,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_18",
+      "pos": [
+        67.71,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 18,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_20",
+      "pos": [
+        75.03,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 20,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c1_21",
+      "pos": [
+        78.69,
+        0.9,
+        3.9
+      ],
+      "label": "CORRIDOR L1",
+      "type": "corridor",
+      "level": 1,
+      "bay": 21,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_00",
+      "pos": [
+        1.83,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 0,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_01",
+      "pos": [
+        5.49,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 1,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_03",
+      "pos": [
+        12.81,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 3,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_04",
+      "pos": [
+        16.47,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 4,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_05",
+      "pos": [
+        20.13,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 5,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_06",
+      "pos": [
+        23.79,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 6,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_07",
+      "pos": [
+        27.45,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 7,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_08",
+      "pos": [
+        31.11,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 8,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_09",
+      "pos": [
+        34.77,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 9,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_10",
+      "pos": [
+        38.43,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 10,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_11",
+      "pos": [
+        42.09,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 11,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_12",
+      "pos": [
+        45.75,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 12,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_13",
+      "pos": [
+        49.41,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 13,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_14",
+      "pos": [
+        53.07,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 14,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_15",
+      "pos": [
+        56.73,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 15,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_16",
+      "pos": [
+        60.39,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 16,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_17",
+      "pos": [
+        64.05,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 17,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_18",
+      "pos": [
+        67.71,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 18,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_20",
+      "pos": [
+        75.03,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 20,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "c4_21",
+      "pos": [
+        78.69,
+        0.9,
+        12.3
+      ],
+      "label": "CORRIDOR L4",
+      "type": "corridor",
+      "level": 4,
+      "bay": 21,
+      "symbol": "SP.CORRIDOR",
+      "block": "A"
+    },
+    {
+      "id": "K03",
+      "pos": [
+        12.81,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b3",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 3,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K04",
+      "pos": [
+        16.47,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b4",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 4,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K05",
+      "pos": [
+        20.13,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b5",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 5,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K06",
+      "pos": [
+        23.79,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b6",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 6,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K07",
+      "pos": [
+        27.45,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b7",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 7,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K08",
+      "pos": [
+        31.11,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b8",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 8,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K09",
+      "pos": [
+        34.77,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b9",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 9,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K10",
+      "pos": [
+        38.43,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b10",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 10,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K11",
+      "pos": [
+        42.09,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b11",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 11,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K12",
+      "pos": [
+        45.75,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b12",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 12,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K13",
+      "pos": [
+        49.41,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b13",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 13,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K14",
+      "pos": [
+        53.07,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b14",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 14,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K15",
+      "pos": [
+        56.73,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b15",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 15,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K16",
+      "pos": [
+        60.39,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b16",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 16,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K17",
+      "pos": [
+        64.05,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b17",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 17,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "K18",
+      "pos": [
+        67.71,
+        5.85,
+        5.3
+      ],
+      "label": "K [L] b18",
+      "type": "dwelling",
+      "tag": "K",
+      "kind": "L",
+      "levels": 2,
+      "corridor_index": 0,
+      "bay": 18,
+      "level": 1,
+      "symbol": "SP.CELL.K",
+      "block": "A"
+    },
+    {
+      "id": "F03",
+      "pos": [
+        12.81,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b3",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 3,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F04",
+      "pos": [
+        16.47,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b4",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 4,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F05",
+      "pos": [
+        20.13,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b5",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 5,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F06",
+      "pos": [
+        23.79,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b6",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 6,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F07",
+      "pos": [
+        27.45,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b7",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 7,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F08",
+      "pos": [
+        31.11,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b8",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 8,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F09",
+      "pos": [
+        34.77,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b9",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 9,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F10",
+      "pos": [
+        38.43,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b10",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 10,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F11",
+      "pos": [
+        42.09,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b11",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 11,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F12",
+      "pos": [
+        45.75,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b12",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 12,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F13",
+      "pos": [
+        49.41,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b13",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 13,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F14",
+      "pos": [
+        53.07,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b14",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 14,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F15",
+      "pos": [
+        56.73,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b15",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 15,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F16",
+      "pos": [
+        60.39,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b16",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 16,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F17",
+      "pos": [
+        64.05,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b17",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 17,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "F18",
+      "pos": [
+        67.71,
+        5.85,
+        12.3
+      ],
+      "label": "F [U] b18",
+      "type": "dwelling",
+      "tag": "F",
+      "kind": "U",
+      "levels": 3,
+      "corridor_index": 1,
+      "bay": 18,
+      "level": 3,
+      "symbol": "SP.CELL.F",
+      "block": "A"
+    },
+    {
+      "id": "E1_00",
+      "pos": [
+        1.83,
+        5.85,
+        3.9
+      ],
+      "label": "END UNIT L1 b0",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 0,
+      "level": 1,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E2_00",
+      "pos": [
+        1.83,
+        4.95,
+        6.7
+      ],
+      "label": "END UNIT L2 b0",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 0,
+      "level": 2,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E3_00",
+      "pos": [
+        1.83,
+        4.95,
+        9.5
+      ],
+      "label": "END UNIT L3 b0",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 0,
+      "level": 3,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E4_00",
+      "pos": [
+        1.83,
+        5.85,
+        12.3
+      ],
+      "label": "END UNIT L4 b0",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 0,
+      "level": 4,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E5_00",
+      "pos": [
+        1.83,
+        4.95,
+        15.1
+      ],
+      "label": "END UNIT L5 b0",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 0,
+      "level": 5,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E1_01",
+      "pos": [
+        5.49,
+        5.85,
+        3.9
+      ],
+      "label": "END UNIT L1 b1",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 1,
+      "level": 1,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E2_01",
+      "pos": [
+        5.49,
+        4.95,
+        6.7
+      ],
+      "label": "END UNIT L2 b1",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 1,
+      "level": 2,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E3_01",
+      "pos": [
+        5.49,
+        4.95,
+        9.5
+      ],
+      "label": "END UNIT L3 b1",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 1,
+      "level": 3,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E4_01",
+      "pos": [
+        5.49,
+        5.85,
+        12.3
+      ],
+      "label": "END UNIT L4 b1",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 1,
+      "level": 4,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E5_01",
+      "pos": [
+        5.49,
+        4.95,
+        15.1
+      ],
+      "label": "END UNIT L5 b1",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 1,
+      "level": 5,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E1_20",
+      "pos": [
+        75.03,
+        5.85,
+        3.9
+      ],
+      "label": "END UNIT L1 b20",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 20,
+      "level": 1,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E2_20",
+      "pos": [
+        75.03,
+        4.95,
+        6.7
+      ],
+      "label": "END UNIT L2 b20",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 20,
+      "level": 2,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E3_20",
+      "pos": [
+        75.03,
+        4.95,
+        9.5
+      ],
+      "label": "END UNIT L3 b20",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 20,
+      "level": 3,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E4_20",
+      "pos": [
+        75.03,
+        5.85,
+        12.3
+      ],
+      "label": "END UNIT L4 b20",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 20,
+      "level": 4,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E5_20",
+      "pos": [
+        75.03,
+        4.95,
+        15.1
+      ],
+      "label": "END UNIT L5 b20",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 20,
+      "level": 5,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E1_21",
+      "pos": [
+        78.69,
+        5.85,
+        3.9
+      ],
+      "label": "END UNIT L1 b21",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 21,
+      "level": 1,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E2_21",
+      "pos": [
+        78.69,
+        4.95,
+        6.7
+      ],
+      "label": "END UNIT L2 b21",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 21,
+      "level": 2,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E3_21",
+      "pos": [
+        78.69,
+        4.95,
+        9.5
+      ],
+      "label": "END UNIT L3 b21",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 21,
+      "level": 3,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E4_21",
+      "pos": [
+        78.69,
+        5.85,
+        12.3
+      ],
+      "label": "END UNIT L4 b21",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 21,
+      "level": 4,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "E5_21",
+      "pos": [
+        78.69,
+        4.95,
+        15.1
+      ],
+      "label": "END UNIT L5 b21",
+      "type": "dwelling",
+      "tag": "E",
+      "kind": "flat",
+      "levels": 1,
+      "corridor_index": 0,
+      "bay": 21,
+      "level": 5,
+      "symbol": "SP.CELL.E",
+      "block": "A"
+    },
+    {
+      "id": "S1_02",
+      "pos": [
+        9.15,
+        7.4,
+        3.9
+      ],
+      "label": "STAIRWELL b2",
+      "type": "stairwell",
+      "level": 1,
+      "bay": 2,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S2_02",
+      "pos": [
+        9.15,
+        7.4,
+        6.7
+      ],
+      "label": "STAIRWELL b2",
+      "type": "stairwell",
+      "level": 2,
+      "bay": 2,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S3_02",
+      "pos": [
+        9.15,
+        7.4,
+        9.5
+      ],
+      "label": "STAIRWELL b2",
+      "type": "stairwell",
+      "level": 3,
+      "bay": 2,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S4_02",
+      "pos": [
+        9.15,
+        7.4,
+        12.3
+      ],
+      "label": "STAIRWELL b2",
+      "type": "stairwell",
+      "level": 4,
+      "bay": 2,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S5_02",
+      "pos": [
+        9.15,
+        7.4,
+        15.1
+      ],
+      "label": "STAIRWELL b2",
+      "type": "stairwell",
+      "level": 5,
+      "bay": 2,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S6_02",
+      "pos": [
+        9.15,
+        7.4,
+        17.9
+      ],
+      "label": "STAIRWELL b2",
+      "type": "stairwell",
+      "level": 6,
+      "bay": 2,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S1_19",
+      "pos": [
+        71.37,
+        7.4,
+        3.9
+      ],
+      "label": "STAIRWELL b19",
+      "type": "stairwell",
+      "level": 1,
+      "bay": 19,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S2_19",
+      "pos": [
+        71.37,
+        7.4,
+        6.7
+      ],
+      "label": "STAIRWELL b19",
+      "type": "stairwell",
+      "level": 2,
+      "bay": 19,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S3_19",
+      "pos": [
+        71.37,
+        7.4,
+        9.5
+      ],
+      "label": "STAIRWELL b19",
+      "type": "stairwell",
+      "level": 3,
+      "bay": 19,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S4_19",
+      "pos": [
+        71.37,
+        7.4,
+        12.3
+      ],
+      "label": "STAIRWELL b19",
+      "type": "stairwell",
+      "level": 4,
+      "bay": 19,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S5_19",
+      "pos": [
+        71.37,
+        7.4,
+        15.1
+      ],
+      "label": "STAIRWELL b19",
+      "type": "stairwell",
+      "level": 5,
+      "bay": 19,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "S6_19",
+      "pos": [
+        71.37,
+        7.4,
+        17.9
+      ],
+      "label": "STAIRWELL b19",
+      "type": "stairwell",
+      "level": 6,
+      "bay": 19,
+      "symbol": "SP.STAIRWELL",
+      "block": "A"
+    },
+    {
+      "id": "PENTHOUSE",
+      "pos": [
+        28.987,
+        7.425,
+        20.7
+      ],
+      "label": "PENTHOUSE",
+      "type": "dwelling",
+      "tag": "PH",
+      "kind": "flat",
+      "levels": 1,
+      "block": "A"
+    },
+    {
+      "id": "IFACE",
+      "pos": [
+        0.0,
+        0.9,
+        3.9
+      ],
+      "label": "[interface] BLOCK L1 corridor",
+      "type": "interface",
+      "block": "A/B"
+    },
+    {
+      "id": "CB0",
+      "pos": [
+        -26.0,
+        -13.0,
+        1.4
+      ],
+      "label": "CB L0",
+      "type": "storey",
+      "level": 0,
+      "block": "B"
+    },
+    {
+      "id": "CB3",
+      "pos": [
+        -26.0,
+        -13.0,
+        9.8
+      ],
+      "label": "CB L3",
+      "type": "storey",
+      "level": 3,
+      "block": "B"
+    },
+    {
+      "id": "HALL",
+      "pos": [
+        -26.0,
+        -13.0,
+        5.6
+      ],
+      "label": "SP.HALL (social condenser)",
+      "type": "hall",
+      "symbol": "SP.HALL",
+      "block": "B",
+      "levels": 2
+    },
+    {
+      "id": "GALLERY",
+      "pos": [
+        -23.0,
+        -11.0,
+        7.28
+      ],
+      "label": "GALLERY",
+      "type": "gallery",
+      "symbol": "SL.GALL",
+      "block": "B"
+    },
+    {
+      "id": "CBS0",
+      "pos": [
+        -21.5,
+        -6.3,
+        1.4
+      ],
+      "label": "CB CORE L0",
+      "type": "stairwell",
+      "level": 0,
+      "symbol": "SP.STAIRWELL",
+      "block": "B"
+    },
+    {
+      "id": "CBS1",
+      "pos": [
+        -21.5,
+        -6.3,
+        4.2
+      ],
+      "label": "CB CORE L1",
+      "type": "stairwell",
+      "level": 1,
+      "symbol": "SP.STAIRWELL",
+      "block": "B"
+    },
+    {
+      "id": "CBS2",
+      "pos": [
+        -21.5,
+        -6.3,
+        7.0
+      ],
+      "label": "CB CORE L2",
+      "type": "stairwell",
+      "level": 2,
+      "symbol": "SP.STAIRWELL",
+      "block": "B"
+    },
+    {
+      "id": "CBS3",
+      "pos": [
+        -21.5,
+        -6.3,
+        9.8
+      ],
+      "label": "CB CORE L3",
+      "type": "stairwell",
+      "level": 3,
+      "symbol": "SP.STAIRWELL",
+      "block": "B"
+    },
+    {
+      "id": "CBS4",
+      "pos": [
+        -21.5,
+        -6.3,
+        12.6
+      ],
+      "label": "CB CORE L4",
+      "type": "stairwell",
+      "level": 4,
+      "symbol": "SP.STAIRWELL",
+      "block": "B"
+    },
+    {
+      "id": "BRIDGE",
+      "pos": [
+        -8.0,
+        -2.0,
+        3.9
+      ],
+      "label": "SP.BRIDGE",
+      "type": "bridge",
+      "symbol": "SP.BRIDGE",
+      "block": "A/B"
+    }
+  ],
+  "edges": [
+    {
+      "a": "E1_00",
+      "b": "E1_01",
+      "rel": "party"
+    },
+    {
+      "a": "K03",
+      "b": "K04",
+      "rel": "party",
+      "mirror": true
+    },
+    {
+      "a": "K04",
+      "b": "K05",
+      "rel": "party"
+    },
+    {
+      "a": "K05",
+      "b": "K06",
+      "rel": "party",
+      "mirror": true
+    },
+    {
+      "a": "K06",
+      "b": "K07",
+      "rel": "party"
+    },
+    {
+      "a": "K07",
+      "b": "K08",
+      "rel": "party",
+      "mirror": true
+    },
+    {
+      "a": "K08",
+      "b": "K09",
+      "rel": "party"
+    },
+    {
+      "a": "K09",
+      "b": "K10",
+      "rel": "party",
+      "mirror": true
+    },
+    {
+      "a": "K10",
+      "b": "K11",
+      "rel": "party"
+    },
+    {
+      "a": "K11",
+      "b": "K12",
+      "rel": "party",
+      "mirror": true
+    },
+    {
+      "a": "K12",
+      "b": "K13",
+      "rel": "party"
+    },
+    {
+      "a": "K13",
+      "b": "K14",
+      "rel": "party",
+      "mirror": true
+    },
+    {
+      "a": "K14",
+      "b": "K15",
+      "rel": "party"
+    },
+    {
+      "a": "K15",
+      "b": "K16",
+      "rel": "party",
+      "mirror": true
+    },
+    {
+      "a": "K16",
+      "b": "K17",
+      "rel": "party"
+    },
+    {
+      "a": "K17",
+      "b": "K18",
+      "rel": "party",
+      "mirror": true
+    },
+    {
+      "a": "E1_20",
+      "b": "E1_21",
+      "rel": "party"
+    },
+    {
+      "a": "E2_00",
+      "b": "E2_01",
+      "rel": "party"
+    },
+    {
+      "a": "E2_20",
+      "b": "E2_21",
+      "rel": "party"
+    },
+    {
+      "a": "E1_00",
+      "b": "E2_00",
+      "rel": "above"
+    },
+    {
+      "a": "E1_01",
+      "b": "E2_01",
+      "rel": "above"
+    },
+    {
+      "a": "E1_20",
+      "b": "E2_20",
+      "rel": "above"
+    },
+    {
+      "a": "E1_21",
+      "b": "E2_21",
+      "rel": "above"
+    },
+    {
+      "a": "E3_00",
+      "b": "E3_01",
+      "rel": "party"
+    },
+    {
+      "a": "F03",
+      "b": "F04",
+      "rel": "party"
+    },
+    {
+      "a": "F04",
+      "b": "F05",
+      "rel": "party"
+    },
+    {
+      "a": "F05",
+      "b": "F06",
+      "rel": "party"
+    },
+    {
+      "a": "F06",
+      "b": "F07",
+      "rel": "party"
+    },
+    {
+      "a": "F07",
+      "b": "F08",
+      "rel": "party"
+    },
+    {
+      "a": "F08",
+      "b": "F09",
+      "rel": "party"
+    },
+    {
+      "a": "F09",
+      "b": "F10",
+      "rel": "party"
+    },
+    {
+      "a": "F10",
+      "b": "F11",
+      "rel": "party"
+    },
+    {
+      "a": "F11",
+      "b": "F12",
+      "rel": "party"
+    },
+    {
+      "a": "F12",
+      "b": "F13",
+      "rel": "party"
+    },
+    {
+      "a": "F13",
+      "b": "F14",
+      "rel": "party"
+    },
+    {
+      "a": "F14",
+      "b": "F15",
+      "rel": "party"
+    },
+    {
+      "a": "F15",
+      "b": "F16",
+      "rel": "party"
+    },
+    {
+      "a": "F16",
+      "b": "F17",
+      "rel": "party"
+    },
+    {
+      "a": "F17",
+      "b": "F18",
+      "rel": "party"
+    },
+    {
+      "a": "E3_20",
+      "b": "E3_21",
+      "rel": "party"
+    },
+    {
+      "a": "E2_00",
+      "b": "E3_00",
+      "rel": "above"
+    },
+    {
+      "a": "E2_01",
+      "b": "E3_01",
+      "rel": "above"
+    },
+    {
+      "a": "K03",
+      "b": "F03",
+      "rel": "above"
+    },
+    {
+      "a": "K04",
+      "b": "F04",
+      "rel": "above"
+    },
+    {
+      "a": "K05",
+      "b": "F05",
+      "rel": "above"
+    },
+    {
+      "a": "K06",
+      "b": "F06",
+      "rel": "above"
+    },
+    {
+      "a": "K07",
+      "b": "F07",
+      "rel": "above"
+    },
+    {
+      "a": "K08",
+      "b": "F08",
+      "rel": "above"
+    },
+    {
+      "a": "K09",
+      "b": "F09",
+      "rel": "above"
+    },
+    {
+      "a": "K10",
+      "b": "F10",
+      "rel": "above"
+    },
+    {
+      "a": "K11",
+      "b": "F11",
+      "rel": "above"
+    },
+    {
+      "a": "K12",
+      "b": "F12",
+      "rel": "above"
+    },
+    {
+      "a": "K13",
+      "b": "F13",
+      "rel": "above"
+    },
+    {
+      "a": "K14",
+      "b": "F14",
+      "rel": "above"
+    },
+    {
+      "a": "K15",
+      "b": "F15",
+      "rel": "above"
+    },
+    {
+      "a": "K16",
+      "b": "F16",
+      "rel": "above"
+    },
+    {
+      "a": "K17",
+      "b": "F17",
+      "rel": "above"
+    },
+    {
+      "a": "K18",
+      "b": "F18",
+      "rel": "above"
+    },
+    {
+      "a": "E2_20",
+      "b": "E3_20",
+      "rel": "above"
+    },
+    {
+      "a": "E2_21",
+      "b": "E3_21",
+      "rel": "above"
+    },
+    {
+      "a": "E4_00",
+      "b": "E4_01",
+      "rel": "party"
+    },
+    {
+      "a": "E4_20",
+      "b": "E4_21",
+      "rel": "party"
+    },
+    {
+      "a": "E3_00",
+      "b": "E4_00",
+      "rel": "above"
+    },
+    {
+      "a": "E3_01",
+      "b": "E4_01",
+      "rel": "above"
+    },
+    {
+      "a": "E3_20",
+      "b": "E4_20",
+      "rel": "above"
+    },
+    {
+      "a": "E3_21",
+      "b": "E4_21",
+      "rel": "above"
+    },
+    {
+      "a": "E5_00",
+      "b": "E5_01",
+      "rel": "party"
+    },
+    {
+      "a": "E5_20",
+      "b": "E5_21",
+      "rel": "party"
+    },
+    {
+      "a": "E4_00",
+      "b": "E5_00",
+      "rel": "above"
+    },
+    {
+      "a": "E4_01",
+      "b": "E5_01",
+      "rel": "above"
+    },
+    {
+      "a": "E4_20",
+      "b": "E5_20",
+      "rel": "above"
+    },
+    {
+      "a": "E4_21",
+      "b": "E5_21",
+      "rel": "above"
+    },
+    {
+      "a": "b6_00",
+      "b": "b6_01",
+      "rel": "party"
+    },
+    {
+      "a": "b6_03",
+      "b": "b6_04",
+      "rel": "party"
+    },
+    {
+      "a": "b6_04",
+      "b": "b6_05",
+      "rel": "party"
+    },
+    {
+      "a": "b6_05",
+      "b": "b6_06",
+      "rel": "party"
+    },
+    {
+      "a": "b6_06",
+      "b": "b6_07",
+      "rel": "party"
+    },
+    {
+      "a": "b6_07",
+      "b": "b6_08",
+      "rel": "party"
+    },
+    {
+      "a": "b6_08",
+      "b": "b6_09",
+      "rel": "party"
+    },
+    {
+      "a": "b6_09",
+      "b": "b6_10",
+      "rel": "party"
+    },
+    {
+      "a": "b6_10",
+      "b": "b6_11",
+      "rel": "party"
+    },
+    {
+      "a": "b6_11",
+      "b": "b6_12",
+      "rel": "party"
+    },
+    {
+      "a": "b6_12",
+      "b": "b6_13",
+      "rel": "party"
+    },
+    {
+      "a": "b6_13",
+      "b": "b6_14",
+      "rel": "party"
+    },
+    {
+      "a": "b6_14",
+      "b": "b6_15",
+      "rel": "party"
+    },
+    {
+      "a": "b6_15",
+      "b": "b6_16",
+      "rel": "party"
+    },
+    {
+      "a": "b6_16",
+      "b": "b6_17",
+      "rel": "party"
+    },
+    {
+      "a": "b6_17",
+      "b": "b6_18",
+      "rel": "party"
+    },
+    {
+      "a": "b6_20",
+      "b": "b6_21",
+      "rel": "party"
+    },
+    {
+      "a": "E5_00",
+      "b": "b6_00",
+      "rel": "above"
+    },
+    {
+      "a": "E5_01",
+      "b": "b6_01",
+      "rel": "above"
+    },
+    {
+      "a": "F03",
+      "b": "b6_03",
+      "rel": "above"
+    },
+    {
+      "a": "F04",
+      "b": "b6_04",
+      "rel": "above"
+    },
+    {
+      "a": "F05",
+      "b": "b6_05",
+      "rel": "above"
+    },
+    {
+      "a": "F06",
+      "b": "b6_06",
+      "rel": "above"
+    },
+    {
+      "a": "F07",
+      "b": "b6_07",
+      "rel": "above"
+    },
+    {
+      "a": "F08",
+      "b": "b6_08",
+      "rel": "above"
+    },
+    {
+      "a": "F09",
+      "b": "b6_09",
+      "rel": "above"
+    },
+    {
+      "a": "F10",
+      "b": "b6_10",
+      "rel": "above"
+    },
+    {
+      "a": "F11",
+      "b": "b6_11",
+      "rel": "above"
+    },
+    {
+      "a": "F12",
+      "b": "b6_12",
+      "rel": "above"
+    },
+    {
+      "a": "F13",
+      "b": "b6_13",
+      "rel": "above"
+    },
+    {
+      "a": "F14",
+      "b": "b6_14",
+      "rel": "above"
+    },
+    {
+      "a": "F15",
+      "b": "b6_15",
+      "rel": "above"
+    },
+    {
+      "a": "F16",
+      "b": "b6_16",
+      "rel": "above"
+    },
+    {
+      "a": "F17",
+      "b": "b6_17",
+      "rel": "above"
+    },
+    {
+      "a": "F18",
+      "b": "b6_18",
+      "rel": "above"
+    },
+    {
+      "a": "E5_20",
+      "b": "b6_20",
+      "rel": "above"
+    },
+    {
+      "a": "E5_21",
+      "b": "b6_21",
+      "rel": "above"
+    },
+    {
+      "a": "c1_00",
+      "b": "c1_01",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_03",
+      "b": "K03",
+      "rel": "door"
+    },
+    {
+      "a": "c1_04",
+      "b": "K04",
+      "rel": "door"
+    },
+    {
+      "a": "c1_03",
+      "b": "c1_04",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_05",
+      "b": "K05",
+      "rel": "door"
+    },
+    {
+      "a": "c1_04",
+      "b": "c1_05",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_06",
+      "b": "K06",
+      "rel": "door"
+    },
+    {
+      "a": "c1_05",
+      "b": "c1_06",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_07",
+      "b": "K07",
+      "rel": "door"
+    },
+    {
+      "a": "c1_06",
+      "b": "c1_07",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_08",
+      "b": "K08",
+      "rel": "door"
+    },
+    {
+      "a": "c1_07",
+      "b": "c1_08",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_09",
+      "b": "K09",
+      "rel": "door"
+    },
+    {
+      "a": "c1_08",
+      "b": "c1_09",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_10",
+      "b": "K10",
+      "rel": "door"
+    },
+    {
+      "a": "c1_09",
+      "b": "c1_10",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_11",
+      "b": "K11",
+      "rel": "door"
+    },
+    {
+      "a": "c1_10",
+      "b": "c1_11",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_12",
+      "b": "K12",
+      "rel": "door"
+    },
+    {
+      "a": "c1_11",
+      "b": "c1_12",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_13",
+      "b": "K13",
+      "rel": "door"
+    },
+    {
+      "a": "c1_12",
+      "b": "c1_13",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_14",
+      "b": "K14",
+      "rel": "door"
+    },
+    {
+      "a": "c1_13",
+      "b": "c1_14",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_15",
+      "b": "K15",
+      "rel": "door"
+    },
+    {
+      "a": "c1_14",
+      "b": "c1_15",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_16",
+      "b": "K16",
+      "rel": "door"
+    },
+    {
+      "a": "c1_15",
+      "b": "c1_16",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_17",
+      "b": "K17",
+      "rel": "door"
+    },
+    {
+      "a": "c1_16",
+      "b": "c1_17",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_18",
+      "b": "K18",
+      "rel": "door"
+    },
+    {
+      "a": "c1_17",
+      "b": "c1_18",
+      "rel": "corridor"
+    },
+    {
+      "a": "c1_20",
+      "b": "c1_21",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_00",
+      "b": "c4_01",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_03",
+      "b": "F03",
+      "rel": "door"
+    },
+    {
+      "a": "c4_04",
+      "b": "F04",
+      "rel": "door"
+    },
+    {
+      "a": "c4_03",
+      "b": "c4_04",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_05",
+      "b": "F05",
+      "rel": "door"
+    },
+    {
+      "a": "c4_04",
+      "b": "c4_05",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_06",
+      "b": "F06",
+      "rel": "door"
+    },
+    {
+      "a": "c4_05",
+      "b": "c4_06",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_07",
+      "b": "F07",
+      "rel": "door"
+    },
+    {
+      "a": "c4_06",
+      "b": "c4_07",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_08",
+      "b": "F08",
+      "rel": "door"
+    },
+    {
+      "a": "c4_07",
+      "b": "c4_08",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_09",
+      "b": "F09",
+      "rel": "door"
+    },
+    {
+      "a": "c4_08",
+      "b": "c4_09",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_10",
+      "b": "F10",
+      "rel": "door"
+    },
+    {
+      "a": "c4_09",
+      "b": "c4_10",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_11",
+      "b": "F11",
+      "rel": "door"
+    },
+    {
+      "a": "c4_10",
+      "b": "c4_11",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_12",
+      "b": "F12",
+      "rel": "door"
+    },
+    {
+      "a": "c4_11",
+      "b": "c4_12",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_13",
+      "b": "F13",
+      "rel": "door"
+    },
+    {
+      "a": "c4_12",
+      "b": "c4_13",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_14",
+      "b": "F14",
+      "rel": "door"
+    },
+    {
+      "a": "c4_13",
+      "b": "c4_14",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_15",
+      "b": "F15",
+      "rel": "door"
+    },
+    {
+      "a": "c4_14",
+      "b": "c4_15",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_16",
+      "b": "F16",
+      "rel": "door"
+    },
+    {
+      "a": "c4_15",
+      "b": "c4_16",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_17",
+      "b": "F17",
+      "rel": "door"
+    },
+    {
+      "a": "c4_16",
+      "b": "c4_17",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_18",
+      "b": "F18",
+      "rel": "door"
+    },
+    {
+      "a": "c4_17",
+      "b": "c4_18",
+      "rel": "corridor"
+    },
+    {
+      "a": "c4_20",
+      "b": "c4_21",
+      "rel": "corridor"
+    },
+    {
+      "a": "GROUND",
+      "b": "S1_02",
+      "rel": "stair"
+    },
+    {
+      "a": "S1_02",
+      "b": "c1_01",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_02",
+      "b": "c1_03",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_02",
+      "b": "E1_01",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_02",
+      "b": "E1_00",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_02",
+      "b": "K03",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_02",
+      "b": "S2_02",
+      "rel": "stair"
+    },
+    {
+      "a": "S2_02",
+      "b": "E2_01",
+      "rel": "core_door"
+    },
+    {
+      "a": "S2_02",
+      "b": "E2_00",
+      "rel": "core_door"
+    },
+    {
+      "a": "S2_02",
+      "b": "S3_02",
+      "rel": "stair"
+    },
+    {
+      "a": "S3_02",
+      "b": "E3_01",
+      "rel": "core_door"
+    },
+    {
+      "a": "S3_02",
+      "b": "E3_00",
+      "rel": "core_door"
+    },
+    {
+      "a": "S3_02",
+      "b": "F03",
+      "rel": "core_door"
+    },
+    {
+      "a": "S3_02",
+      "b": "S4_02",
+      "rel": "stair"
+    },
+    {
+      "a": "S4_02",
+      "b": "c4_01",
+      "rel": "core_door"
+    },
+    {
+      "a": "S4_02",
+      "b": "c4_03",
+      "rel": "core_door"
+    },
+    {
+      "a": "S4_02",
+      "b": "E4_01",
+      "rel": "core_door"
+    },
+    {
+      "a": "S4_02",
+      "b": "E4_00",
+      "rel": "core_door"
+    },
+    {
+      "a": "S4_02",
+      "b": "S5_02",
+      "rel": "stair"
+    },
+    {
+      "a": "S5_02",
+      "b": "E5_01",
+      "rel": "core_door"
+    },
+    {
+      "a": "S5_02",
+      "b": "E5_00",
+      "rel": "core_door"
+    },
+    {
+      "a": "S5_02",
+      "b": "S6_02",
+      "rel": "stair"
+    },
+    {
+      "a": "GROUND",
+      "b": "S1_19",
+      "rel": "stair"
+    },
+    {
+      "a": "S1_19",
+      "b": "c1_18",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_19",
+      "b": "c1_20",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_19",
+      "b": "E1_20",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_19",
+      "b": "E1_21",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_19",
+      "b": "K18",
+      "rel": "core_door"
+    },
+    {
+      "a": "S1_19",
+      "b": "S2_19",
+      "rel": "stair"
+    },
+    {
+      "a": "S2_19",
+      "b": "E2_20",
+      "rel": "core_door"
+    },
+    {
+      "a": "S2_19",
+      "b": "E2_21",
+      "rel": "core_door"
+    },
+    {
+      "a": "S2_19",
+      "b": "S3_19",
+      "rel": "stair"
+    },
+    {
+      "a": "S3_19",
+      "b": "E3_20",
+      "rel": "core_door"
+    },
+    {
+      "a": "S3_19",
+      "b": "E3_21",
+      "rel": "core_door"
+    },
+    {
+      "a": "S3_19",
+      "b": "F18",
+      "rel": "core_door"
+    },
+    {
+      "a": "S3_19",
+      "b": "S4_19",
+      "rel": "stair"
+    },
+    {
+      "a": "S4_19",
+      "b": "c4_18",
+      "rel": "core_door"
+    },
+    {
+      "a": "S4_19",
+      "b": "c4_20",
+      "rel": "core_door"
+    },
+    {
+      "a": "S4_19",
+      "b": "E4_20",
+      "rel": "core_door"
+    },
+    {
+      "a": "S4_19",
+      "b": "E4_21",
+      "rel": "core_door"
+    },
+    {
+      "a": "S4_19",
+      "b": "S5_19",
+      "rel": "stair"
+    },
+    {
+      "a": "S5_19",
+      "b": "E5_20",
+      "rel": "core_door"
+    },
+    {
+      "a": "S5_19",
+      "b": "E5_21",
+      "rel": "core_door"
+    },
+    {
+      "a": "S5_19",
+      "b": "S6_19",
+      "rel": "stair"
+    },
+    {
+      "a": "S6_02",
+      "b": "PENTHOUSE",
+      "rel": "stair"
+    },
+    {
+      "a": "CB0",
+      "b": "HALL",
+      "rel": "above"
+    },
+    {
+      "a": "HALL",
+      "b": "CB3",
+      "rel": "above"
+    },
+    {
+      "a": "HALL",
+      "b": "GALLERY",
+      "rel": "open"
+    },
+    {
+      "a": "CBS0",
+      "b": "CBS1",
+      "rel": "stair"
+    },
+    {
+      "a": "CBS1",
+      "b": "CBS2",
+      "rel": "stair"
+    },
+    {
+      "a": "CBS2",
+      "b": "CBS3",
+      "rel": "stair"
+    },
+    {
+      "a": "CBS3",
+      "b": "CBS4",
+      "rel": "stair"
+    },
+    {
+      "a": "CBS1",
+      "b": "HALL",
+      "rel": "core_door"
+    },
+    {
+      "a": "CBS2",
+      "b": "GALLERY",
+      "rel": "core_door"
+    },
+    {
+      "a": "CBS1",
+      "b": "BRIDGE",
+      "rel": "bridge"
+    },
+    {
+      "a": "BRIDGE",
+      "b": "IFACE",
+      "rel": "bridge"
+    },
+    {
+      "a": "IFACE",
+      "b": "c1_00",
+      "rel": "door"
+    }
+  ],
+  "metrics": {
+    "nodes": 137,
+    "edges": 232,
+    "max_degree": 7,
+    "components": 1,
+    "edges_by_access": {
+      "none": 111,
+      "open": 35,
+      "door": 69,
+      "stair": 17
+    },
+    "nodes_by_type": {
+      "bridge": 1,
+      "corridor": 40,
+      "dwelling": 53,
+      "gallery": 1,
+      "ground": 1,
+      "hall": 1,
+      "interface": 1,
+      "roof": 20,
+      "stairwell": 17,
+      "storey": 2
+    }
+  }
+}

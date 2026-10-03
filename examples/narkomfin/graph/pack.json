@@ -1,0 +1,168 @@
+{
+  "title": "Dom Narkomfin graph grammar",
+  "version": "0.1.0",
+  "model": "Dom Narkomfin (Ginzburg & Milinis, 1928-30)",
+  "modules": {"rules": "rules.py", "interpret": "interpret.py", "validate": "validate.py"},
+  "source": "GROUND",
+
+  "relations": {
+    "supports": "none", "above": "none", "party": "none",
+    "door": "door", "core_door": "door", "bridge": "door",
+    "corridor": "open", "open": "open",
+    "stair": "stair"
+  },
+  "occupiable": ["ground", "dwelling", "corridor", "stairwell", "hall", "gallery", "bridge", "interface"],
+  "nonterminals": ["mass", "storey", "bay"],
+
+  "dimensions": {
+    "bay": 3.66, "depth": 9.90, "storey": 2.80, "pilotis": 2.50, "slab": 0.30,
+    "corridor": 1.80, "hall_band": 1.58, "stairwell_depth": 5.0,
+    "cb_origin": [-7.21, -22.96], "cb_length": 10.65, "cb_depth": 9.96,
+    "cb_core_length": 8.90, "cb_core_depth": 3.40, "bridge_width": 2.34
+  },
+
+  "parameters": {
+    "bays": 22, "levels": 6, "corridor_levels": [1, 4],
+    "cells": [[1, 2, 0, "K"], [3, 5, 1, "F"]],
+    "core_lines": [2, 19], "ends": 3,
+    "cb_levels": 4, "cb_merge": [1, 2], "cb_core_levels": 5
+  },
+
+  "parameter_notes": {
+    "bays": "number of structural bays along the block",
+    "levels": "storeys above the pilotis",
+    "corridor_levels": "the levels an internal street runs on",
+    "cells": "dwelling groups as [lowest level, highest level, index of the pierced level, tag]",
+    "core_lines": "the bays that become stair cores",
+    "ends": "bays beyond the last core, counted from the east end",
+    "cb_levels": "storeys of the condenser",
+    "cb_merge": "condenser storeys merged into the hall, as [lowest, highest]",
+    "cb_core_levels": "levels of the condenser core"
+  },
+
+  "presets": {
+    "V1_as_built": {
+      "title": "V1 as built",
+      "note": "22 bays, 6 levels, streets at L1 and L4. K cells are L-sections, F cells are U-sections.",
+      "parameters": {},
+      "golden": "../golden/graph_AS_BUILT_AB_dicts.json",
+      "expect": {
+        "access": {
+          "nodes": 115, "edges": 121, "components": 1, "max_degree": 7, "cut_vertices": 49,
+          "nodes_by_type": {"bridge": 1, "corridor": 40, "dwelling": 53, "gallery": 1, "ground": 1,
+                            "hall": 1, "interface": 1, "stairwell": 17},
+          "edges_by_access": {"door": 69, "open": 35, "stair": 17}
+        },
+        "full": {"nodes": 137, "edges": 232},
+        "dwellings": 53
+      }
+    },
+    "V2_all_U_3levels": {
+      "title": "V2 all U",
+      "note": "9 levels, 3 streets, every cell a three-level U.",
+      "parameters": {"levels": 9, "corridor_levels": [2, 5, 8],
+                     "cells": [[1, 3, 1, "F"], [4, 6, 1, "F"], [7, 9, 1, "F"]]},
+      "expect": {"dwellings": 81},
+      "prototype": {"dwellings": 49, "full": {"nodes": 143, "edges": 241},
+                    "note": "The prototype named a dwelling by tag and bay, so the three F cells of one bay were one node."}
+    },
+    "V3_gamma_access_over": {
+      "title": "V3 Gamma",
+      "note": "Unbuilt. The street at the top of a two-level cell: access over the dwelling.",
+      "parameters": {"levels": 6, "corridor_levels": [2, 5],
+                     "cells": [[1, 2, 1, "G"], [4, 5, 1, "G"]]},
+      "expect": {"dwellings": 53},
+      "prototype": {"dwellings": 37, "full": {"nodes": 137, "edges": 228},
+                    "note": "The prototype named a dwelling by tag and bay, so the two G cells of one bay were one node."}
+    },
+    "V4_skipstop_Z4": {
+      "title": "V4 skip-stop Z",
+      "note": "Unbuilt. 8 levels, four-level cells, one street per four floors.",
+      "parameters": {"levels": 8, "corridor_levels": [2, 6],
+                     "cells": [[1, 4, 1, "Z"], [5, 8, 1, "Z"]]},
+      "expect": {"dwellings": 61},
+      "prototype": {"dwellings": 45, "full": {"nodes": 117, "edges": 190},
+                    "graph": "../golden/graph_V4_skipstop_Z4_dicts.json",
+                    "note": "The prototype named a dwelling by tag and bay, so the two Z cells of one bay were one node."}
+    },
+    "V5_short_block": {
+      "title": "V5 short block",
+      "note": "10 bays, cores at lines 2 and 8.",
+      "parameters": {"bays": 10, "core_lines": [2, 8], "levels": 6},
+      "expect": {"full": {"nodes": 77, "edges": 119}, "dwellings": 24}
+    }
+  },
+
+  "rules": [
+    {"id": "GA0", "name": "AXIOM", "grammar": "GA", "stage": 0,
+     "operation": "create", "shape_operation": "axiom prism",
+     "description": "One node of type mass: the block as a single prism."},
+
+    {"id": "GA1", "name": "R_LIFT", "grammar": "GA", "stage": 1,
+     "operation": "split", "shape_operation": "SPLIT-Z", "symbols": ["CO.PIL"],
+     "description": "mass becomes ground + mass, joined by 'supports' (access none). The ground plane becomes a node in its own right, which is what makes the pilotis legible to the graph at all."},
+
+    {"id": "GA2", "name": "R_STACK", "grammar": "GA", "stage": 2,
+     "operation": "expand", "shape_operation": "repeated SPLIT-Z", "symbols": ["SL.BAY", "SL.ROOF"],
+     "description": "mass becomes a chain of storey nodes on 'above' edges (access none)."},
+
+    {"id": "GA3", "name": "R_BAY", "grammar": "GA", "stage": 3,
+     "operation": "expand", "shape_operation": "SPLIT-X + wall/column pair",
+     "symbols": ["DV.WALL.PARTY", "CO.RECT", "SL.BAY"],
+     "description": "A storey node is expanded into n bay nodes chained by 'party' edges whose access is NONE. The subdivision creates adjacency without access; every later rule has to supply the access explicitly."},
+
+    {"id": "GA4", "name": "R_CORRIDOR", "grammar": "GA", "stage": 4,
+     "operation": "split", "shape_operation": "SPLIT-Y + door wall",
+     "symbols": ["SP.CORRIDOR", "DV.WALL.CORR", "OP.DOOR"],
+     "description": "On a street level each bay node splits into corridor + band. The corridor nodes form an open chain (access open) and each band gets exactly one 'door' edge. The internal street now exists as a path in the graph."},
+
+    {"id": "GA5", "name": "R_LCELL / R_UCELL", "grammar": "GA", "stage": 5,
+     "operation": "contract", "shape_operation": "merge stack - corridor notch",
+     "symbols": ["SP.CELL.K", "SP.CELL.F", "CI.STAIR.K", "CI.STAIR.F"],
+     "description": "CONTRACT the run of band nodes of one bay into a single dwelling node. The door edge to the pierced level survives; the internal 'above' edges dissolve. The index of the pierced level decides the section: L, U, Gamma or Z. End units are the degenerate case: one level, entered from the stair lobby. This is the only production that reduces the node count."},
+
+    {"id": "GA6", "name": "R_CORE", "grammar": "GA", "stage": 6,
+     "operation": "relabel + attach", "shape_operation": "relabel + flights",
+     "symbols": ["SP.STAIRWELL", "CI.FLIGHT", "CI.LANDING", "DV.WALL.CORE"],
+     "description": "A bay stack is relabelled as stairwells chained by 'stair' edges (access stair), with 'core_door' edges into the streets, the end units and the dwellings beside the core. Before this rule the graph has no vertical access at all."},
+
+    {"id": "GA7", "name": "R_FACADE", "grammar": "GA", "stage": 7, "identity": true,
+     "operation": "identity", "shape_operation": "SPLIT-Z (parametric h)",
+     "symbols": ["EN.SPAND", "EN.WIN.RIBBON"],
+     "description": "IDENTITY on the graph. The facade split (spandrel + ribbon) changes no node and no edge. It stays in the rule list as the honest record that shape and graph grammars are not in bijection: envelope is style, and the graph cannot see it."},
+
+    {"id": "GA8", "name": "R_ROOF", "grammar": "GA", "stage": 8,
+     "operation": "relabel + attach", "shape_operation": "parapet + penthouse",
+     "symbols": ["SL.ROOF", "EN.PARAPET", "EN.WALL.END"],
+     "description": "The bay nodes of the top level are relabelled as roof zone, and a terminal penthouse dwelling is attached to a core. A bay left anywhere below the top is an unresolved non-terminal."},
+
+    {"id": "GB0", "name": "AXIOM", "grammar": "GB", "stage": 0,
+     "operation": "create", "shape_operation": "axiom prism",
+     "description": "A second axiom, plus ONE interface node standing for the block's corridor. Grammar GB sees nothing else of grammar GA, which is what lets the two be varied independently."},
+
+    {"id": "GB1", "name": "R_STACK", "grammar": "GB", "stage": 1,
+     "operation": "expand", "shape_operation": "repeated SPLIT-Z",
+     "description": "The same stacking production as GA2."},
+
+    {"id": "GB2", "name": "R_MERGE", "grammar": "GB", "stage": 2,
+     "operation": "contract", "shape_operation": "UNION of two storeys", "symbols": ["SP.HALL"],
+     "description": "CONTRACT adjacent storey nodes into one. The same graph operation as GA5 with the opposite programme: a collective room instead of a dwelling. The result is a node of high degree, which is the graph-theoretic definition of a social condenser."},
+
+    {"id": "GB3", "name": "R_GALLERY", "grammar": "GB", "stage": 3,
+     "operation": "attach", "shape_operation": "SUBTRACT curved void", "symbols": ["SL.GALL"],
+     "description": "A node joined to the hall by an 'open' edge: no wall, no door. The open edge is what distinguishes a gallery from a room."},
+
+    {"id": "GB4", "name": "R_FACADE", "grammar": "GB", "stage": 4, "identity": true,
+     "operation": "identity", "shape_operation": "SPLIT-Z with h = 0", "symbols": ["EN.WIN.CURT"],
+     "description": "IDENTITY, as GA7. The curtain wall is the same facade rule with the split height at zero."},
+
+    {"id": "GB5", "name": "R_CORE", "grammar": "GB", "stage": 5,
+     "operation": "attach", "shape_operation": "ATTACH on a face port",
+     "symbols": ["SP.STAIRWELL", "CI.FLIGHT"],
+     "description": "A core chain attached to the hall and the gallery by 'core_door' edges."},
+
+    {"id": "GB6", "name": "R_BRIDGE", "grammar": "GB", "stage": 6,
+     "operation": "attach + glue", "shape_operation": "ATTACH", "symbols": ["SP.BRIDGE"],
+     "description": "The single production that joins the two grammars, through the interface node. In the composed graph BRIDGE is a cut vertex: remove it and the communal programme is stranded."}
+  ]
+}

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "topogrammar"
+version = "0.0.1"
+description = "A Topologic shape + graph grammar toolset"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+# pythonocc-core (OCCT 8) comes from conda-forge, not pip: see docs/PLAN.md section 3
+dependencies = [
+    "topologicpy>=0.9.80",
+    "python-igraph",
+    "numpy",
+]
+
+[project.optional-dependencies]
+viewer = ["fastapi", "uvicorn[standard]"]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["topogrammar*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["occ: needs the pythonocc-core / OCCT 8 backend"]
