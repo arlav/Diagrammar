@@ -1,0 +1,1888 @@
+{
+  "model": "Dom Narkomfin (Ginzburg & Milinis, 1928-30)",
+  "note": "Element dictionary / alphabet of terminals for the Topologic shape+graph grammar. Each element is in its own canonical local frame; see the module docstring.",
+  "constants": {
+    "bay": 3.66,
+    "depth": 9.9,
+    "storey": 2.8,
+    "pilotis_storey": 2.5,
+    "slab": 0.3,
+    "wall_ext": 0.3,
+    "wall_corridor": 0.2,
+    "partition": 0.1,
+    "pane": 0.05,
+    "spandrel": 1.0
+  },
+  "elements": [
+    {
+      "symbol": "SL.BAY",
+      "name": "Bay floor slab",
+      "category": "Structure",
+      "ifc": "IfcSlab",
+      "object": "SL.BAY_Bayfloorslab",
+      "params": {
+        "length": 3.66,
+        "depth": 9.9,
+        "thickness": 0.3
+      },
+      "ports": [
+        {
+          "name": "top",
+          "at": [
+            1.83,
+            4.95,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "soffit",
+          "at": [
+            1.83,
+            4.95,
+            -0.3
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "edge_W",
+          "at": [
+            0,
+            4.95,
+            -0.15
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "edge_E",
+          "at": [
+            3.66,
+            4.95,
+            -0.15
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "edge_S",
+          "at": [
+            1.83,
+            0,
+            -0.15
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "edge_N",
+          "at": [
+            1.83,
+            9.9,
+            -0.15
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": 110,
+      "where": "every bay of every level of the residential block",
+      "grammar_role": "the unit of horizontal subdivision; SPLIT-X of a slab band generates the bay rhythm",
+      "catalogue_location": [
+        0.0,
+        -9.9,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SL.STRIP",
+      "name": "Partial slab strip (corridor / hall band)",
+      "category": "Structure",
+      "ifc": "IfcSlab",
+      "object": "SL.STRIP_Partialslabstrip",
+      "params": {
+        "length": 3.66,
+        "depth": 3.38,
+        "thickness": 0.3
+      },
+      "ports": [
+        {
+          "name": "top",
+          "at": [
+            1.83,
+            1.69,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "edge_N",
+          "at": [
+            1.83,
+            3.38,
+            -0.15
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": 16,
+      "where": "L4 of the F bays: the corridor + entrance-hall band, leaving the living room double height",
+      "grammar_role": "produced by SUBTRACT of a void volume from SL.BAY; the rule that makes the F duplex",
+      "catalogue_location": [
+        5.86,
+        -6.64,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SL.BALC",
+      "name": "Balcony slab strip",
+      "category": "Structure",
+      "ifc": "IfcSlab",
+      "object": "SL.BALC_Balconyslabstrip",
+      "params": {
+        "length": 3.66,
+        "depth": 2.3,
+        "thickness": 0.3
+      },
+      "ports": [
+        {
+          "name": "top",
+          "at": [
+            1.83,
+            1.15,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "edge_N",
+          "at": [
+            1.83,
+            2.3,
+            -0.15
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "parapet_seat",
+          "at": [
+            1.83,
+            0.1,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "occurrences": 21,
+      "where": "L1 south side, the full length of the block",
+      "grammar_role": "OFFSET-Y of SL.BAY beyond the facade line; carries EN.PARAPET",
+      "catalogue_location": [
+        11.72,
+        -6.1,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SL.BALC.SEMI",
+      "name": "Semicircular balcony",
+      "category": "Structure",
+      "ifc": "IfcSlab",
+      "object": "SL.BALC.SEMI_Semicircularbalcony",
+      "params": {
+        "radius": 2.4,
+        "thickness": 0.3
+      },
+      "ports": [
+        {
+          "name": "top",
+          "at": [
+            -1.2,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "wall_face",
+          "at": [
+            0,
+            0,
+            -0.15
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": 4,
+      "where": "west gable, L2-L5",
+      "grammar_role": "a curved terminal: rotational rule applied to the end wall, not derivable by orthogonal splits",
+      "catalogue_location": [
+        19.98,
+        -4.95,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SL.GALL",
+      "name": "Gallery slab with curved edge",
+      "category": "Structure",
+      "ifc": "IfcSlab",
+      "object": "SL.GALL_Galleryslabwithcurvededge",
+      "params": {
+        "length": 10.65,
+        "depth": 7.52,
+        "thickness": 0.3,
+        "bite": "elliptical, 0.97 deep"
+      },
+      "ports": [
+        {
+          "name": "top",
+          "at": [
+            5.3,
+            3.5,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "curved_edge",
+          "at": [
+            7.3,
+            6.55,
+            -0.15
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": 1,
+      "where": "condenser: the gallery over the double-height hall",
+      "grammar_role": "SUBTRACT of a curved void from a full slab; the only non-orthogonal horizontal element",
+      "catalogue_location": [
+        22.18,
+        -8.71,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SL.ROOF",
+      "name": "Roof slab (bay)",
+      "category": "Structure",
+      "ifc": "IfcRoof",
+      "object": "SL.ROOF_Roofslab",
+      "params": {
+        "length": 3.66,
+        "depth": 9.9,
+        "thickness": 0.3
+      },
+      "ports": [
+        {
+          "name": "top",
+          "at": [
+            1.83,
+            4.95,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "occurrences": 25,
+      "where": "top of both blocks",
+      "grammar_role": "terminal: the last slab of a vertical repetition stops the STACK-Z rule",
+      "catalogue_location": [
+        35.03,
+        -9.9,
+        0.0
+      ]
+    },
+    {
+      "symbol": "CO.PIL",
+      "name": "Pilotis (round column)",
+      "category": "Structure",
+      "ifc": "IfcColumn",
+      "object": "CO.PIL_Pilotis",
+      "params": {
+        "diameter": 0.5,
+        "height": 2.2,
+        "profile": "circular"
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            0,
+            0,
+            2.2
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "occurrences": 69,
+      "where": "ground floor, three rows at y = 8.72 / 12.41 / 16.20",
+      "grammar_role": "the free-standing terminal that lets the ground plane stay open; marks the pilotis storey",
+      "catalogue_location": [
+        41.14,
+        -4.95,
+        0.0
+      ]
+    },
+    {
+      "symbol": "CO.RECT",
+      "name": "Column (rectangular, in the party wall)",
+      "category": "Structure",
+      "ifc": "IfcColumn",
+      "object": "CO.RECT_Column",
+      "params": {
+        "width": 0.3,
+        "depth": 0.4,
+        "height": 2.5,
+        "profile": "rectangular"
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            0,
+            0,
+            2.5
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "wall_W",
+          "at": [
+            -0.15,
+            0,
+            1.25
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "wall_E",
+          "at": [
+            0.15,
+            0,
+            1.25
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": 352,
+      "where": "all upper levels, flush with the party walls on the same three rows",
+      "grammar_role": "the column absorbed into the division; walls are SPLIT by it (hence the _s0/_s1 pieces)",
+      "catalogue_location": [
+        43.74,
+        -4.95,
+        0.0
+      ]
+    },
+    {
+      "symbol": "CO.RND.INT",
+      "name": "Interior round column",
+      "category": "Structure",
+      "ifc": "IfcColumn",
+      "object": "CO.RND.INT_Interiorroundcolumn",
+      "params": {
+        "diameter": 0.5,
+        "height": 2.5,
+        "profile": "circular"
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            0,
+            0,
+            2.5
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "occurrences": 6,
+      "where": "condenser hall, in front of the glazed east face",
+      "grammar_role": "free column inside a space: does not divide it, so the graph keeps one node",
+      "catalogue_location": [
+        46.34,
+        -4.95,
+        0.0
+      ]
+    },
+    {
+      "symbol": "EN.SPAND",
+      "name": "Spandrel band",
+      "category": "Envelope",
+      "ifc": "IfcWall",
+      "object": "EN.SPAND_Spandrelband",
+      "params": {
+        "length": 3.66,
+        "thickness": 0.3,
+        "height": 1.0
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            1.83,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            1.83,
+            0,
+            1.0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "out",
+          "at": [
+            1.83,
+            -0.15,
+            0.5
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "in",
+          "at": [
+            1.83,
+            0.15,
+            0.5
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u2248180 pieces",
+      "where": "both long facades of both blocks, every level",
+      "grammar_role": "lower half of the SPLIT-Z of a facade panel; pairs with EN.WIN.RIBBON",
+      "catalogue_location": [
+        0.0,
+        -18.085,
+        0.0
+      ]
+    },
+    {
+      "symbol": "EN.WIN.RIBBON",
+      "name": "Ribbon window (single pane)",
+      "category": "Envelope",
+      "ifc": "IfcWindow",
+      "object": "EN.WIN.RIBBON_Ribbonwindow",
+      "params": {
+        "length": 3.66,
+        "thickness": 0.05,
+        "height": 1.5,
+        "glazing": "single pane, full bay"
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            1.83,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            1.83,
+            0,
+            1.5
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "out",
+          "at": [
+            1.83,
+            -0.025,
+            0.75
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u2248200 panes",
+      "where": "both long facades, continuous from party wall to party wall",
+      "grammar_role": "upper half of the facade SPLIT-Z; the rule keeps it CONTINUOUS across bays, which is the signature of the style - a bay-wise pane would be the wrong grammar",
+      "catalogue_location": [
+        5.86,
+        -18.085,
+        0.0
+      ]
+    },
+    {
+      "symbol": "EN.WIN.CURT",
+      "name": "Curtain wall (storey-high pane)",
+      "category": "Envelope",
+      "ifc": "IfcWindow",
+      "object": "EN.WIN.CURT_Curtainwall",
+      "params": {
+        "length": 10.56,
+        "thickness": 0.05,
+        "height": 2.5
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            5.28,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "out",
+          "at": [
+            5.28,
+            -0.025,
+            1.25
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "occurrences": 5,
+      "where": "condenser east face, one pane per storey (fully glazed)",
+      "grammar_role": "degenerate case of the facade SPLIT-Z with spandrel = 0; the 'social condenser' reading",
+      "catalogue_location": [
+        11.72,
+        -18.085,
+        0.0
+      ]
+    },
+    {
+      "symbol": "EN.WIN.CURVED",
+      "name": "Curved glazing",
+      "category": "Envelope",
+      "ifc": "IfcWindow",
+      "object": "EN.WIN.CURVED_Curvedglazing",
+      "params": {
+        "radius": 3.16,
+        "thickness": 0.05,
+        "height": 2.2,
+        "sweep": 180
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "chord",
+          "at": [
+            0,
+            0,
+            1.1
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": 3,
+      "where": "ground-floor lobby (apse) and the east entrance vestibule",
+      "grammar_role": "rotational terminal; the LHS is an orthogonal room corner, the RHS its curved replacement",
+      "catalogue_location": [
+        24.48,
+        -18.085,
+        0.0
+      ]
+    },
+    {
+      "symbol": "EN.WALL.END",
+      "name": "Blank end wall (gable)",
+      "category": "Envelope",
+      "ifc": "IfcWall",
+      "object": "EN.WALL.END_Blankendwall",
+      "params": {
+        "length": 9.9,
+        "thickness": 0.3,
+        "height": 2.5
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            4.95,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "out",
+          "at": [
+            4.95,
+            -0.15,
+            1.25
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "corner_S",
+          "at": [
+            0,
+            0,
+            1.25
+          ],
+          "faces": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "corner_N",
+          "at": [
+            9.9,
+            0,
+            1.25
+          ],
+          "faces": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": 12,
+      "where": "east and west gables of the block, all levels",
+      "grammar_role": "the boundary terminal: stops the repetition along x; may carry a door to SL.BALC.SEMI",
+      "catalogue_location": [
+        29.865,
+        -18.085,
+        0.0
+      ]
+    },
+    {
+      "symbol": "EN.PARAPET",
+      "name": "Parapet",
+      "category": "Envelope",
+      "ifc": "IfcWall",
+      "object": "EN.PARAPET_Parapet",
+      "params": {
+        "length": 3.66,
+        "thickness": 0.2,
+        "height": 0.6
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            1.83,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        }
+      ],
+      "occurrences": "\u224840 pieces",
+      "where": "roof edges of both blocks (1.20 m version on the L1 balcony)",
+      "grammar_role": "attaches to a slab edge port; the guard rule for any accessible horizontal surface",
+      "catalogue_location": [
+        41.965,
+        -18.085,
+        0.0
+      ]
+    },
+    {
+      "symbol": "EN.PARAPET.CURVED",
+      "name": "Curved parapet",
+      "category": "Envelope",
+      "ifc": "IfcWall",
+      "object": "EN.PARAPET.CURVED_Curvedparapet",
+      "params": {
+        "radius": 2.4,
+        "thickness": 0.15,
+        "height": 1.1,
+        "sweep": 180
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            0,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        }
+      ],
+      "occurrences": 4,
+      "where": "the semicircular west balconies",
+      "grammar_role": "the same guard rule following a curved edge - shows the rule is edge-driven, not axis-driven",
+      "catalogue_location": [
+        50.225,
+        -18.085,
+        0.0
+      ]
+    },
+    {
+      "symbol": "DV.WALL.PARTY",
+      "name": "Party wall",
+      "category": "Division",
+      "ifc": "IfcWall",
+      "object": "DV.WALL.PARTY_Partywall",
+      "params": {
+        "length": 9.9,
+        "thickness": 0.3,
+        "height": 2.5
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            4.95,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            4.95,
+            0,
+            2.5
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "face_W",
+          "at": [
+            4.95,
+            -0.15,
+            1.25
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "face_E",
+          "at": [
+            4.95,
+            0.15,
+            1.25
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u2248150 pieces",
+      "where": "between dwellings, on the bay lines; blind (no openings)",
+      "grammar_role": "the DIVIDE-X operator made material: one party wall = one new node pair in the graph",
+      "catalogue_location": [
+        0.0,
+        -31.22,
+        0.0
+      ]
+    },
+    {
+      "symbol": "DV.WALL.CORE",
+      "name": "Core wall (with door)",
+      "category": "Division",
+      "ifc": "IfcWall",
+      "object": "DV.WALL.CORE_Corewall",
+      "params": {
+        "length": 9.9,
+        "thickness": 0.3,
+        "height": 2.5,
+        "opening": "0.9 x 2.1"
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            4.95,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "door",
+          "at": [
+            3.95,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u224840 pieces",
+      "where": "around both stair cores, all levels",
+      "grammar_role": "same as DV.WALL.PARTY but with a door notch: the wall that a graph EDGE passes through",
+      "catalogue_location": [
+        12.25,
+        -36.17,
+        0.0
+      ]
+    },
+    {
+      "symbol": "DV.WALL.CORR",
+      "name": "Corridor wall (with entrance door)",
+      "category": "Division",
+      "ifc": "IfcWall",
+      "object": "DV.WALL.CORR_Corridorwall",
+      "params": {
+        "length": 3.66,
+        "thickness": 0.2,
+        "height": 2.5,
+        "opening": "0.9 x 2.1"
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            1.83,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "door",
+          "at": [
+            1.65,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "face_corr",
+          "at": [
+            1.83,
+            -0.1,
+            1.25
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "face_unit",
+          "at": [
+            1.83,
+            0.1,
+            1.25
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u224840 pieces",
+      "where": "the internal street at L1 (y=12.41) and L4 (y=10.46)",
+      "grammar_role": "the SPLIT-Y that produces the corridor; one door per dwelling = one edge corridor->unit",
+      "catalogue_location": [
+        14.6,
+        -31.22,
+        0.0
+      ]
+    },
+    {
+      "symbol": "DV.WALL.PART",
+      "name": "Partition",
+      "category": "Division",
+      "ifc": "IfcWall",
+      "object": "DV.WALL.PART_Partition",
+      "params": {
+        "length": 3.0,
+        "thickness": 0.1,
+        "height": 2.5
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            1.5,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "start",
+          "at": [
+            0,
+            0,
+            1.25
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "end",
+          "at": [
+            3.0,
+            0,
+            1.25
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u224890 pieces",
+      "where": "inside the dwellings: bedroom, kitchen and bathroom divisions",
+      "grammar_role": "the light, non-structural DIVIDE inside a cell - free of the column grid, so it is the level where unit variants are generated",
+      "catalogue_location": [
+        20.46,
+        -31.22,
+        0.0
+      ]
+    },
+    {
+      "symbol": "DV.WALL.WC",
+      "name": "WC partition (paired doors)",
+      "category": "Division",
+      "ifc": "IfcWall",
+      "object": "DV.WALL.WC_WCpartition",
+      "params": {
+        "length": 2.0,
+        "thickness": 0.1,
+        "height": 2.5,
+        "openings": "2 x 0.7 x 2.1"
+      },
+      "ports": [
+        {
+          "name": "base",
+          "at": [
+            1.0,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "door_1",
+          "at": [
+            0.55,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "door_2",
+          "at": [
+            1.4500000000000002,
+            0,
+            0
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": 16,
+      "where": "the F dwellings' paired WC/shower off the entrance hall, L4",
+      "grammar_role": "a repeated micro-rule: the same partition serves two cells - a shared-service motif",
+      "catalogue_location": [
+        25.71,
+        -32.22,
+        0.0
+      ]
+    },
+    {
+      "symbol": "CI.FLIGHT",
+      "name": "Stair flight (half storey)",
+      "category": "Circulation",
+      "ifc": "IfcStair",
+      "object": "CI.FLIGHT_Stairflight",
+      "params": {
+        "width": 1.5,
+        "run": 2.3,
+        "rise": 1.4,
+        "thickness": 0.25
+      },
+      "ports": [
+        {
+          "name": "foot",
+          "at": [
+            0,
+            0.75,
+            0
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            2.3,
+            0.75,
+            1.4
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u224860",
+      "where": "both main cores, one pair per storey",
+      "grammar_role": "the vertical CONNECT operator; its two ports are what make a graph edge between levels",
+      "catalogue_location": [
+        0.0,
+        -42.67,
+        0.0
+      ]
+    },
+    {
+      "symbol": "CI.LANDING",
+      "name": "Stair landing",
+      "category": "Circulation",
+      "ifc": "IfcStair",
+      "object": "CI.LANDING_Stairlanding",
+      "params": {
+        "length": 3.06,
+        "depth": 1.22,
+        "thickness": 0.3
+      },
+      "ports": [
+        {
+          "name": "top",
+          "at": [
+            1.53,
+            0.61,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "name": "arrive",
+          "at": [
+            0,
+            0.61,
+            -0.15
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "depart",
+          "at": [
+            3.06,
+            0.61,
+            -0.15
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u224830",
+      "where": "half-landing of each dogleg",
+      "grammar_role": "the turn: two CI.FLIGHT plus one CI.LANDING = the dogleg composite",
+      "catalogue_location": [
+        4.5,
+        -42.53,
+        0.0
+      ]
+    },
+    {
+      "symbol": "CI.STAIR.K",
+      "name": "K-unit stair (one storey, straight)",
+      "category": "Circulation",
+      "ifc": "IfcStair",
+      "object": "CI.STAIR.K_K-unitstair",
+      "params": {
+        "width": 1.2,
+        "run": 2.59,
+        "rise": 2.8,
+        "thickness": 0.25
+      },
+      "ports": [
+        {
+          "name": "foot",
+          "at": [
+            0,
+            0.6,
+            0
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            2.59,
+            0.6,
+            2.8
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": 8,
+      "where": "inside each K dwelling, L1 to L2, against the party wall",
+      "grammar_role": "the element that turns two stacked cells into ONE dwelling node: the K duplex rule",
+      "catalogue_location": [
+        9.76,
+        -42.52,
+        0.0
+      ]
+    },
+    {
+      "symbol": "CI.STAIR.F",
+      "name": "F-unit stair (one storey, straight)",
+      "category": "Circulation",
+      "ifc": "IfcStair",
+      "object": "CI.STAIR.F_F-unitstair",
+      "params": {
+        "width": 1.05,
+        "run": 2.5,
+        "rise": 2.8,
+        "thickness": 0.25
+      },
+      "ports": [
+        {
+          "name": "foot",
+          "at": [
+            0,
+            0.52,
+            0
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "head",
+          "at": [
+            2.5,
+            0.52,
+            2.8
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "occurrences": 32,
+      "where": "inside each F dwelling, L3->L4 and L4->L5",
+      "grammar_role": "applied twice per dwelling: the split-level F duplex that spans the corridor level",
+      "catalogue_location": [
+        14.55,
+        -42.445,
+        0.0
+      ]
+    },
+    {
+      "symbol": "OP.DOOR",
+      "name": "Door (single pane)",
+      "category": "Opening",
+      "ifc": "IfcDoor",
+      "object": "OP.DOOR_Door",
+      "params": {
+        "width": 0.9,
+        "height": 2.1,
+        "thickness": 0.05
+      },
+      "ports": [
+        {
+          "name": "hinge",
+          "at": [
+            0,
+            0,
+            1.05
+          ],
+          "faces": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "axis",
+          "at": [
+            0.45,
+            0,
+            1.05
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u224895",
+      "where": "dwelling entrances, core doors, interior doors, balcony doors",
+      "grammar_role": "the OPENING terminal: it does not divide, it CONNECTS - every door is a graph edge",
+      "catalogue_location": [
+        0.0,
+        -47.695,
+        0.0
+      ]
+    },
+    {
+      "symbol": "OP.DOOR.WC",
+      "name": "WC door (single pane)",
+      "category": "Opening",
+      "ifc": "IfcDoor",
+      "object": "OP.DOOR.WC_WCdoor",
+      "params": {
+        "width": 0.7,
+        "height": 2.1,
+        "thickness": 0.05
+      },
+      "ports": [
+        {
+          "name": "hinge",
+          "at": [
+            0,
+            0,
+            1.05
+          ],
+          "faces": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "axis",
+          "at": [
+            0.35,
+            0,
+            1.05
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": "\u224840",
+      "where": "WC / shower / bathroom",
+      "grammar_role": "narrow variant; the width is the only parameter that distinguishes service from habitable",
+      "catalogue_location": [
+        3.1,
+        -47.695,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SP.CELL.K",
+      "name": "K dwelling volume (2 bays, 2 levels)",
+      "category": "Space",
+      "ifc": "IfcSpace",
+      "object": "SP.CELL.K_Kdwellingvolume",
+      "params": {
+        "length": 7.32,
+        "depth": 9.9,
+        "height": 5.3,
+        "type": "K: compact kitchen, no dining"
+      },
+      "ports": [
+        {
+          "name": "entrance",
+          "at": [
+            2.9280000000000004,
+            3.75,
+            0
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "facade_S",
+          "at": [
+            3.66,
+            0,
+            1.4
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "facade_N",
+          "at": [
+            3.66,
+            9.9,
+            1.4
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": 8,
+      "where": "L1-L2, bays 3-18, in mirrored pairs",
+      "grammar_role": "the 2-bay x 2-level cell; MIRROR-X of this cell is the rule that makes the pair",
+      "catalogue_location": [
+        0.0,
+        -63.62,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SP.CELL.F",
+      "name": "F dwelling volume (1 bay, 3 levels)",
+      "category": "Space",
+      "ifc": "IfcSpace",
+      "object": "SP.CELL.F_Fdwellingvolume",
+      "params": {
+        "length": 3.66,
+        "depth": 9.9,
+        "height": 8.099999999999998,
+        "type": "F: duplex, no kitchen (communal dining)"
+      },
+      "ports": [
+        {
+          "name": "entrance",
+          "at": [
+            0.5,
+            4.51,
+            2.8
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "facade_S",
+          "at": [
+            1.83,
+            0,
+            1.4
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "facade_N",
+          "at": [
+            1.83,
+            9.9,
+            1.4
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": 16,
+      "where": "L3-L5, bays 3-18",
+      "grammar_role": "the 1-bay x 3-level cell entered from its MIDDLE level: the section that lets one corridor serve three floors - the key move of the whole building",
+      "catalogue_location": [
+        9.52,
+        -63.62,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SP.CORRIDOR",
+      "name": "Corridor segment",
+      "category": "Space",
+      "ifc": "IfcSpace",
+      "object": "SP.CORRIDOR_Corridorsegment",
+      "params": {
+        "length": 3.66,
+        "depth": 1.29,
+        "height": 2.5
+      },
+      "ports": [
+        {
+          "name": "west",
+          "at": [
+            0,
+            0.65,
+            1.2
+          ],
+          "faces": [
+            -1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "east",
+          "at": [
+            3.66,
+            0.65,
+            1.2
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "unit",
+          "at": [
+            1.83,
+            1.29,
+            1.2
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "occurrences": "2 streets",
+      "where": "L1 (K level) and L4 (F level), running the full 80 m",
+      "grammar_role": "the linear connector: a chain of segments whose end nodes attach to SP.STAIRWELL",
+      "catalogue_location": [
+        15.38,
+        -59.315,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SP.STAIRWELL",
+      "name": "Stair core volume",
+      "category": "Space",
+      "ifc": "IfcSpace",
+      "object": "SP.STAIRWELL_Staircorevolume",
+      "params": {
+        "length": 3.66,
+        "depth": 5.01,
+        "height": 2.5
+      },
+      "ports": [
+        {
+          "name": "corridor",
+          "at": [
+            1.83,
+            0,
+            1.2
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        },
+        {
+          "name": "down",
+          "at": [
+            1.83,
+            3.0,
+            0
+          ],
+          "faces": [
+            0,
+            0,
+            -1
+          ]
+        },
+        {
+          "name": "up",
+          "at": [
+            1.83,
+            3.0,
+            2.5
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "occurrences": "2 cores x 7 levels",
+      "where": "bays 2 and 19, from the ground to the roof",
+      "grammar_role": "the only terminal with vertical ports: STACK-Z of stairwells is what makes the graph 3D",
+      "catalogue_location": [
+        21.24,
+        -61.175,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SP.HALL",
+      "name": "Condenser hall (double height)",
+      "category": "Space",
+      "ifc": "IfcSpace",
+      "object": "SP.HALL_Condenserhall",
+      "params": {
+        "length": 10.05,
+        "depth": 9.96,
+        "height": 5.3,
+        "programme": "gymnasium / dining / library"
+      },
+      "ports": [
+        {
+          "name": "core",
+          "at": [
+            5.0,
+            9.96,
+            1.2
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "entrance",
+          "at": [
+            10.05,
+            5.0,
+            1.2
+          ],
+          "faces": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "gallery",
+          "at": [
+            5.0,
+            5.0,
+            2.8
+          ],
+          "faces": [
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "occurrences": 2,
+      "where": "condenser block: the collective volume, with a gallery on one side",
+      "grammar_role": "the social condenser: a single node of HIGH degree - the graph-level definition of 'collective'",
+      "catalogue_location": [
+        27.1,
+        -63.65,
+        0.0
+      ]
+    },
+    {
+      "symbol": "SP.BRIDGE",
+      "name": "Bridge / passage volume",
+      "category": "Space",
+      "ifc": "IfcSpace",
+      "object": "SP.BRIDGE_Bridge/passagevolume",
+      "params": {
+        "length": 2.34,
+        "depth": 11.9,
+        "height": 2.5
+      },
+      "ports": [
+        {
+          "name": "block",
+          "at": [
+            1.17,
+            11.9,
+            1.2
+          ],
+          "faces": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "name": "condenser",
+          "at": [
+            1.17,
+            0,
+            1.2
+          ],
+          "faces": [
+            0,
+            -1,
+            0
+          ]
+        }
+      ],
+      "occurrences": 1,
+      "where": "L1, from the corridor of the block to the condenser core",
+      "grammar_role": "the bridging edge: removing this one terminal disconnects the graph into two components",
+      "catalogue_location": [
+        39.35,
+        -64.62,
+        0.0
+      ]
+    }
+  ]
+}

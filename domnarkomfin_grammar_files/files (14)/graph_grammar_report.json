@@ -1,0 +1,3025 @@
+{
+  "grammar_GA": [
+    {
+      "rule": "GA0",
+      "name": "AXIOM",
+      "description": "GA0 AXIOM: one node, type=mass.",
+      "nodes": 1,
+      "edges": 0,
+      "max_degree": 0,
+      "components": 1,
+      "edges_by_access": {},
+      "nodes_by_type": {
+        "mass": 1
+      }
+    },
+    {
+      "rule": "GA1",
+      "name": "R_LIFT",
+      "description": "GA1 R_LIFT: mass -> {ground, mass} joined by 'supports' (access none). The ground plane becomes a node in its own right, which is what makes the pilotis legible to the graph at all.",
+      "nodes": 2,
+      "edges": 1,
+      "max_degree": 1,
+      "components": 1,
+      "edges_by_access": {
+        "none": 1
+      },
+      "nodes_by_type": {
+        "ground": 1,
+        "mass": 1
+      }
+    },
+    {
+      "rule": "GA2",
+      "name": "R_STACK",
+      "description": "GA2 R_STACK: mass -> a chain of 6 storey nodes on 'above' edges (access none).",
+      "nodes": 7,
+      "edges": 6,
+      "max_degree": 2,
+      "components": 1,
+      "edges_by_access": {
+        "none": 6
+      },
+      "nodes_by_type": {
+        "ground": 1,
+        "storey": 6
+      }
+    },
+    {
+      "rule": "GA3",
+      "name": "R_BAY",
+      "description": "GA3 R_BAY: each storey node is expanded into n bay nodes chained by 'party' edges whose access is NONE. This is the graph half of the bay / party-wall pair: the subdivision creates adjacency WITHOUT access, and every later rule has to supply the access explicitly.",
+      "nodes": 133,
+      "edges": 236,
+      "max_degree": 4,
+      "components": 2,
+      "edges_by_access": {
+        "none": 236
+      },
+      "nodes_by_type": {
+        "bay": 132,
+        "ground": 1
+      }
+    },
+    {
+      "rule": "GA4",
+      "name": "R_CORRIDOR",
+      "description": "GA4 R_CORRIDOR: on the chosen levels each bay node splits into {corridor, band}. The corridor nodes form an open chain (access open) and each band gets exactly ONE 'door' edge. The internal street now exists as a path in the graph, so the shape rule that cuts it is no longer optional.",
+      "nodes": 177,
+      "edges": 322,
+      "max_degree": 5,
+      "components": 2,
+      "edges_by_access": {
+        "none": 236,
+        "door": 44,
+        "open": 42
+      },
+      "nodes_by_type": {
+        "bay": 132,
+        "corridor": 44,
+        "ground": 1
+      }
+    },
+    {
+      "rule": "GA5",
+      "name": "R_LCELL / R_UCELL",
+      "description": "GA5 R_LCELL / R_UCELL: CONTRACT the run of band nodes of one bay into a single dwelling node, keeping the door edge to the level the corridor pierces and dissolving the internal 'above' edges (they are now inside one dwelling). K: 2 levels, corridor at index 0 -> L; F: 3 levels, corridor at index 1 -> U. This is the only production that REDUCES the node count, and it is where the section type is decided: L keeps 2 levels on one street, U hangs 3 levels off one street.",
+      "nodes": 129,
+      "edges": 221,
+      "max_degree": 7,
+      "components": 2,
+      "edges_by_access": {
+        "none": 143,
+        "open": 42,
+        "door": 36
+      },
+      "nodes_by_type": {
+        "bay": 32,
+        "corridor": 44,
+        "dwelling": 52,
+        "ground": 1
+      }
+    },
+    {
+      "rule": "GA6",
+      "name": "R_CORE",
+      "description": "GA6 R_CORE: two bay stacks are relabelled as stairwells and chained by 'stair' edges (access stair), with 'core_door' edges into the corridor chains. Before this rule the graph has no vertical access at all; after it every dwelling is reachable from GROUND, which is the property a generated variant must be tested against.",
+      "nodes": 125,
+      "edges": 219,
+      "max_degree": 7,
+      "components": 1,
+      "edges_by_access": {
+        "none": 109,
+        "open": 34,
+        "door": 64,
+        "stair": 12
+      },
+      "nodes_by_type": {
+        "bay": 20,
+        "corridor": 40,
+        "dwelling": 52,
+        "ground": 1,
+        "stairwell": 12
+      }
+    },
+    {
+      "rule": "GA7",
+      "name": "R_FACADE (identity)",
+      "description": "GA7 R_FACADE: IDENTITY on the graph. The shape grammar's facade split (spandrel + ribbon, or spandrel=0 -> curtain wall) changes no node and no edge. Keeping it in the list as an explicit identity production is the honest way to record that shape and graph grammars are NOT in bijection: the envelope is style, and the graph cannot see it.",
+      "nodes": 125,
+      "edges": 219,
+      "max_degree": 7,
+      "components": 1,
+      "edges_by_access": {
+        "none": 109,
+        "open": 34,
+        "door": 64,
+        "stair": 12
+      },
+      "nodes_by_type": {
+        "bay": 20,
+        "corridor": 40,
+        "dwelling": 52,
+        "ground": 1,
+        "stairwell": 12
+      }
+    },
+    {
+      "rule": "GA8",
+      "name": "R_ROOF",
+      "description": "GA8 R_ROOF: the bay nodes still unassigned at the top level are relabelled as roof zone, and a terminal penthouse dwelling is attached to a core. No 'bay' node may survive a complete derivation - a leftover bay is the graph grammar's equivalent of an unresolved non-terminal.",
+      "nodes": 126,
+      "edges": 220,
+      "max_degree": 7,
+      "components": 1,
+      "edges_by_access": {
+        "none": 109,
+        "open": 34,
+        "door": 64,
+        "stair": 13
+      },
+      "nodes_by_type": {
+        "corridor": 40,
+        "dwelling": 53,
+        "ground": 1,
+        "roof": 20,
+        "stairwell": 12
+      },
+      "topologic_graph": {
+        "vertices": 126,
+        "edges": 220
+      },
+      "cut_vertices": 11,
+      "cut_vertex_ids": [
+        "S1_02",
+        "S1_19",
+        "S4_02",
+        "S4_19",
+        "S5_02",
+        "S5_19",
+        "S6_02",
+        "c1_01",
+        "c1_20",
+        "c4_01",
+        "c4_20"
+      ],
+      "degree_centrality_max": 0.056
+    }
+  ],
+  "grammar_GB": [
+    {
+      "rule": "GB0",
+      "name": "AXIOM",
+      "description": "GB0 AXIOM: a second axiom, plus ONE interface node standing for the block's corridor. Grammar GB sees nothing else of grammar GA, which is what lets the two be varied independently.",
+      "nodes": 128,
+      "edges": 220,
+      "max_degree": 7,
+      "components": 3,
+      "edges_by_access": {
+        "none": 109,
+        "open": 34,
+        "door": 64,
+        "stair": 13
+      },
+      "nodes_by_type": {
+        "corridor": 40,
+        "dwelling": 53,
+        "ground": 1,
+        "interface": 1,
+        "mass": 1,
+        "roof": 20,
+        "stairwell": 12
+      }
+    },
+    {
+      "rule": "GB1",
+      "name": "R_STACK",
+      "description": "GB1 R_STACK: the same stacking production as GA2, 4 levels.",
+      "nodes": 131,
+      "edges": 223,
+      "max_degree": 7,
+      "components": 3,
+      "edges_by_access": {
+        "none": 112,
+        "open": 34,
+        "door": 64,
+        "stair": 13
+      },
+      "nodes_by_type": {
+        "corridor": 40,
+        "dwelling": 53,
+        "ground": 1,
+        "interface": 1,
+        "roof": 20,
+        "stairwell": 12,
+        "storey": 4
+      }
+    },
+    {
+      "rule": "GB2",
+      "name": "R_MERGE (condenser)",
+      "description": "GB2 R_MERGE (the condenser rule): CONTRACT adjacent storey nodes into one. It is the inverse of GA2/GB1 and the mirror of GA5 - same graph operation, opposite programme: GA5 contracts a stack into a dwelling, GB2 contracts a stack into a collective room. The result is a node of high degree, which is the graph-theoretic definition of a social condenser.",
+      "nodes": 130,
+      "edges": 222,
+      "max_degree": 7,
+      "components": 3,
+      "edges_by_access": {
+        "none": 111,
+        "open": 34,
+        "door": 64,
+        "stair": 13
+      },
+      "nodes_by_type": {
+        "corridor": 40,
+        "dwelling": 53,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "roof": 20,
+        "stairwell": 12,
+        "storey": 2
+      }
+    },
+    {
+      "rule": "GB3",
+      "name": "R_GALLERY",
+      "description": "GB3 R_GALLERY: a node joined to the hall by an 'open' edge - no wall, no door. The open edge is what distinguishes a gallery from a room, and it is invisible to any grammar that only records 'adjacent'.",
+      "nodes": 131,
+      "edges": 223,
+      "max_degree": 7,
+      "components": 3,
+      "edges_by_access": {
+        "none": 111,
+        "open": 35,
+        "door": 64,
+        "stair": 13
+      },
+      "nodes_by_type": {
+        "corridor": 40,
+        "dwelling": 53,
+        "gallery": 1,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "roof": 20,
+        "stairwell": 12,
+        "storey": 2
+      }
+    },
+    {
+      "rule": "GB4",
+      "name": "R_FACADE (identity)",
+      "description": "GB4 R_FACADE (identity): as GA7. The condenser's curtain wall is the same facade rule with the split height at zero, and it too leaves the graph untouched.",
+      "nodes": 131,
+      "edges": 223,
+      "max_degree": 7,
+      "components": 3,
+      "edges_by_access": {
+        "none": 111,
+        "open": 35,
+        "door": 64,
+        "stair": 13
+      },
+      "nodes_by_type": {
+        "corridor": 40,
+        "dwelling": 53,
+        "gallery": 1,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "roof": 20,
+        "stairwell": 12,
+        "storey": 2
+      }
+    },
+    {
+      "rule": "GB5",
+      "name": "R_CORE",
+      "description": "GB5 R_CORE: a core chain ATTACHED to the hall and the gallery by 'core_door' edges.",
+      "nodes": 136,
+      "edges": 229,
+      "max_degree": 7,
+      "components": 3,
+      "edges_by_access": {
+        "none": 111,
+        "open": 35,
+        "door": 66,
+        "stair": 17
+      },
+      "nodes_by_type": {
+        "corridor": 40,
+        "dwelling": 53,
+        "gallery": 1,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "roof": 20,
+        "stairwell": 17,
+        "storey": 2
+      }
+    },
+    {
+      "rule": "GB6",
+      "name": "R_BRIDGE",
+      "description": "GB6 R_BRIDGE (composition): the single production that joins the two grammars, through the interface node. In the composed graph BRIDGE is a cut vertex - the only one that matters architecturally, since removing it strands the whole communal programme.",
+      "nodes": 137,
+      "edges": 232,
+      "max_degree": 7,
+      "components": 1,
+      "edges_by_access": {
+        "none": 111,
+        "open": 35,
+        "door": 69,
+        "stair": 17
+      },
+      "nodes_by_type": {
+        "bridge": 1,
+        "corridor": 40,
+        "dwelling": 53,
+        "gallery": 1,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "roof": 20,
+        "stairwell": 17,
+        "storey": 2
+      },
+      "topologic_graph": {
+        "vertices": 137,
+        "edges": 232
+      },
+      "cut_vertices": 18,
+      "cut_vertex_ids": [
+        "BRIDGE",
+        "CBS1",
+        "CBS2",
+        "CBS3",
+        "HALL",
+        "IFACE",
+        "S1_02",
+        "S1_19",
+        "S4_02",
+        "S4_19",
+        "S5_02",
+        "S5_19"
+      ],
+      "degree_centrality_max": 0.0515
+    }
+  ],
+  "comparison": {
+    "available": true,
+    "shape_side_full": {
+      "nodes": 137,
+      "edges": 190,
+      "max_degree": 7,
+      "components": 4,
+      "edges_by_access": {
+        "none": 69,
+        "open": 35,
+        "door": 69,
+        "stair": 17
+      },
+      "nodes_by_type": {
+        "bridge": 1,
+        "corridor": 40,
+        "dwelling": 53,
+        "gallery": 1,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "other": 22,
+        "stairwell": 17
+      },
+      "topologic_graph": {
+        "vertices": 137,
+        "edges": 180
+      },
+      "cut_vertices": 36,
+      "cut_vertex_ids": [
+        "BRIDGE",
+        "C1b00",
+        "C1b01",
+        "C1b20",
+        "C4b01",
+        "C4b20",
+        "CBS1",
+        "CBS2",
+        "CBS3",
+        "HALL",
+        "IFACE.BLOCK_L1_CORRIDOR",
+        "L6b04"
+      ],
+      "degree_centrality_max": 0.0515
+    },
+    "graph_side_full": {
+      "nodes": 137,
+      "edges": 232,
+      "max_degree": 7,
+      "components": 1,
+      "edges_by_access": {
+        "none": 111,
+        "open": 35,
+        "door": 69,
+        "stair": 17
+      },
+      "nodes_by_type": {
+        "bridge": 1,
+        "corridor": 40,
+        "dwelling": 53,
+        "gallery": 1,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "roof": 20,
+        "stairwell": 17,
+        "storey": 2
+      },
+      "topologic_graph": {
+        "vertices": 137,
+        "edges": 232
+      },
+      "cut_vertices": 18,
+      "cut_vertex_ids": [
+        "BRIDGE",
+        "CBS1",
+        "CBS2",
+        "CBS3",
+        "HALL",
+        "IFACE",
+        "S1_02",
+        "S1_19",
+        "S4_02",
+        "S4_19",
+        "S5_02",
+        "S5_19"
+      ],
+      "degree_centrality_max": 0.0515
+    },
+    "shape_side_access": {
+      "nodes": 115,
+      "edges": 121,
+      "max_degree": 7,
+      "components": 1,
+      "edges_by_access": {
+        "open": 35,
+        "door": 69,
+        "stair": 17
+      },
+      "nodes_by_type": {
+        "bridge": 1,
+        "corridor": 40,
+        "dwelling": 53,
+        "gallery": 1,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "stairwell": 17
+      },
+      "topologic_graph": {
+        "vertices": 115,
+        "edges": 121
+      },
+      "cut_vertices": 49,
+      "cut_vertex_ids": [
+        "BRIDGE",
+        "C1b00",
+        "C1b01",
+        "C1b04",
+        "C1b05",
+        "C1b06",
+        "C1b07",
+        "C1b08",
+        "C1b09",
+        "C1b10",
+        "C1b11",
+        "C1b12"
+      ],
+      "degree_centrality_max": 0.0614
+    },
+    "graph_side_access": {
+      "nodes": 115,
+      "edges": 121,
+      "max_degree": 7,
+      "components": 1,
+      "edges_by_access": {
+        "open": 35,
+        "door": 69,
+        "stair": 17
+      },
+      "nodes_by_type": {
+        "bridge": 1,
+        "corridor": 40,
+        "dwelling": 53,
+        "gallery": 1,
+        "ground": 1,
+        "hall": 1,
+        "interface": 1,
+        "stairwell": 17
+      },
+      "topologic_graph": {
+        "vertices": 115,
+        "edges": 121
+      },
+      "cut_vertices": 49,
+      "cut_vertex_ids": [
+        "BRIDGE",
+        "CBS1",
+        "CBS2",
+        "CBS3",
+        "IFACE",
+        "S1_02",
+        "S1_19",
+        "S2_02",
+        "S2_19",
+        "S3_02",
+        "S3_19",
+        "S4_02"
+      ],
+      "degree_centrality_max": 0.0614
+    },
+    "shape_access_node_types": {
+      "bridge": 1,
+      "corridor": 40,
+      "dwelling": 53,
+      "gallery": 1,
+      "ground": 1,
+      "hall": 1,
+      "interface": 1,
+      "stairwell": 17
+    },
+    "graph_access_node_types": {
+      "bridge": 1,
+      "corridor": 40,
+      "dwelling": 53,
+      "gallery": 1,
+      "ground": 1,
+      "hall": 1,
+      "interface": 1,
+      "stairwell": 17
+    },
+    "access_graphs_isomorphic_topologic": false,
+    "degree_sequences_equal": true,
+    "access_graphs_isomorphic": true,
+    "access_graphs_isomorphic_typed": true,
+    "note": "The full states are not comparable - the shape grammar carries element cells the graph grammar has no use for. What must agree is the ACCESS structure, and it now does: same node count, same edge count, same node types, same degree sequence, one component, and a type-preserving isomorphism. That agreement is the correctness test for generated variants: derive on one side, realise on the other, compare access graphs."
+  },
+  "variants": [
+    {
+      "name": "V1_as_built",
+      "parameters": {
+        "bays": 22,
+        "levels": 6,
+        "corridor_levels": [
+          1,
+          4
+        ],
+        "cells": [
+          [
+            1,
+            2,
+            0,
+            "K"
+          ],
+          [
+            3,
+            5,
+            1,
+            "F"
+          ]
+        ],
+        "core_lines": [
+          2,
+          19
+        ],
+        "ends": 3,
+        "cb_levels": 4,
+        "cb_merge": [
+          1,
+          2
+        ],
+        "cb_core_levels": 5
+      },
+      "metrics": {
+        "nodes": 137,
+        "edges": 232,
+        "max_degree": 7,
+        "components": 1,
+        "edges_by_access": {
+          "none": 111,
+          "open": 35,
+          "door": 69,
+          "stair": 17
+        },
+        "nodes_by_type": {
+          "bridge": 1,
+          "corridor": 40,
+          "dwelling": 53,
+          "gallery": 1,
+          "ground": 1,
+          "hall": 1,
+          "interface": 1,
+          "roof": 20,
+          "stairwell": 17,
+          "storey": 2
+        },
+        "topologic_graph": {
+          "vertices": 137,
+          "edges": 232
+        },
+        "cut_vertices": 18,
+        "cut_vertex_ids": [
+          "BRIDGE",
+          "CBS1",
+          "CBS2",
+          "CBS3",
+          "HALL",
+          "IFACE",
+          "S1_02",
+          "S1_19",
+          "S4_02",
+          "S4_19",
+          "S5_02",
+          "S5_19"
+        ],
+        "degree_centrality_max": 0.0515
+      },
+      "steps_A": [
+        {
+          "rule": "GA0",
+          "name": "AXIOM",
+          "description": "GA0 AXIOM: one node, type=mass.",
+          "nodes": 1,
+          "edges": 0,
+          "max_degree": 0,
+          "components": 1,
+          "edges_by_access": {},
+          "nodes_by_type": {
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA1",
+          "name": "R_LIFT",
+          "description": "GA1 R_LIFT: mass -> {ground, mass} joined by 'supports' (access none). The ground plane becomes a node in its own right, which is what makes the pilotis legible to the graph at all.",
+          "nodes": 2,
+          "edges": 1,
+          "max_degree": 1,
+          "components": 1,
+          "edges_by_access": {
+            "none": 1
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA2",
+          "name": "R_STACK",
+          "description": "GA2 R_STACK: mass -> a chain of 6 storey nodes on 'above' edges (access none).",
+          "nodes": 7,
+          "edges": 6,
+          "max_degree": 2,
+          "components": 1,
+          "edges_by_access": {
+            "none": 6
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "storey": 6
+          }
+        },
+        {
+          "rule": "GA3",
+          "name": "R_BAY",
+          "description": "GA3 R_BAY: each storey node is expanded into n bay nodes chained by 'party' edges whose access is NONE. This is the graph half of the bay / party-wall pair: the subdivision creates adjacency WITHOUT access, and every later rule has to supply the access explicitly.",
+          "nodes": 133,
+          "edges": 236,
+          "max_degree": 4,
+          "components": 2,
+          "edges_by_access": {
+            "none": 236
+          },
+          "nodes_by_type": {
+            "bay": 132,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA4",
+          "name": "R_CORRIDOR",
+          "description": "GA4 R_CORRIDOR: on the chosen levels each bay node splits into {corridor, band}. The corridor nodes form an open chain (access open) and each band gets exactly ONE 'door' edge. The internal street now exists as a path in the graph, so the shape rule that cuts it is no longer optional.",
+          "nodes": 177,
+          "edges": 322,
+          "max_degree": 5,
+          "components": 2,
+          "edges_by_access": {
+            "none": 236,
+            "door": 44,
+            "open": 42
+          },
+          "nodes_by_type": {
+            "bay": 132,
+            "corridor": 44,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA5",
+          "name": "R_LCELL / R_UCELL",
+          "description": "GA5 R_LCELL / R_UCELL: CONTRACT the run of band nodes of one bay into a single dwelling node, keeping the door edge to the level the corridor pierces and dissolving the internal 'above' edges (they are now inside one dwelling). K: 2 levels, corridor at index 0 -> L; F: 3 levels, corridor at index 1 -> U. This is the only production that REDUCES the node count, and it is where the section type is decided: L keeps 2 levels on one street, U hangs 3 levels off one street.",
+          "nodes": 129,
+          "edges": 221,
+          "max_degree": 7,
+          "components": 2,
+          "edges_by_access": {
+            "none": 143,
+            "open": 42,
+            "door": 36
+          },
+          "nodes_by_type": {
+            "bay": 32,
+            "corridor": 44,
+            "dwelling": 52,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA6",
+          "name": "R_CORE",
+          "description": "GA6 R_CORE: two bay stacks are relabelled as stairwells and chained by 'stair' edges (access stair), with 'core_door' edges into the corridor chains. Before this rule the graph has no vertical access at all; after it every dwelling is reachable from GROUND, which is the property a generated variant must be tested against.",
+          "nodes": 125,
+          "edges": 219,
+          "max_degree": 7,
+          "components": 1,
+          "edges_by_access": {
+            "none": 109,
+            "open": 34,
+            "door": 64,
+            "stair": 12
+          },
+          "nodes_by_type": {
+            "bay": 20,
+            "corridor": 40,
+            "dwelling": 52,
+            "ground": 1,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GA7",
+          "name": "R_FACADE (identity)",
+          "description": "GA7 R_FACADE: IDENTITY on the graph. The shape grammar's facade split (spandrel + ribbon, or spandrel=0 -> curtain wall) changes no node and no edge. Keeping it in the list as an explicit identity production is the honest way to record that shape and graph grammars are NOT in bijection: the envelope is style, and the graph cannot see it.",
+          "nodes": 125,
+          "edges": 219,
+          "max_degree": 7,
+          "components": 1,
+          "edges_by_access": {
+            "none": 109,
+            "open": 34,
+            "door": 64,
+            "stair": 12
+          },
+          "nodes_by_type": {
+            "bay": 20,
+            "corridor": 40,
+            "dwelling": 52,
+            "ground": 1,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GA8",
+          "name": "R_ROOF",
+          "description": "GA8 R_ROOF: the bay nodes still unassigned at the top level are relabelled as roof zone, and a terminal penthouse dwelling is attached to a core. No 'bay' node may survive a complete derivation - a leftover bay is the graph grammar's equivalent of an unresolved non-terminal.",
+          "nodes": 126,
+          "edges": 220,
+          "max_degree": 7,
+          "components": 1,
+          "edges_by_access": {
+            "none": 109,
+            "open": 34,
+            "door": 64,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 53,
+            "ground": 1,
+            "roof": 20,
+            "stairwell": 12
+          },
+          "topologic_graph": {
+            "vertices": 126,
+            "edges": 220
+          },
+          "cut_vertices": 11,
+          "cut_vertex_ids": [
+            "S1_02",
+            "S1_19",
+            "S4_02",
+            "S4_19",
+            "S5_02",
+            "S5_19",
+            "S6_02",
+            "c1_01",
+            "c1_20",
+            "c4_01",
+            "c4_20"
+          ],
+          "degree_centrality_max": 0.056
+        }
+      ],
+      "steps_B": [
+        {
+          "rule": "GB0",
+          "name": "AXIOM",
+          "description": "GB0 AXIOM: a second axiom, plus ONE interface node standing for the block's corridor. Grammar GB sees nothing else of grammar GA, which is what lets the two be varied independently.",
+          "nodes": 128,
+          "edges": 220,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 109,
+            "open": 34,
+            "door": 64,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 53,
+            "ground": 1,
+            "interface": 1,
+            "mass": 1,
+            "roof": 20,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GB1",
+          "name": "R_STACK",
+          "description": "GB1 R_STACK: the same stacking production as GA2, 4 levels.",
+          "nodes": 131,
+          "edges": 223,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 112,
+            "open": 34,
+            "door": 64,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 53,
+            "ground": 1,
+            "interface": 1,
+            "roof": 20,
+            "stairwell": 12,
+            "storey": 4
+          }
+        },
+        {
+          "rule": "GB2",
+          "name": "R_MERGE (condenser)",
+          "description": "GB2 R_MERGE (the condenser rule): CONTRACT adjacent storey nodes into one. It is the inverse of GA2/GB1 and the mirror of GA5 - same graph operation, opposite programme: GA5 contracts a stack into a dwelling, GB2 contracts a stack into a collective room. The result is a node of high degree, which is the graph-theoretic definition of a social condenser.",
+          "nodes": 130,
+          "edges": 222,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 111,
+            "open": 34,
+            "door": 64,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 53,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 20,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB3",
+          "name": "R_GALLERY",
+          "description": "GB3 R_GALLERY: a node joined to the hall by an 'open' edge - no wall, no door. The open edge is what distinguishes a gallery from a room, and it is invisible to any grammar that only records 'adjacent'.",
+          "nodes": 131,
+          "edges": 223,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 111,
+            "open": 35,
+            "door": 64,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 53,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 20,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB4",
+          "name": "R_FACADE (identity)",
+          "description": "GB4 R_FACADE (identity): as GA7. The condenser's curtain wall is the same facade rule with the split height at zero, and it too leaves the graph untouched.",
+          "nodes": 131,
+          "edges": 223,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 111,
+            "open": 35,
+            "door": 64,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 53,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 20,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB5",
+          "name": "R_CORE",
+          "description": "GB5 R_CORE: a core chain ATTACHED to the hall and the gallery by 'core_door' edges.",
+          "nodes": 136,
+          "edges": 229,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 111,
+            "open": 35,
+            "door": 66,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 53,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 20,
+            "stairwell": 17,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB6",
+          "name": "R_BRIDGE",
+          "description": "GB6 R_BRIDGE (composition): the single production that joins the two grammars, through the interface node. In the composed graph BRIDGE is a cut vertex - the only one that matters architecturally, since removing it strands the whole communal programme.",
+          "nodes": 137,
+          "edges": 232,
+          "max_degree": 7,
+          "components": 1,
+          "edges_by_access": {
+            "none": 111,
+            "open": 35,
+            "door": 69,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "bridge": 1,
+            "corridor": 40,
+            "dwelling": 53,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 20,
+            "stairwell": 17,
+            "storey": 2
+          },
+          "topologic_graph": {
+            "vertices": 137,
+            "edges": 232
+          },
+          "cut_vertices": 18,
+          "cut_vertex_ids": [
+            "BRIDGE",
+            "CBS1",
+            "CBS2",
+            "CBS3",
+            "HALL",
+            "IFACE",
+            "S1_02",
+            "S1_19",
+            "S4_02",
+            "S4_19",
+            "S5_02",
+            "S5_19"
+          ],
+          "degree_centrality_max": 0.0515
+        }
+      ],
+      "dwellings": 53,
+      "dwellings_reachable_from_ground": 53,
+      "valid": true,
+      "floors_per_street": 3.0,
+      "interpreted": {
+        "cells": 92,
+        "volume": 8744.4,
+        "merged": null,
+        "recovered_graph": null
+      }
+    },
+    {
+      "name": "V2_all_U_3levels",
+      "parameters": {
+        "bays": 22,
+        "levels": 9,
+        "corridor_levels": [
+          2,
+          5,
+          8
+        ],
+        "cells": [
+          [
+            1,
+            3,
+            1,
+            "F"
+          ],
+          [
+            4,
+            6,
+            1,
+            "F"
+          ],
+          [
+            7,
+            9,
+            1,
+            "F"
+          ]
+        ],
+        "core_lines": [
+          2,
+          19
+        ],
+        "ends": 3,
+        "cb_levels": 4,
+        "cb_merge": [
+          1,
+          2
+        ],
+        "cb_core_levels": 5
+      },
+      "metrics": {
+        "nodes": 143,
+        "edges": 241,
+        "max_degree": 6,
+        "components": 1,
+        "edges_by_access": {
+          "none": 67,
+          "open": 52,
+          "door": 99,
+          "stair": 23
+        },
+        "nodes_by_type": {
+          "bridge": 1,
+          "corridor": 60,
+          "dwelling": 49,
+          "gallery": 1,
+          "ground": 1,
+          "hall": 1,
+          "interface": 1,
+          "roof": 4,
+          "stairwell": 23,
+          "storey": 2
+        },
+        "topologic_graph": {
+          "vertices": 143,
+          "edges": 241
+        },
+        "cut_vertices": 20,
+        "cut_vertex_ids": [
+          "BRIDGE",
+          "CBS1",
+          "CBS2",
+          "CBS3",
+          "HALL",
+          "IFACE",
+          "S2_02",
+          "S2_19",
+          "S5_02",
+          "S5_19",
+          "S8_02",
+          "S8_19"
+        ],
+        "degree_centrality_max": 0.0423
+      },
+      "steps_A": [
+        {
+          "rule": "GA0",
+          "name": "AXIOM",
+          "description": "GA0 AXIOM: one node, type=mass.",
+          "nodes": 1,
+          "edges": 0,
+          "max_degree": 0,
+          "components": 1,
+          "edges_by_access": {},
+          "nodes_by_type": {
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA1",
+          "name": "R_LIFT",
+          "description": "GA1 R_LIFT: mass -> {ground, mass} joined by 'supports' (access none). The ground plane becomes a node in its own right, which is what makes the pilotis legible to the graph at all.",
+          "nodes": 2,
+          "edges": 1,
+          "max_degree": 1,
+          "components": 1,
+          "edges_by_access": {
+            "none": 1
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA2",
+          "name": "R_STACK",
+          "description": "GA2 R_STACK: mass -> a chain of 9 storey nodes on 'above' edges (access none).",
+          "nodes": 10,
+          "edges": 9,
+          "max_degree": 2,
+          "components": 1,
+          "edges_by_access": {
+            "none": 9
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "storey": 9
+          }
+        },
+        {
+          "rule": "GA3",
+          "name": "R_BAY",
+          "description": "GA3 R_BAY: each storey node is expanded into n bay nodes chained by 'party' edges whose access is NONE. This is the graph half of the bay / party-wall pair: the subdivision creates adjacency WITHOUT access, and every later rule has to supply the access explicitly.",
+          "nodes": 199,
+          "edges": 365,
+          "max_degree": 4,
+          "components": 2,
+          "edges_by_access": {
+            "none": 365
+          },
+          "nodes_by_type": {
+            "bay": 198,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA4",
+          "name": "R_CORRIDOR",
+          "description": "GA4 R_CORRIDOR: on the chosen levels each bay node splits into {corridor, band}. The corridor nodes form an open chain (access open) and each band gets exactly ONE 'door' edge. The internal street now exists as a path in the graph, so the shape rule that cuts it is no longer optional.",
+          "nodes": 265,
+          "edges": 494,
+          "max_degree": 5,
+          "components": 2,
+          "edges_by_access": {
+            "none": 365,
+            "door": 66,
+            "open": 63
+          },
+          "nodes_by_type": {
+            "bay": 198,
+            "corridor": 66,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA5",
+          "name": "R_LCELL / R_UCELL",
+          "description": "GA5 R_LCELL / R_UCELL: CONTRACT the run of band nodes of one bay into a single dwelling node, keeping the door edge to the level the corridor pierces and dissolving the internal 'above' edges (they are now inside one dwelling). F: 3 levels, corridor at index 1 -> U; F: 3 levels, corridor at index 1 -> U; F: 3 levels, corridor at index 1 -> U. This is the only production that REDUCES the node count, and it is where the section type is decided: L keeps 2 levels on one street, U hangs 3 levels off one street.",
+          "nodes": 137,
+          "edges": 234,
+          "max_degree": 13,
+          "components": 2,
+          "edges_by_access": {
+            "none": 117,
+            "open": 63,
+            "door": 54
+          },
+          "nodes_by_type": {
+            "bay": 22,
+            "corridor": 66,
+            "dwelling": 48,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA6",
+          "name": "R_CORE",
+          "description": "GA6 R_CORE: two bay stacks are relabelled as stairwells and chained by 'stair' edges (access stair), with 'core_door' edges into the corridor chains. Before this rule the graph has no vertical access at all; after it every dwelling is reachable from GROUND, which is the property a generated variant must be tested against.",
+          "nodes": 131,
+          "edges": 228,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 65,
+            "open": 51,
+            "door": 94,
+            "stair": 18
+          },
+          "nodes_by_type": {
+            "bay": 4,
+            "corridor": 60,
+            "dwelling": 48,
+            "ground": 1,
+            "stairwell": 18
+          }
+        },
+        {
+          "rule": "GA7",
+          "name": "R_FACADE (identity)",
+          "description": "GA7 R_FACADE: IDENTITY on the graph. The shape grammar's facade split (spandrel + ribbon, or spandrel=0 -> curtain wall) changes no node and no edge. Keeping it in the list as an explicit identity production is the honest way to record that shape and graph grammars are NOT in bijection: the envelope is style, and the graph cannot see it.",
+          "nodes": 131,
+          "edges": 228,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 65,
+            "open": 51,
+            "door": 94,
+            "stair": 18
+          },
+          "nodes_by_type": {
+            "bay": 4,
+            "corridor": 60,
+            "dwelling": 48,
+            "ground": 1,
+            "stairwell": 18
+          }
+        },
+        {
+          "rule": "GA8",
+          "name": "R_ROOF",
+          "description": "GA8 R_ROOF: the bay nodes still unassigned at the top level are relabelled as roof zone, and a terminal penthouse dwelling is attached to a core. No 'bay' node may survive a complete derivation - a leftover bay is the graph grammar's equivalent of an unresolved non-terminal.",
+          "nodes": 132,
+          "edges": 229,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 65,
+            "open": 51,
+            "door": 94,
+            "stair": 19
+          },
+          "nodes_by_type": {
+            "corridor": 60,
+            "dwelling": 49,
+            "ground": 1,
+            "roof": 4,
+            "stairwell": 18
+          },
+          "topologic_graph": {
+            "vertices": 132,
+            "edges": 229
+          },
+          "cut_vertices": 13,
+          "cut_vertex_ids": [
+            "S2_02",
+            "S2_19",
+            "S5_02",
+            "S5_19",
+            "S8_02",
+            "S8_19",
+            "S9_02",
+            "c2_01",
+            "c2_20",
+            "c5_01",
+            "c5_20",
+            "c8_01"
+          ],
+          "degree_centrality_max": 0.0458
+        }
+      ],
+      "steps_B": [
+        {
+          "rule": "GB0",
+          "name": "AXIOM",
+          "description": "GB0 AXIOM: a second axiom, plus ONE interface node standing for the block's corridor. Grammar GB sees nothing else of grammar GA, which is what lets the two be varied independently.",
+          "nodes": 134,
+          "edges": 229,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 65,
+            "open": 51,
+            "door": 94,
+            "stair": 19
+          },
+          "nodes_by_type": {
+            "corridor": 60,
+            "dwelling": 49,
+            "ground": 1,
+            "interface": 1,
+            "mass": 1,
+            "roof": 4,
+            "stairwell": 18
+          }
+        },
+        {
+          "rule": "GB1",
+          "name": "R_STACK",
+          "description": "GB1 R_STACK: the same stacking production as GA2, 4 levels.",
+          "nodes": 137,
+          "edges": 232,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 68,
+            "open": 51,
+            "door": 94,
+            "stair": 19
+          },
+          "nodes_by_type": {
+            "corridor": 60,
+            "dwelling": 49,
+            "ground": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 18,
+            "storey": 4
+          }
+        },
+        {
+          "rule": "GB2",
+          "name": "R_MERGE (condenser)",
+          "description": "GB2 R_MERGE (the condenser rule): CONTRACT adjacent storey nodes into one. It is the inverse of GA2/GB1 and the mirror of GA5 - same graph operation, opposite programme: GA5 contracts a stack into a dwelling, GB2 contracts a stack into a collective room. The result is a node of high degree, which is the graph-theoretic definition of a social condenser.",
+          "nodes": 136,
+          "edges": 231,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 67,
+            "open": 51,
+            "door": 94,
+            "stair": 19
+          },
+          "nodes_by_type": {
+            "corridor": 60,
+            "dwelling": 49,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 18,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB3",
+          "name": "R_GALLERY",
+          "description": "GB3 R_GALLERY: a node joined to the hall by an 'open' edge - no wall, no door. The open edge is what distinguishes a gallery from a room, and it is invisible to any grammar that only records 'adjacent'.",
+          "nodes": 137,
+          "edges": 232,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 67,
+            "open": 52,
+            "door": 94,
+            "stair": 19
+          },
+          "nodes_by_type": {
+            "corridor": 60,
+            "dwelling": 49,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 18,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB4",
+          "name": "R_FACADE (identity)",
+          "description": "GB4 R_FACADE (identity): as GA7. The condenser's curtain wall is the same facade rule with the split height at zero, and it too leaves the graph untouched.",
+          "nodes": 137,
+          "edges": 232,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 67,
+            "open": 52,
+            "door": 94,
+            "stair": 19
+          },
+          "nodes_by_type": {
+            "corridor": 60,
+            "dwelling": 49,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 18,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB5",
+          "name": "R_CORE",
+          "description": "GB5 R_CORE: a core chain ATTACHED to the hall and the gallery by 'core_door' edges.",
+          "nodes": 142,
+          "edges": 238,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 67,
+            "open": 52,
+            "door": 96,
+            "stair": 23
+          },
+          "nodes_by_type": {
+            "corridor": 60,
+            "dwelling": 49,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 23,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB6",
+          "name": "R_BRIDGE",
+          "description": "GB6 R_BRIDGE (composition): the single production that joins the two grammars, through the interface node. In the composed graph BRIDGE is a cut vertex - the only one that matters architecturally, since removing it strands the whole communal programme.",
+          "nodes": 143,
+          "edges": 241,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 67,
+            "open": 52,
+            "door": 99,
+            "stair": 23
+          },
+          "nodes_by_type": {
+            "bridge": 1,
+            "corridor": 60,
+            "dwelling": 49,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 23,
+            "storey": 2
+          },
+          "topologic_graph": {
+            "vertices": 143,
+            "edges": 241
+          },
+          "cut_vertices": 20,
+          "cut_vertex_ids": [
+            "BRIDGE",
+            "CBS1",
+            "CBS2",
+            "CBS3",
+            "HALL",
+            "IFACE",
+            "S2_02",
+            "S2_19",
+            "S5_02",
+            "S5_19",
+            "S8_02",
+            "S8_19"
+          ],
+          "degree_centrality_max": 0.0423
+        }
+      ],
+      "dwellings": 49,
+      "dwellings_reachable_from_ground": 49,
+      "valid": true,
+      "floors_per_street": 3.0,
+      "interpreted": {
+        "cells": 102,
+        "volume": 6719.9,
+        "merged": null,
+        "recovered_graph": null
+      }
+    },
+    {
+      "name": "V3_gamma_access_over",
+      "parameters": {
+        "bays": 22,
+        "levels": 6,
+        "corridor_levels": [
+          2,
+          5
+        ],
+        "cells": [
+          [
+            1,
+            2,
+            1,
+            "G"
+          ],
+          [
+            4,
+            5,
+            1,
+            "G"
+          ]
+        ],
+        "core_lines": [
+          2,
+          19
+        ],
+        "ends": 3,
+        "cb_levels": 4,
+        "cb_merge": [
+          1,
+          2
+        ],
+        "cb_core_levels": 5
+      },
+      "metrics": {
+        "nodes": 137,
+        "edges": 228,
+        "max_degree": 6,
+        "components": 1,
+        "edges_by_access": {
+          "none": 111,
+          "open": 35,
+          "door": 65,
+          "stair": 17
+        },
+        "nodes_by_type": {
+          "bridge": 1,
+          "corridor": 40,
+          "dwelling": 37,
+          "gallery": 1,
+          "ground": 1,
+          "hall": 1,
+          "interface": 1,
+          "roof": 36,
+          "stairwell": 17,
+          "storey": 2
+        },
+        "topologic_graph": {
+          "vertices": 137,
+          "edges": 228
+        },
+        "cut_vertices": 16,
+        "cut_vertex_ids": [
+          "BRIDGE",
+          "CBS1",
+          "CBS2",
+          "CBS3",
+          "HALL",
+          "IFACE",
+          "S2_02",
+          "S2_19",
+          "S5_02",
+          "S5_19",
+          "S6_02",
+          "c2_00"
+        ],
+        "degree_centrality_max": 0.0441
+      },
+      "steps_A": [
+        {
+          "rule": "GA0",
+          "name": "AXIOM",
+          "description": "GA0 AXIOM: one node, type=mass.",
+          "nodes": 1,
+          "edges": 0,
+          "max_degree": 0,
+          "components": 1,
+          "edges_by_access": {},
+          "nodes_by_type": {
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA1",
+          "name": "R_LIFT",
+          "description": "GA1 R_LIFT: mass -> {ground, mass} joined by 'supports' (access none). The ground plane becomes a node in its own right, which is what makes the pilotis legible to the graph at all.",
+          "nodes": 2,
+          "edges": 1,
+          "max_degree": 1,
+          "components": 1,
+          "edges_by_access": {
+            "none": 1
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA2",
+          "name": "R_STACK",
+          "description": "GA2 R_STACK: mass -> a chain of 6 storey nodes on 'above' edges (access none).",
+          "nodes": 7,
+          "edges": 6,
+          "max_degree": 2,
+          "components": 1,
+          "edges_by_access": {
+            "none": 6
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "storey": 6
+          }
+        },
+        {
+          "rule": "GA3",
+          "name": "R_BAY",
+          "description": "GA3 R_BAY: each storey node is expanded into n bay nodes chained by 'party' edges whose access is NONE. This is the graph half of the bay / party-wall pair: the subdivision creates adjacency WITHOUT access, and every later rule has to supply the access explicitly.",
+          "nodes": 133,
+          "edges": 236,
+          "max_degree": 4,
+          "components": 2,
+          "edges_by_access": {
+            "none": 236
+          },
+          "nodes_by_type": {
+            "bay": 132,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA4",
+          "name": "R_CORRIDOR",
+          "description": "GA4 R_CORRIDOR: on the chosen levels each bay node splits into {corridor, band}. The corridor nodes form an open chain (access open) and each band gets exactly ONE 'door' edge. The internal street now exists as a path in the graph, so the shape rule that cuts it is no longer optional.",
+          "nodes": 177,
+          "edges": 322,
+          "max_degree": 5,
+          "components": 2,
+          "edges_by_access": {
+            "none": 236,
+            "door": 44,
+            "open": 42
+          },
+          "nodes_by_type": {
+            "bay": 132,
+            "corridor": 44,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA5",
+          "name": "R_LCELL / R_UCELL",
+          "description": "GA5 R_LCELL / R_UCELL: CONTRACT the run of band nodes of one bay into a single dwelling node, keeping the door edge to the level the corridor pierces and dissolving the internal 'above' edges (they are now inside one dwelling). G: 2 levels, corridor at index 1 -> Gamma; G: 2 levels, corridor at index 1 -> Gamma. This is the only production that REDUCES the node count, and it is where the section type is decided: L keeps 2 levels on one street, U hangs 3 levels off one street.",
+          "nodes": 129,
+          "edges": 221,
+          "max_degree": 9,
+          "components": 2,
+          "edges_by_access": {
+            "none": 143,
+            "open": 42,
+            "door": 36
+          },
+          "nodes_by_type": {
+            "bay": 48,
+            "corridor": 44,
+            "dwelling": 36,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA6",
+          "name": "R_CORE",
+          "description": "GA6 R_CORE: two bay stacks are relabelled as stairwells and chained by 'stair' edges (access stair), with 'core_door' edges into the corridor chains. Before this rule the graph has no vertical access at all; after it every dwelling is reachable from GROUND, which is the property a generated variant must be tested against.",
+          "nodes": 125,
+          "edges": 215,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 109,
+            "open": 34,
+            "door": 60,
+            "stair": 12
+          },
+          "nodes_by_type": {
+            "bay": 36,
+            "corridor": 40,
+            "dwelling": 36,
+            "ground": 1,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GA7",
+          "name": "R_FACADE (identity)",
+          "description": "GA7 R_FACADE: IDENTITY on the graph. The shape grammar's facade split (spandrel + ribbon, or spandrel=0 -> curtain wall) changes no node and no edge. Keeping it in the list as an explicit identity production is the honest way to record that shape and graph grammars are NOT in bijection: the envelope is style, and the graph cannot see it.",
+          "nodes": 125,
+          "edges": 215,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 109,
+            "open": 34,
+            "door": 60,
+            "stair": 12
+          },
+          "nodes_by_type": {
+            "bay": 36,
+            "corridor": 40,
+            "dwelling": 36,
+            "ground": 1,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GA8",
+          "name": "R_ROOF",
+          "description": "GA8 R_ROOF: the bay nodes still unassigned at the top level are relabelled as roof zone, and a terminal penthouse dwelling is attached to a core. No 'bay' node may survive a complete derivation - a leftover bay is the graph grammar's equivalent of an unresolved non-terminal.",
+          "nodes": 126,
+          "edges": 216,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 109,
+            "open": 34,
+            "door": 60,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 37,
+            "ground": 1,
+            "roof": 36,
+            "stairwell": 12
+          },
+          "topologic_graph": {
+            "vertices": 126,
+            "edges": 216
+          },
+          "cut_vertices": 9,
+          "cut_vertex_ids": [
+            "S2_02",
+            "S2_19",
+            "S5_02",
+            "S5_19",
+            "S6_02",
+            "c2_01",
+            "c2_20",
+            "c5_01",
+            "c5_20"
+          ],
+          "degree_centrality_max": 0.048
+        }
+      ],
+      "steps_B": [
+        {
+          "rule": "GB0",
+          "name": "AXIOM",
+          "description": "GB0 AXIOM: a second axiom, plus ONE interface node standing for the block's corridor. Grammar GB sees nothing else of grammar GA, which is what lets the two be varied independently.",
+          "nodes": 128,
+          "edges": 216,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 109,
+            "open": 34,
+            "door": 60,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 37,
+            "ground": 1,
+            "interface": 1,
+            "mass": 1,
+            "roof": 36,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GB1",
+          "name": "R_STACK",
+          "description": "GB1 R_STACK: the same stacking production as GA2, 4 levels.",
+          "nodes": 131,
+          "edges": 219,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 112,
+            "open": 34,
+            "door": 60,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 37,
+            "ground": 1,
+            "interface": 1,
+            "roof": 36,
+            "stairwell": 12,
+            "storey": 4
+          }
+        },
+        {
+          "rule": "GB2",
+          "name": "R_MERGE (condenser)",
+          "description": "GB2 R_MERGE (the condenser rule): CONTRACT adjacent storey nodes into one. It is the inverse of GA2/GB1 and the mirror of GA5 - same graph operation, opposite programme: GA5 contracts a stack into a dwelling, GB2 contracts a stack into a collective room. The result is a node of high degree, which is the graph-theoretic definition of a social condenser.",
+          "nodes": 130,
+          "edges": 218,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 111,
+            "open": 34,
+            "door": 60,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 37,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 36,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB3",
+          "name": "R_GALLERY",
+          "description": "GB3 R_GALLERY: a node joined to the hall by an 'open' edge - no wall, no door. The open edge is what distinguishes a gallery from a room, and it is invisible to any grammar that only records 'adjacent'.",
+          "nodes": 131,
+          "edges": 219,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 111,
+            "open": 35,
+            "door": 60,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 37,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 36,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB4",
+          "name": "R_FACADE (identity)",
+          "description": "GB4 R_FACADE (identity): as GA7. The condenser's curtain wall is the same facade rule with the split height at zero, and it too leaves the graph untouched.",
+          "nodes": 131,
+          "edges": 219,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 111,
+            "open": 35,
+            "door": 60,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 37,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 36,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB5",
+          "name": "R_CORE",
+          "description": "GB5 R_CORE: a core chain ATTACHED to the hall and the gallery by 'core_door' edges.",
+          "nodes": 136,
+          "edges": 225,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 111,
+            "open": 35,
+            "door": 62,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 37,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 36,
+            "stairwell": 17,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB6",
+          "name": "R_BRIDGE",
+          "description": "GB6 R_BRIDGE (composition): the single production that joins the two grammars, through the interface node. In the composed graph BRIDGE is a cut vertex - the only one that matters architecturally, since removing it strands the whole communal programme.",
+          "nodes": 137,
+          "edges": 228,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 111,
+            "open": 35,
+            "door": 65,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "bridge": 1,
+            "corridor": 40,
+            "dwelling": 37,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 36,
+            "stairwell": 17,
+            "storey": 2
+          },
+          "topologic_graph": {
+            "vertices": 137,
+            "edges": 228
+          },
+          "cut_vertices": 16,
+          "cut_vertex_ids": [
+            "BRIDGE",
+            "CBS1",
+            "CBS2",
+            "CBS3",
+            "HALL",
+            "IFACE",
+            "S2_02",
+            "S2_19",
+            "S5_02",
+            "S5_19",
+            "S6_02",
+            "c2_00"
+          ],
+          "degree_centrality_max": 0.0441
+        }
+      ],
+      "dwellings": 37,
+      "dwellings_reachable_from_ground": 37,
+      "valid": true,
+      "floors_per_street": 3.0,
+      "interpreted": {
+        "cells": 76,
+        "volume": 4675.3,
+        "merged": null,
+        "recovered_graph": null
+      }
+    },
+    {
+      "name": "V4_skipstop_Z4",
+      "parameters": {
+        "bays": 22,
+        "levels": 8,
+        "corridor_levels": [
+          2,
+          6
+        ],
+        "cells": [
+          [
+            1,
+            4,
+            1,
+            "Z"
+          ],
+          [
+            5,
+            8,
+            1,
+            "Z"
+          ]
+        ],
+        "core_lines": [
+          2,
+          19
+        ],
+        "ends": 3,
+        "cb_levels": 4,
+        "cb_merge": [
+          1,
+          2
+        ],
+        "cb_core_levels": 5
+      },
+      "metrics": {
+        "nodes": 117,
+        "edges": 190,
+        "max_degree": 6,
+        "components": 1,
+        "edges_by_access": {
+          "none": 61,
+          "open": 35,
+          "door": 73,
+          "stair": 21
+        },
+        "nodes_by_type": {
+          "bridge": 1,
+          "corridor": 40,
+          "dwelling": 45,
+          "gallery": 1,
+          "ground": 1,
+          "hall": 1,
+          "interface": 1,
+          "roof": 4,
+          "stairwell": 21,
+          "storey": 2
+        },
+        "topologic_graph": {
+          "vertices": 117,
+          "edges": 190
+        },
+        "cut_vertices": 18,
+        "cut_vertex_ids": [
+          "BRIDGE",
+          "CBS1",
+          "CBS2",
+          "CBS3",
+          "HALL",
+          "IFACE",
+          "S2_02",
+          "S2_19",
+          "S6_02",
+          "S6_19",
+          "S7_02",
+          "S7_19"
+        ],
+        "degree_centrality_max": 0.0517
+      },
+      "steps_A": [
+        {
+          "rule": "GA0",
+          "name": "AXIOM",
+          "description": "GA0 AXIOM: one node, type=mass.",
+          "nodes": 1,
+          "edges": 0,
+          "max_degree": 0,
+          "components": 1,
+          "edges_by_access": {},
+          "nodes_by_type": {
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA1",
+          "name": "R_LIFT",
+          "description": "GA1 R_LIFT: mass -> {ground, mass} joined by 'supports' (access none). The ground plane becomes a node in its own right, which is what makes the pilotis legible to the graph at all.",
+          "nodes": 2,
+          "edges": 1,
+          "max_degree": 1,
+          "components": 1,
+          "edges_by_access": {
+            "none": 1
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA2",
+          "name": "R_STACK",
+          "description": "GA2 R_STACK: mass -> a chain of 8 storey nodes on 'above' edges (access none).",
+          "nodes": 9,
+          "edges": 8,
+          "max_degree": 2,
+          "components": 1,
+          "edges_by_access": {
+            "none": 8
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "storey": 8
+          }
+        },
+        {
+          "rule": "GA3",
+          "name": "R_BAY",
+          "description": "GA3 R_BAY: each storey node is expanded into n bay nodes chained by 'party' edges whose access is NONE. This is the graph half of the bay / party-wall pair: the subdivision creates adjacency WITHOUT access, and every later rule has to supply the access explicitly.",
+          "nodes": 177,
+          "edges": 322,
+          "max_degree": 4,
+          "components": 2,
+          "edges_by_access": {
+            "none": 322
+          },
+          "nodes_by_type": {
+            "bay": 176,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA4",
+          "name": "R_CORRIDOR",
+          "description": "GA4 R_CORRIDOR: on the chosen levels each bay node splits into {corridor, band}. The corridor nodes form an open chain (access open) and each band gets exactly ONE 'door' edge. The internal street now exists as a path in the graph, so the shape rule that cuts it is no longer optional.",
+          "nodes": 221,
+          "edges": 408,
+          "max_degree": 5,
+          "components": 2,
+          "edges_by_access": {
+            "none": 322,
+            "door": 44,
+            "open": 42
+          },
+          "nodes_by_type": {
+            "bay": 176,
+            "corridor": 44,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA5",
+          "name": "R_LCELL / R_UCELL",
+          "description": "GA5 R_LCELL / R_UCELL: CONTRACT the run of band nodes of one bay into a single dwelling node, keeping the door edge to the level the corridor pierces and dissolving the internal 'above' edges (they are now inside one dwelling). Z: 4 levels, corridor at index 1 -> Z; Z: 4 levels, corridor at index 1 -> Z. This is the only production that REDUCES the node count, and it is where the section type is decided: L keeps 2 levels on one street, U hangs 3 levels off one street.",
+          "nodes": 109,
+          "edges": 183,
+          "max_degree": 11,
+          "components": 2,
+          "edges_by_access": {
+            "none": 105,
+            "open": 42,
+            "door": 36
+          },
+          "nodes_by_type": {
+            "bay": 20,
+            "corridor": 44,
+            "dwelling": 44,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA6",
+          "name": "R_CORE",
+          "description": "GA6 R_CORE: two bay stacks are relabelled as stairwells and chained by 'stair' edges (access stair), with 'core_door' edges into the corridor chains. Before this rule the graph has no vertical access at all; after it every dwelling is reachable from GROUND, which is the property a generated variant must be tested against.",
+          "nodes": 105,
+          "edges": 177,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 59,
+            "open": 34,
+            "door": 68,
+            "stair": 16
+          },
+          "nodes_by_type": {
+            "bay": 4,
+            "corridor": 40,
+            "dwelling": 44,
+            "ground": 1,
+            "stairwell": 16
+          }
+        },
+        {
+          "rule": "GA7",
+          "name": "R_FACADE (identity)",
+          "description": "GA7 R_FACADE: IDENTITY on the graph. The shape grammar's facade split (spandrel + ribbon, or spandrel=0 -> curtain wall) changes no node and no edge. Keeping it in the list as an explicit identity production is the honest way to record that shape and graph grammars are NOT in bijection: the envelope is style, and the graph cannot see it.",
+          "nodes": 105,
+          "edges": 177,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 59,
+            "open": 34,
+            "door": 68,
+            "stair": 16
+          },
+          "nodes_by_type": {
+            "bay": 4,
+            "corridor": 40,
+            "dwelling": 44,
+            "ground": 1,
+            "stairwell": 16
+          }
+        },
+        {
+          "rule": "GA8",
+          "name": "R_ROOF",
+          "description": "GA8 R_ROOF: the bay nodes still unassigned at the top level are relabelled as roof zone, and a terminal penthouse dwelling is attached to a core. No 'bay' node may survive a complete derivation - a leftover bay is the graph grammar's equivalent of an unresolved non-terminal.",
+          "nodes": 106,
+          "edges": 178,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 59,
+            "open": 34,
+            "door": 68,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 45,
+            "ground": 1,
+            "roof": 4,
+            "stairwell": 16
+          },
+          "topologic_graph": {
+            "vertices": 106,
+            "edges": 178
+          },
+          "cut_vertices": 11,
+          "cut_vertex_ids": [
+            "S2_02",
+            "S2_19",
+            "S6_02",
+            "S6_19",
+            "S7_02",
+            "S7_19",
+            "S8_02",
+            "c2_01",
+            "c2_20",
+            "c6_01",
+            "c6_20"
+          ],
+          "degree_centrality_max": 0.0571
+        }
+      ],
+      "steps_B": [
+        {
+          "rule": "GB0",
+          "name": "AXIOM",
+          "description": "GB0 AXIOM: a second axiom, plus ONE interface node standing for the block's corridor. Grammar GB sees nothing else of grammar GA, which is what lets the two be varied independently.",
+          "nodes": 108,
+          "edges": 178,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 59,
+            "open": 34,
+            "door": 68,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 45,
+            "ground": 1,
+            "interface": 1,
+            "mass": 1,
+            "roof": 4,
+            "stairwell": 16
+          }
+        },
+        {
+          "rule": "GB1",
+          "name": "R_STACK",
+          "description": "GB1 R_STACK: the same stacking production as GA2, 4 levels.",
+          "nodes": 111,
+          "edges": 181,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 62,
+            "open": 34,
+            "door": 68,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 45,
+            "ground": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 16,
+            "storey": 4
+          }
+        },
+        {
+          "rule": "GB2",
+          "name": "R_MERGE (condenser)",
+          "description": "GB2 R_MERGE (the condenser rule): CONTRACT adjacent storey nodes into one. It is the inverse of GA2/GB1 and the mirror of GA5 - same graph operation, opposite programme: GA5 contracts a stack into a dwelling, GB2 contracts a stack into a collective room. The result is a node of high degree, which is the graph-theoretic definition of a social condenser.",
+          "nodes": 110,
+          "edges": 180,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 61,
+            "open": 34,
+            "door": 68,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 45,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 16,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB3",
+          "name": "R_GALLERY",
+          "description": "GB3 R_GALLERY: a node joined to the hall by an 'open' edge - no wall, no door. The open edge is what distinguishes a gallery from a room, and it is invisible to any grammar that only records 'adjacent'.",
+          "nodes": 111,
+          "edges": 181,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 61,
+            "open": 35,
+            "door": 68,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 45,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 16,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB4",
+          "name": "R_FACADE (identity)",
+          "description": "GB4 R_FACADE (identity): as GA7. The condenser's curtain wall is the same facade rule with the split height at zero, and it too leaves the graph untouched.",
+          "nodes": 111,
+          "edges": 181,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 61,
+            "open": 35,
+            "door": 68,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 45,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 16,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB5",
+          "name": "R_CORE",
+          "description": "GB5 R_CORE: a core chain ATTACHED to the hall and the gallery by 'core_door' edges.",
+          "nodes": 116,
+          "edges": 187,
+          "max_degree": 6,
+          "components": 3,
+          "edges_by_access": {
+            "none": 61,
+            "open": 35,
+            "door": 70,
+            "stair": 21
+          },
+          "nodes_by_type": {
+            "corridor": 40,
+            "dwelling": 45,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 21,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB6",
+          "name": "R_BRIDGE",
+          "description": "GB6 R_BRIDGE (composition): the single production that joins the two grammars, through the interface node. In the composed graph BRIDGE is a cut vertex - the only one that matters architecturally, since removing it strands the whole communal programme.",
+          "nodes": 117,
+          "edges": 190,
+          "max_degree": 6,
+          "components": 1,
+          "edges_by_access": {
+            "none": 61,
+            "open": 35,
+            "door": 73,
+            "stair": 21
+          },
+          "nodes_by_type": {
+            "bridge": 1,
+            "corridor": 40,
+            "dwelling": 45,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 4,
+            "stairwell": 21,
+            "storey": 2
+          },
+          "topologic_graph": {
+            "vertices": 117,
+            "edges": 190
+          },
+          "cut_vertices": 18,
+          "cut_vertex_ids": [
+            "BRIDGE",
+            "CBS1",
+            "CBS2",
+            "CBS3",
+            "HALL",
+            "IFACE",
+            "S2_02",
+            "S2_19",
+            "S6_02",
+            "S6_19",
+            "S7_02",
+            "S7_19"
+          ],
+          "degree_centrality_max": 0.0517
+        }
+      ],
+      "dwellings": 45,
+      "dwellings_reachable_from_ground": 45,
+      "valid": true,
+      "floors_per_street": 4.0,
+      "interpreted": {
+        "cells": 80,
+        "volume": 7823.8,
+        "merged": null,
+        "recovered_graph": null
+      }
+    },
+    {
+      "name": "V5_short_block",
+      "parameters": {
+        "bays": 10,
+        "levels": 6,
+        "corridor_levels": [
+          1,
+          4
+        ],
+        "cells": [
+          [
+            1,
+            2,
+            0,
+            "K"
+          ],
+          [
+            3,
+            5,
+            1,
+            "F"
+          ]
+        ],
+        "core_lines": [
+          2,
+          8
+        ],
+        "ends": 3,
+        "cb_levels": 4,
+        "cb_merge": [
+          1,
+          2
+        ],
+        "cb_core_levels": 5
+      },
+      "metrics": {
+        "nodes": 77,
+        "edges": 119,
+        "max_degree": 7,
+        "components": 1,
+        "edges_by_access": {
+          "none": 51,
+          "open": 11,
+          "door": 40,
+          "stair": 17
+        },
+        "nodes_by_type": {
+          "bridge": 1,
+          "corridor": 16,
+          "dwelling": 24,
+          "gallery": 1,
+          "ground": 1,
+          "hall": 1,
+          "interface": 1,
+          "roof": 13,
+          "stairwell": 17,
+          "storey": 2
+        },
+        "topologic_graph": {
+          "vertices": 77,
+          "edges": 119
+        },
+        "cut_vertices": 17,
+        "cut_vertex_ids": [
+          "BRIDGE",
+          "CBS1",
+          "CBS2",
+          "CBS3",
+          "E5_09",
+          "HALL",
+          "IFACE",
+          "S1_02",
+          "S1_08",
+          "S4_02",
+          "S4_08",
+          "S5_02"
+        ],
+        "degree_centrality_max": 0.0921
+      },
+      "steps_A": [
+        {
+          "rule": "GA0",
+          "name": "AXIOM",
+          "description": "GA0 AXIOM: one node, type=mass.",
+          "nodes": 1,
+          "edges": 0,
+          "max_degree": 0,
+          "components": 1,
+          "edges_by_access": {},
+          "nodes_by_type": {
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA1",
+          "name": "R_LIFT",
+          "description": "GA1 R_LIFT: mass -> {ground, mass} joined by 'supports' (access none). The ground plane becomes a node in its own right, which is what makes the pilotis legible to the graph at all.",
+          "nodes": 2,
+          "edges": 1,
+          "max_degree": 1,
+          "components": 1,
+          "edges_by_access": {
+            "none": 1
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "mass": 1
+          }
+        },
+        {
+          "rule": "GA2",
+          "name": "R_STACK",
+          "description": "GA2 R_STACK: mass -> a chain of 6 storey nodes on 'above' edges (access none).",
+          "nodes": 7,
+          "edges": 6,
+          "max_degree": 2,
+          "components": 1,
+          "edges_by_access": {
+            "none": 6
+          },
+          "nodes_by_type": {
+            "ground": 1,
+            "storey": 6
+          }
+        },
+        {
+          "rule": "GA3",
+          "name": "R_BAY",
+          "description": "GA3 R_BAY: each storey node is expanded into n bay nodes chained by 'party' edges whose access is NONE. This is the graph half of the bay / party-wall pair: the subdivision creates adjacency WITHOUT access, and every later rule has to supply the access explicitly.",
+          "nodes": 61,
+          "edges": 104,
+          "max_degree": 4,
+          "components": 2,
+          "edges_by_access": {
+            "none": 104
+          },
+          "nodes_by_type": {
+            "bay": 60,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA4",
+          "name": "R_CORRIDOR",
+          "description": "GA4 R_CORRIDOR: on the chosen levels each bay node splits into {corridor, band}. The corridor nodes form an open chain (access open) and each band gets exactly ONE 'door' edge. The internal street now exists as a path in the graph, so the shape rule that cuts it is no longer optional.",
+          "nodes": 81,
+          "edges": 142,
+          "max_degree": 5,
+          "components": 2,
+          "edges_by_access": {
+            "none": 104,
+            "door": 20,
+            "open": 18
+          },
+          "nodes_by_type": {
+            "bay": 60,
+            "corridor": 20,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA5",
+          "name": "R_LCELL / R_UCELL",
+          "description": "GA5 R_LCELL / R_UCELL: CONTRACT the run of band nodes of one bay into a single dwelling node, keeping the door edge to the level the corridor pierces and dissolving the internal 'above' edges (they are now inside one dwelling). K: 2 levels, corridor at index 0 -> L; F: 3 levels, corridor at index 1 -> U. This is the only production that REDUCES the node count, and it is where the section type is decided: L keeps 2 levels on one street, U hangs 3 levels off one street.",
+          "nodes": 69,
+          "edges": 115,
+          "max_degree": 7,
+          "components": 2,
+          "edges_by_access": {
+            "none": 83,
+            "open": 18,
+            "door": 14
+          },
+          "nodes_by_type": {
+            "bay": 25,
+            "corridor": 20,
+            "dwelling": 23,
+            "ground": 1
+          }
+        },
+        {
+          "rule": "GA6",
+          "name": "R_CORE",
+          "description": "GA6 R_CORE: two bay stacks are relabelled as stairwells and chained by 'stair' edges (access stair), with 'core_door' edges into the corridor chains. Before this rule the graph has no vertical access at all; after it every dwelling is reachable from GROUND, which is the property a generated variant must be tested against.",
+          "nodes": 65,
+          "edges": 106,
+          "max_degree": 7,
+          "components": 1,
+          "edges_by_access": {
+            "none": 49,
+            "open": 10,
+            "door": 35,
+            "stair": 12
+          },
+          "nodes_by_type": {
+            "bay": 13,
+            "corridor": 16,
+            "dwelling": 23,
+            "ground": 1,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GA7",
+          "name": "R_FACADE (identity)",
+          "description": "GA7 R_FACADE: IDENTITY on the graph. The shape grammar's facade split (spandrel + ribbon, or spandrel=0 -> curtain wall) changes no node and no edge. Keeping it in the list as an explicit identity production is the honest way to record that shape and graph grammars are NOT in bijection: the envelope is style, and the graph cannot see it.",
+          "nodes": 65,
+          "edges": 106,
+          "max_degree": 7,
+          "components": 1,
+          "edges_by_access": {
+            "none": 49,
+            "open": 10,
+            "door": 35,
+            "stair": 12
+          },
+          "nodes_by_type": {
+            "bay": 13,
+            "corridor": 16,
+            "dwelling": 23,
+            "ground": 1,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GA8",
+          "name": "R_ROOF",
+          "description": "GA8 R_ROOF: the bay nodes still unassigned at the top level are relabelled as roof zone, and a terminal penthouse dwelling is attached to a core. No 'bay' node may survive a complete derivation - a leftover bay is the graph grammar's equivalent of an unresolved non-terminal.",
+          "nodes": 66,
+          "edges": 107,
+          "max_degree": 7,
+          "components": 1,
+          "edges_by_access": {
+            "none": 49,
+            "open": 10,
+            "door": 35,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 16,
+            "dwelling": 24,
+            "ground": 1,
+            "roof": 13,
+            "stairwell": 12
+          },
+          "topologic_graph": {
+            "vertices": 66,
+            "edges": 107
+          },
+          "cut_vertices": 10,
+          "cut_vertex_ids": [
+            "E5_09",
+            "S1_02",
+            "S1_08",
+            "S4_02",
+            "S4_08",
+            "S5_02",
+            "S5_08",
+            "S6_02",
+            "c1_01",
+            "c4_01"
+          ],
+          "degree_centrality_max": 0.1077
+        }
+      ],
+      "steps_B": [
+        {
+          "rule": "GB0",
+          "name": "AXIOM",
+          "description": "GB0 AXIOM: a second axiom, plus ONE interface node standing for the block's corridor. Grammar GB sees nothing else of grammar GA, which is what lets the two be varied independently.",
+          "nodes": 68,
+          "edges": 107,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 49,
+            "open": 10,
+            "door": 35,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 16,
+            "dwelling": 24,
+            "ground": 1,
+            "interface": 1,
+            "mass": 1,
+            "roof": 13,
+            "stairwell": 12
+          }
+        },
+        {
+          "rule": "GB1",
+          "name": "R_STACK",
+          "description": "GB1 R_STACK: the same stacking production as GA2, 4 levels.",
+          "nodes": 71,
+          "edges": 110,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 52,
+            "open": 10,
+            "door": 35,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 16,
+            "dwelling": 24,
+            "ground": 1,
+            "interface": 1,
+            "roof": 13,
+            "stairwell": 12,
+            "storey": 4
+          }
+        },
+        {
+          "rule": "GB2",
+          "name": "R_MERGE (condenser)",
+          "description": "GB2 R_MERGE (the condenser rule): CONTRACT adjacent storey nodes into one. It is the inverse of GA2/GB1 and the mirror of GA5 - same graph operation, opposite programme: GA5 contracts a stack into a dwelling, GB2 contracts a stack into a collective room. The result is a node of high degree, which is the graph-theoretic definition of a social condenser.",
+          "nodes": 70,
+          "edges": 109,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 51,
+            "open": 10,
+            "door": 35,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 16,
+            "dwelling": 24,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 13,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB3",
+          "name": "R_GALLERY",
+          "description": "GB3 R_GALLERY: a node joined to the hall by an 'open' edge - no wall, no door. The open edge is what distinguishes a gallery from a room, and it is invisible to any grammar that only records 'adjacent'.",
+          "nodes": 71,
+          "edges": 110,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 51,
+            "open": 11,
+            "door": 35,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 16,
+            "dwelling": 24,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 13,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB4",
+          "name": "R_FACADE (identity)",
+          "description": "GB4 R_FACADE (identity): as GA7. The condenser's curtain wall is the same facade rule with the split height at zero, and it too leaves the graph untouched.",
+          "nodes": 71,
+          "edges": 110,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 51,
+            "open": 11,
+            "door": 35,
+            "stair": 13
+          },
+          "nodes_by_type": {
+            "corridor": 16,
+            "dwelling": 24,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 13,
+            "stairwell": 12,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB5",
+          "name": "R_CORE",
+          "description": "GB5 R_CORE: a core chain ATTACHED to the hall and the gallery by 'core_door' edges.",
+          "nodes": 76,
+          "edges": 116,
+          "max_degree": 7,
+          "components": 3,
+          "edges_by_access": {
+            "none": 51,
+            "open": 11,
+            "door": 37,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "corridor": 16,
+            "dwelling": 24,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 13,
+            "stairwell": 17,
+            "storey": 2
+          }
+        },
+        {
+          "rule": "GB6",
+          "name": "R_BRIDGE",
+          "description": "GB6 R_BRIDGE (composition): the single production that joins the two grammars, through the interface node. In the composed graph BRIDGE is a cut vertex - the only one that matters architecturally, since removing it strands the whole communal programme.",
+          "nodes": 77,
+          "edges": 119,
+          "max_degree": 7,
+          "components": 1,
+          "edges_by_access": {
+            "none": 51,
+            "open": 11,
+            "door": 40,
+            "stair": 17
+          },
+          "nodes_by_type": {
+            "bridge": 1,
+            "corridor": 16,
+            "dwelling": 24,
+            "gallery": 1,
+            "ground": 1,
+            "hall": 1,
+            "interface": 1,
+            "roof": 13,
+            "stairwell": 17,
+            "storey": 2
+          },
+          "topologic_graph": {
+            "vertices": 77,
+            "edges": 119
+          },
+          "cut_vertices": 17,
+          "cut_vertex_ids": [
+            "BRIDGE",
+            "CBS1",
+            "CBS2",
+            "CBS3",
+            "E5_09",
+            "HALL",
+            "IFACE",
+            "S1_02",
+            "S1_08",
+            "S4_02",
+            "S4_08",
+            "S5_02"
+          ],
+          "degree_centrality_max": 0.0921
+        }
+      ],
+      "dwellings": 24,
+      "dwellings_reachable_from_ground": 24,
+      "valid": true,
+      "floors_per_street": 3.0,
+      "interpreted": {
+        "cells": 44,
+        "volume": 3395.5,
+        "merged": "Cluster",
+        "recovered_graph": {
+          "nodes": 44,
+          "edges": 12
+        }
+      }
+    }
+  ],
+  "edge_access_semantics": {
+    "supports": "none",
+    "above": "none",
+    "party": "none",
+    "door": "door",
+    "corridor": "open",
+    "stair": "stair",
+    "core_door": "door",
+    "open": "open",
+    "bridge": "door"
+  },
+  "parameters": {
+    "bays": 22,
+    "levels": 6,
+    "corridor_levels": [
+      1,
+      4
+    ],
+    "cells": [
+      [
+        1,
+        2,
+        0,
+        "K"
+      ],
+      [
+        3,
+        5,
+        1,
+        "F"
+      ]
+    ],
+    "core_lines": [
+      2,
+      19
+    ],
+    "ends": 3,
+    "cb_levels": 4,
+    "cb_merge": [
+      1,
+      2
+    ],
+    "cb_core_levels": 5
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "model": "Dom Narkomfin",
+  "grammars": {
+    "A": {
+      "name": "BLOCK",
+      "scope": "the residential slab",
+      "steps": [
+        {
+          "step": 0,
+          "rule": "A0",
+          "name": "AXIOM",
+          "cells": 1,
+          "nodes": 1,
+          "edges": 0,
+          "description": "A0 AXIOM: a single prism, 80.5 x 9.9 x 19.3 m, labelled BLOCK"
+        },
+        {
+          "step": 1,
+          "rule": "A1",
+          "name": "R_LIFT",
+          "cells": 71,
+          "nodes": 2,
+          "edges": 1,
+          "description": "A1 R_LIFT: SPLIT-Z at 2.50 m. The lower part is emptied to a colonnade of CO.PIL (3 rows x 23 lines) and the upper part relabelled MASS: the ground plane is given away, which is the first political act of the building. Graph: one node becomes two, joined by a 'supports' edge."
+        },
+        {
+          "step": 2,
+          "rule": "A2",
+          "name": "R_STACK",
+          "cells": 83,
+          "nodes": 7,
+          "edges": 6,
+          "description": "A2 R_STACK: repeated SPLIT-Z of MASS into 6 storey bands of 2.80 m, each a slab band + a storey volume, closed by SL.ROOF. Graph: a vertical chain of 'above' edges - stacking is the only rule so far that makes the graph three-dimensional, and R_LCELL/R_UCELL will later exploit it."
+        },
+        {
+          "step": 3,
+          "rule": "A3",
+          "name": "R_BAY (bay / party-wall pair)",
+          "cells": 749,
+          "nodes": 133,
+          "edges": 126,
+          "description": "A3 R_BAY (the bay / party-wall pair): SPLIT-X of a storey band on a 3.66 m rhythm. The rule is a PAIR because neither half is meaningful alone: each cut produces a bay slab AND the party wall on the cut line, and the column CO.RECT is absorbed into that wall, splitting it into pieces. Graph: 22 bay nodes per level, chained by blind 'party wall' edges - adjacency without access, which is exactly what a party wall means."
+        },
+        {
+          "step": 4,
+          "rule": "A4",
+          "name": "R_CORRIDOR",
+          "cells": 837,
+          "nodes": 133,
+          "edges": 126,
+          "description": "A4 R_CORRIDOR: SPLIT-Y of levels L1, L4 into a 1.80 m common corridor on the south and the dwelling band on the north, with DV.WALL.CORR (door notch per bay) on the cut. Graph: the corridor nodes form an open chain - the 'internal street'. This is the level at which the whole social programme is decided."
+        },
+        {
+          "step": 5,
+          "rule": "A5",
+          "name": "R_LCELL / R_UCELL",
+          "cells": 789,
+          "nodes": 125,
+          "edges": 165,
+          "description": "A5 R_LCELL / R_UCELL (one rule, one parameter): a run of stacked bays is merged into a single dwelling whose SECTION is the bay rectangle minus the corridor notch. K: 2 levels, corridor at index 0 -> section L; F: 3 levels, corridor at index 1 -> section U; E: 1 level, no corridor notch -> flat (the end units beyond the cores). The K cell is an L: two levels, corridor at the bottom, so the upper level runs the full 9.90 m depth over the corridor. The F cell is a U: three levels, corridor through the MIDDLE, so the dwelling has a full-depth level below AND above the street and only a narrow hall band beside it. One corridor therefore serves three floors. Graph: the stacked bay nodes COLLAPSE into one dwelling node with a single 'entrance door' edge to the corridor - the section rule is visible in the graph as a change of node count, which is what we want to drive variants from. The END UNITS are the degenerate case of the same production - levels = 1, no notch - which is the cheapest possible proof that L, U and flat are one rule and not three."
+        },
+        {
+          "step": 6,
+          "rule": "A6",
+          "name": "R_CORE",
+          "cells": 809,
+          "nodes": 125,
+          "edges": 197,
+          "description": "A6 R_CORE: two bays (lines 2 and 19) are relabelled as vertical cores - CI.FLIGHT pairs + SP.STAIRWELL. Graph: the only nodes carrying VERTICAL edges. Until this rule the graph is a set of horizontal chains; after it the graph is genuinely three-dimensional. The core also CARRIES THE STREET: because it interrupts the corridor, it takes a door on each side, so the chain runs corridor - stairwell - corridor rather than breaking into two dangling halves. The end units and the dwellings beside the core are entered from the same lobby."
+        },
+        {
+          "step": 7,
+          "rule": "A7",
+          "name": "R_FACADE (facade split)",
+          "cells": 833,
+          "nodes": 125,
+          "edges": 197,
+          "description": "A7 R_FACADE (facade split): every envelope panel is SPLIT-Z at 1.00 m into EN.SPAND below and EN.WIN.RIBBON above, the pane running from end to end of the block. Two things matter grammatically: (i) the split height is a parameter - at spandrel = 0 the same rule yields the condenser's EN.WIN.CURT, so ribbon and curtain wall are ONE rule, not two; (ii) the pane is NOT subdivided by the bay rule, so the facade is deliberately out of step with the structure. A per-bay window would generate a different architecture with the same plan. The graph is unchanged: the facade split adds no nodes, only exterior faces - envelope is style, not topology."
+        },
+        {
+          "step": 8,
+          "rule": "A8",
+          "name": "R_END + R_ROOF",
+          "cells": 851,
+          "nodes": 126,
+          "edges": 198,
+          "description": "A8 R_END + R_ROOF: EN.WALL.END terminates the repetition along x (a blind gable - the rule that says 'stop'), with SL.BALC.SEMI attached to its outer face on L2-L5, and the stack is closed by parapet and penthouse. Graph: one terminal node on top of a core."
+        }
+      ]
+    },
+    "B": {
+      "name": "SOCIAL CONDENSER",
+      "scope": "the communal block + the bridge that composes the two",
+      "steps": [
+        {
+          "step": 0,
+          "rule": "B0",
+          "name": "AXIOM",
+          "cells": 1,
+          "nodes": 2,
+          "edges": 0,
+          "description": "B0 AXIOM: a second, separate prism - the social condenser. It is a SEPARATE GRAMMAR because its rules are different in kind: the block subdivides a repetitive frame, the condenser merges levels into a single collective volume. Same operations, opposite direction."
+        },
+        {
+          "step": 1,
+          "rule": "B1",
+          "name": "R_STACK",
+          "cells": 9,
+          "nodes": 5,
+          "edges": 3,
+          "description": "B1 R_STACK: the same SPLIT-Z as A2, 4 storeys."
+        },
+        {
+          "step": 2,
+          "rule": "B2",
+          "name": "R_MERGE (condenser)",
+          "cells": 7,
+          "nodes": 4,
+          "edges": 2,
+          "description": "B2 R_MERGE (the social condenser rule): delete an intermediate slab and UNION the two storeys into one double-height volume - gymnasium / dining / library. Graph: two nodes collapse into one of HIGH degree. That is the graph-theoretic definition of a 'social condenser': not a room type but a node whose degree is out of proportion to the rest of the graph."
+        },
+        {
+          "step": 3,
+          "rule": "B3",
+          "name": "R_GALLERY",
+          "cells": 8,
+          "nodes": 5,
+          "edges": 3,
+          "description": "B3 R_GALLERY: SUBTRACT a curved void from a slab inside the hall, giving SL.GALL. Graph: a node adjacent to the hall by an OPEN edge (no wall, no door) - the relation that makes a gallery a gallery rather than a room."
+        },
+        {
+          "step": 4,
+          "rule": "B4",
+          "name": "R_FACADE (curtain)",
+          "cells": 16,
+          "nodes": 5,
+          "edges": 3,
+          "description": "B4 R_FACADE (spandrel = 0): the SAME facade split as A7 with the split height driven to zero, so the whole east face becomes one storey-high pane per level. Ribbon and curtain wall are one rule with one parameter - this is the strongest evidence that the two grammars share an alphabet."
+        },
+        {
+          "step": 5,
+          "rule": "B5",
+          "name": "R_CORE",
+          "cells": 26,
+          "nodes": 10,
+          "edges": 9,
+          "description": "B5 R_CORE: a core strip is attached to the north face (ATTACH on a face port, not a split). It overshoots the roof by one level, which is what gives the condenser its roof terrace."
+        },
+        {
+          "step": 6,
+          "rule": "B6",
+          "name": "R_BRIDGE",
+          "cells": 27,
+          "nodes": 11,
+          "edges": 11,
+          "description": "B6 R_BRIDGE (the composition rule): a single volume at L1 linking the condenser core to the block's corridor. In the graph it is a CUT VERTEX - delete it and the design falls into two components. The two grammars are therefore composed by exactly one production, which is why they can be developed, and varied, independently."
+        }
+      ]
+    }
+  },
+  "rule_cards": [
+    {
+      "id": "R_FACADE",
+      "title": "facade split  panel -> EN.SPAND + EN.WIN.RIBBON (continuous)",
+      "note": "SPLIT-Z at h=1.00. The pane is NOT cut by the bay rule: one pane spans the whole facade.\nh is a parameter: h=0 gives EN.WIN.CURT (the condenser). Graph: unchanged."
+    },
+    {
+      "id": "R_BAY",
+      "title": "bay / party-wall PAIR  band -> 2 bays + party wall + column",
+      "note": "SPLIT-X at 3.66. Inseparable pair: the cut yields two bay slabs AND the party wall on the\ncut line, with CO.RECT absorbed into it (so the wall arrives in pieces). Graph: 1 node -> 2,\njoined by a BLIND edge - adjacent, not connected."
+    },
+    {
+      "id": "R_CORRIDOR",
+      "title": "corridor insertion  bay -> SP.CORRIDOR + dwelling band",
+      "note": "SPLIT-Y at 1.80 with DV.WALL.CORR on the cut. Graph: corridor nodes form an OPEN chain\n(the internal street); each dwelling gets exactly one 'entrance door' edge to it."
+    },
+    {
+      "id": "R_LCELL",
+      "title": "L-section cell (K-type): 2 levels, corridor at the BOTTOM",
+      "note": "2 stacked bays + the corridor at level 0 MERGE into ONE dwelling. The section is the\nbay rectangle minus the corridor notch -> L. The pierced level keeps only a\n1.58 m hall band beside the street. Graph: the stacked bay nodes COLLAPSE into one dwelling\nnode; one corridor serves two floors."
+    },
+    {
+      "id": "R_UCELL",
+      "title": "U-section cell (F-type): 3 levels, corridor in the MIDDLE",
+      "note": "3 stacked bays + the corridor at level 1 MERGE into ONE dwelling. The section is the\nbay rectangle minus the corridor notch -> U. The pierced level keeps only a\n1.58 m hall band beside the street. Graph: the stacked bay nodes COLLAPSE into one dwelling\nnode; one corridor serves three floors."
+    },
+    {
+      "id": "R_MERGE",
+      "title": "social condenser  two storeys -> one double-height SP.HALL",
+      "note": "The INVERSE of R_STACK: delete the intermediate slab and UNION the storeys. Graph: two nodes\ncollapse into one of high degree - the graph definition of a social condenser."
+    }
+  ],
+  "variants": [
+    {
+      "id": "V1",
+      "levels": 2,
+      "corridor_index": 0,
+      "kind": "L",
+      "note": "as built: K-type, 2 levels, corridor at the bottom",
+      "dwellings_per_street": "1 street serves 2 floors"
+    },
+    {
+      "id": "V2",
+      "levels": 3,
+      "corridor_index": 1,
+      "kind": "U",
+      "note": "as built: F-type, 3 levels, corridor through the middle",
+      "dwellings_per_street": "1 street serves 3 floors"
+    },
+    {
+      "id": "V3",
+      "levels": 2,
+      "corridor_index": 1,
+      "kind": "Gamma",
+      "note": "unbuilt: corridor at the TOP - the L flipped, access over the dwelling",
+      "dwellings_per_street": "1 street serves 2 floors"
+    },
+    {
+      "id": "V4",
+      "levels": 4,
+      "corridor_index": 1,
+      "kind": "Z",
+      "note": "unbuilt: 4 levels, corridor at level 1 - a skip-stop section, one street per four floors",
+      "dwellings_per_street": "1 street serves 4 floors"
+    }
+  ],
+  "parameters": {
+    "bay": 3.66,
+    "depth": 9.9,
+    "storey": 2.8,
+    "pilotis": 2.5,
+    "corridor_depth": 1.8,
+    "hall_band": 1.58,
+    "spandrel": 1.0,
+    "bays": 22
+  }
+}
